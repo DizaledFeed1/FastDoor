@@ -38,7 +38,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    private final Set<String> roles; // Может содержать "ROLE_USER", "ROLE_INSTALLER", "ROLE_ADMIN"
+    private final Set<String> roles; // Может содержать "ROLE_USER", "ROLE_INSTALLER",  "ROLE_ADMIN"
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
