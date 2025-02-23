@@ -111,20 +111,14 @@
     <input type="time" id="timeOrdered" th:field="*{timeOrder}" required>
     <div class="error-message" th:if="${#fields.hasErrors('timeOrder')}" th:errors="*{timeOrder}"></div>
 
-    <label for="price">Сумма заказа: </label>
-    <input type="number" id="price" th:field="*{price}" required>
-    <div class="error-message" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+    <label for="quantity">Колличество дверей</label>
+    <input type="number" id="quantity" th:field="*{quantity}"required>
+    <div class="error-message" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">
 
-    <div class="door-selection">
-        <h3>Выберите двери для заказа</h3>
-        <label for="doors">Двери: </label>
-        <select id="doors" name="doors" multiple>
-            <option th:each="door : ${doors}" th:value="${door.id}" th:text="${door.doorName}"></option>
-        </select>
+<!--    <label for="price">Сумма заказа: </label>-->
+<!--    <input type="number" id="price" th:field="*{price}" required>-->
+<!--    <div class="error-message" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>-->
 
-        <div id="doorCountInputs" class="door-counts">
-            <p>Введите количество для выбранных дверей:</p>
-        </div>
     </div>
 
     <input type="submit" value="Подтвердить заказ"/>

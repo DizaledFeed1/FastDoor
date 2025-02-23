@@ -1,4 +1,10 @@
 spring:
+  logging:
+    level:
+      org.springframework.security: DEBUG
+      org.springframework.security.web: DEBUG
+      org.springframework.security.authentication: DEBUG
+
   output:
     ansi:
       enabled: always

@@ -2,6 +2,7 @@ package org.example.mrdverkin.controllers;
 
 import jakarta.validation.Valid;
 import org.example.mrdverkin.dataBase.*;
+import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,21 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/orders")
 public class OrdersCreateController {
-    @Autowired
-    private OrderDoorsDoorRepository orderDoorsDoorRepository;
     @Autowired
     private OrderRepository orderRepository;
 
     @GetMapping("/create")
     public String createOrder(Model model) {
-        List<Door> doors = orderDoorsDoorRepository.findAllDoors();
-        model.addAttribute("order", new Order());  // Добавляем пустой заказ
-        model.addAttribute("doors", doors);
         return "create";
     }
     @ModelAttribute("order")
@@ -40,9 +34,6 @@ public class OrdersCreateController {
         if (errors.hasErrors()) {
             return "create";
         }
-        OrderDoors lastOrderDoors =orderDoorsDoorRepository.findLastOrderDoors();
-        order.setOrderDoors(lastOrderDoors);
-        order.setOrderDoors(lastOrderDoors);
         orderRepository.save(order);
         sessionStatus.setComplete();
         return "done";

@@ -164,24 +164,8 @@
                 <th>Сумма</th>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="order : ${orders}">
-                <td th:text="${order.id}"></td>
-                <td th:text="${order.fullName}"></td>
-                <td th:text="${order.dateOrder}  + ' в ' + ${order.timeOrder}"></td>
-                <td th:text="${@homeController.formatPhoneNumber(order.phone)}"></td>
-                <td th:text="${order.price} + ' руб'"></td>
-            </tr>
-            <tr th:if="${orders.isEmpty()}">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
         </table>
-        <button><a href="/doors">Создать новый заказ</a></button>
+        <button><a href="/orders/create">Создать новый заказ</a></button>
     </section>
 
     <section class="notifications">

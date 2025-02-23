@@ -3,7 +3,6 @@ package org.example.mrdverkin.dataBase;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +10,6 @@ import java.util.Date;
 
 @Entity
 @Data
-@ToString(exclude = "orderDoors")
 @Table(name = "\"order\"")
 public class Order {
 
@@ -28,11 +26,10 @@ public class Order {
 
     @NotNull(message = "Время доставки должно быть указано")
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime timeOrder;
+    private LocalTime timeOrder;;
 
-    private Float price;
     private Date placeAt = new Date();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private OrderDoors orderDoors;
+    @NotNull(message = "Колличество дверей не указано")
+    private int quantity;
 }
