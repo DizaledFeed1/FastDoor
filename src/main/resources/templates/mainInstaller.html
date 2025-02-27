@@ -43,11 +43,11 @@
       });
     });
 
-    function DisabledOff() {
-      let workerSelect = document.getElementById('select-the-worker');
-      let disabledBtn = document.getElementById('btn-confirm');
+    function DisabledOff(selectElement) {
+      let row = selectElement.closest('tr');
+      let disabledBtn = row.querySelector('.btn-confirm');
 
-      if (workerSelect.value !== "") {
+      if (selectElement.value !== "") {
         disabledBtn.disabled = false;
         console.log(123)
       }else {
@@ -55,9 +55,6 @@
         console.log(321)
       }
     }
-
-
-
   </script>
 
 </head>
@@ -93,20 +90,15 @@
     <td th:text="${order.dateOrder} + ' в ' + ${order.timeOrder}"></td>
     <td th:text="${order.quantity}"></td>
     <td>
-      <select id="select-the-worker" onchange="DisabledOff()">
+      <select id="worker-select" data-order-id="${order.id}" onchange="DisabledOff(this)">
         <option value="">Выберите установщика</option>
         <option th:each="installer : ${installers}" th:value="${installer.fullName}" th:text="${installer.fullName}"></option>
         <option value="worker1">Установщик 1</option>
         <option value="worker2">Установщик 2</option>
       </select>
-
-      <!--      <select>-->
-<!--       <option th:each="installer : ${installers}" th:value="${installer.fullName}" th:text="${installer.fullName}"></option>-->
-<!--        <option value="">Установщик 1</option>-->
-<!--      </select>-->
     </td>
     <td>
-      <button disabled id="btn-confirm" onclick="confirmOrder(this.getAttribute('data-order-id'))">
+      <button disabled class="btn-confirm"  data-order-id="${order.id}" onclick="confirmOrder(this.getAttribute('data-order-id'))">
         Подтвердить заказ
       </button>
     </td>
