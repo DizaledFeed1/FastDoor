@@ -8,13 +8,15 @@
   <link rel="stylesheet" th:href="@{/style/style.css}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
   <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-
   <script th:inline="javascript">
     // Передаем данные о доступности из Thymeleaf
     const availabilityData = /*[[${availabilityList}]]*/ [];
     const availabilityMap = {};
+    const availabilityMapinDoorQuantity = {};
+
     availabilityData.forEach(day => {
-      availabilityMap[day.date] = day.availableDoors;
+      availabilityMap[day.date] = day.frontDoorQuantity;
+      availabilityMapinDoorQuantity[day.date] = day.inDoorQuantity;
     });
     console.log('Availability Map:', availabilityMap);
 
@@ -62,6 +64,7 @@
         installerFullName: selectedInstaller,
         installerComment: commentByInstaller()
       };
+
       console.log('Отправляемые данные:', orderData);
 
       await fetch('/home/mainInstaller', {
@@ -87,14 +90,14 @@
               });
     }
 
+
+
     document.addEventListener("DOMContentLoaded", function() {
+      let hoverPopup = document.querySelector('#calendar-popup');
       let picker = new Pikaday({
         field: document.getElementById('calendar'),
         bound: false,
         position: { top: 0, left: 0 },
-        onSelect: function(date) {
-          document.getElementById('selected-date').innerText = "Выбранная дата: " + this.toString();
-        },
         onDraw: function() {
           const days = document.querySelectorAll('.pika-day');
           days.forEach(dayElement => {
@@ -102,10 +105,23 @@
             const month = String(Number(dayElement.getAttribute('data-pika-month')) + 1).padStart(2, '0');
             const day = String(dayElement.getAttribute('data-pika-day')).padStart(2, '0');
             const dateStr = `${year}-${month}-${day}`;
-            if (availabilityMap[dateStr] !== undefined) {
-              const availableDoors = availabilityMap[dateStr];
-              dayElement.innerHTML += `<br><small>${availableDoors} дв.</small>`;
-            }
+
+            dayElement.addEventListener('mouseover', function(e) {
+              hoverPopup.style.display = 'block';
+              if (availabilityMap[dateStr] !== undefined) {
+                const availableDoors = availabilityMap[dateStr];
+                const availableInDoors = availabilityMapinDoorQuantity[dateStr];
+                hoverPopup.innerText = `Дата: ${dateStr}\n Входные двери ${availableDoors}\n Межкомнатные двери: ${availableInDoors}`;
+              }
+              // Позиционируем попап рядом с ячейкой
+              const rect = dayElement.getBoundingClientRect();
+              hoverPopup.style.top = `${rect.bottom + window.scrollY + 5}px`; // Чуть ниже ячейки
+              hoverPopup.style.left = `${rect.left + window.scrollX}px`; // Выравниваем по левой стороне
+
+            });
+            dayElement.addEventListener('mouseout', function() {
+              hoverPopup.style.display = 'none'; // Скрываем попап
+            });
           });
         },
         disableDayFn: function(date) {
@@ -113,10 +129,24 @@
           const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() возвращает 0-11
           const day = String(date.getDate()).padStart(2, '0');
           const dateStr = `${year}-${month}-${day}`;
-          // Отключаем дату, если количество доступных дверей равно 0
-          return availabilityMap[dateStr] === 0;
+          const data = availabilityMap[dateStr];
+
+          // Получаем текущую дату динамически
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Устанавливаем начало текущего дня
+          const checkDate = new Date(date);
+          checkDate.setHours(0, 0, 0, 0); // Устанавливаем начало проверяемого дня
+
+          // Отключаем прошедшие дни ИЛИ дни с нулевой доступностью
+          return checkDate < today || (data && data.frontDoorQuantity === 0 && data.inDoorQuantity === 0);
         }
       });
+
+      // Автоматическое обновление календаря каждые 24 часа
+      setInterval(() => {
+        picker.render(); // Перерисовываем календарь
+        console.log('Календарь обновлен:', new Date());
+      }, 24 * 60 * 60 * 1000); // 24 часа в миллисекундах
     });
 
     function DisabledOff(selectElement) {
@@ -153,6 +183,17 @@
     .pika-lendar {
       width: 500px;
       height: 210px;
+    }
+
+    #calendar-popup {
+      position: absolute;
+      width: 200px;
+      height: 100px;
+      background-color: rgb(98,125,57);
+      border: 1px solid black;
+      overflow: hidden;
+      display: none;
+      z-index: 10000;
     }
   </style>
 </head>
@@ -225,6 +266,7 @@
   <p class="calendar-subtitle">Выберите дату:</p>
   <div id="calendar">
 
+    <div id="calendar-popup"></div>
   </div>
 </div>
 
