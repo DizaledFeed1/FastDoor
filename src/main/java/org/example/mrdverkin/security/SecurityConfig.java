@@ -53,6 +53,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/home/seller/**", "/orders/**").hasRole("SELLER")
                         .requestMatchers("/home/mainInstaller/**").hasRole("MainInstaller")
                         .requestMatchers("edit/**").hasAnyRole("SELLER", "MainInstaller")
