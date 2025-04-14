@@ -19,10 +19,6 @@ public class RegistrationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping
-    public String registerForm() {
-        return "registration";
-    }
     @PostMapping
     public ResponseEntity<String> processRegistration(@RequestBody RegistrationForm form) {
         if (!form.isPasswordMatching()){
