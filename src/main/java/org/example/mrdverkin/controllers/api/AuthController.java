@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api")
 
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthService authService;
 
@@ -23,7 +27,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest,  HttpServletRequest httpRequest) {
+        logger.info("Login attempt with username: {} and password: {}", loginRequest.getUsername(), loginRequest.getPassword());
+
         boolean succes = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
+
         if (succes) {
             httpRequest.getSession(true);
             return ResponseEntity.ok("Login Successful");
