@@ -1,97 +1,97 @@
-<!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная</title>
-    <link rel="stylesheet" th:href="@{/style/style.css}">
-    <link rel="stylesheet" th:href="@{/style/main.css}">
-    <link rel="stylesheet" th:href="@{/style/mobileGlobalStyles.css}">
-</head>
-<body>
-<header class="header">
-    <figure>
-        <a href="/"><img class="logo" th:src="@{/logo-v4-2.svg}" alt="Логотип компании"></a>
-     </figure>
-    <nav class="nav">
-        <ul>
+<!--<!DOCTYPE html>-->
+<!--<html lang="ru" xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Главная</title>-->
+<!--    <link rel="stylesheet" th:href="@{/style/style.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/style/main.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/style/mobileGlobalStyles.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--<header class="header">-->
+<!--    <figure>-->
+<!--        <a href="/"><img class="logo" th:src="@{/logo-v4-2.svg}" alt="Логотип компании"></a>-->
+<!--     </figure>-->
+<!--    <nav class="nav">-->
+<!--        <ul>-->
+<!--&lt;!&ndash;            <li><a href="/listOrders">Заказы</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li><a href="/profile">Мой профиль</a></li>&ndash;&gt;-->
+<!--            <ul>-->
+<!--                <a href="http://localhost:5173">Тест</a>-->
+<!--                &lt;!&ndash; Показываем "Выход", если пользователь залогинен &ndash;&gt;-->
+<!--                <li sec:authorize="isAuthenticated()">-->
+<!--                    <form th:action="@{/logout}" method="post">-->
+<!--                        <button type="submit">Выход</button>-->
+<!--                    </form>-->
+<!--                </li>-->
+<!--                &lt;!&ndash; Показываем "Register" и "Login", если пользователь НЕ залогинен &ndash;&gt;-->
+<!--                <li sec:authorize="!isAuthenticated()">-->
+<!--                    <a href="/register">Регистрация</a>-->
+<!--                </li>-->
+<!--                <li sec:authorize="!isAuthenticated()">-->
+<!--                    <a href="/login">Вход</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </ul>-->
+<!--    </nav>-->
+
+
+
+<!--</header>-->
+<!--<main>-->
+<!--    <h4>Инфа по сайту, документация</h4>-->
+<!--</main>-->
+<!--<footer class="footer">-->
+<!--    <p>Контактная информация: info@doorscompany.com</p>-->
+<!--    <p><a href="/privacy">Политика конфиденциальности</a> | <a href="/terms">Условия использования</a></p>-->
+<!--    <div class="social-links">-->
+<!--        <a href="https://mrdverkin.ru/">Каталог</a>-->
+<!--        <a href="https://twitter.com">Twitter</a>-->
+<!--    </div>-->
+<!--</footer>-->
+
+
+<!--<div class="burger">-->
+<!--    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--        <path d="M4 18L20 18" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>-->
+<!--        <path d="M4 12L20 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>-->
+<!--        <path d="M4 6L20 6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>-->
+<!--    </svg>-->
+<!--</div>-->
+
+<!--<div class="burger_popup">-->
+<!--    <div class="burger_popup_close">-->
+<!--        <svg xmlns="http://www.w3.org/2000/svg" color="white" width="20" height="20" viewBox="0 0 32 32">-->
+<!--            <path fill="#000000" d="M17.414 16L24 9.414L22.586 8L16 14.586L9.414 8L8-->
+<!--            9.414L14.586 16L8 22.586L9.414 24L16 17.414L22.586 24L24 22.586z"/></svg>-->
+<!--    </div>-->
+<!--    <nav class="navBurger">-->
+<!--        <ul>-->
 <!--            <li><a href="/listOrders">Заказы</a></li>-->
 <!--            <li><a href="/profile">Мой профиль</a></li>-->
-            <ul>
-                <a href="http://localhost:5173">Тест</a>
-                <!-- Показываем "Выход", если пользователь залогинен -->
-                <li sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit">Выход</button>
-                    </form>
-                </li>
-                <!-- Показываем "Register" и "Login", если пользователь НЕ залогинен -->
-                <li sec:authorize="!isAuthenticated()">
-                    <a href="/register">Регистрация</a>
-                </li>
-                <li sec:authorize="!isAuthenticated()">
-                    <a href="/login">Вход</a>
-                </li>
-            </ul>
-        </ul>
-    </nav>
+<!--            &lt;!&ndash; Если пользователь есть в сессии, выводим ссылку "Выход" &ndash;&gt;-->
+<!--            <ul>-->
+<!--                &lt;!&ndash; Показываем "Выход", если пользователь залогинен &ndash;&gt;-->
+<!--                <li sec:authorize="isAuthenticated()">-->
+<!--                    <form th:action="@{/logout}" method="post">-->
+<!--                        <button type="submit">Выход</button>-->
+<!--                    </form>-->
+<!--                </li>-->
+<!--                &lt;!&ndash; Показываем "Register" и "Login", если пользователь НЕ залогинен &ndash;&gt;-->
+<!--                <li sec:authorize="!isAuthenticated()">-->
+<!--                    <a href="/register">Регистрация</a>-->
+<!--                </li>-->
+<!--                <li sec:authorize="!isAuthenticated()">-->
+<!--                    <a href="/login">Вход</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</div>-->
 
 
-
-</header>
-<main>
-    <h4>Инфа по сайту, документация</h4>
-</main>
-<footer class="footer">
-    <p>Контактная информация: info@doorscompany.com</p>
-    <p><a href="/privacy">Политика конфиденциальности</a> | <a href="/terms">Условия использования</a></p>
-    <div class="social-links">
-        <a href="https://mrdverkin.ru/">Каталог</a>
-        <a href="https://twitter.com">Twitter</a>
-    </div>
-</footer>
-
-
-<div class="burger">
-    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 18L20 18" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-        <path d="M4 12L20 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-        <path d="M4 6L20 6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-</div>
-
-<div class="burger_popup">
-    <div class="burger_popup_close">
-        <svg xmlns="http://www.w3.org/2000/svg" color="white" width="20" height="20" viewBox="0 0 32 32">
-            <path fill="#000000" d="M17.414 16L24 9.414L22.586 8L16 14.586L9.414 8L8
-            9.414L14.586 16L8 22.586L9.414 24L16 17.414L22.586 24L24 22.586z"/></svg>
-    </div>
-    <nav class="navBurger">
-        <ul>
-            <li><a href="/listOrders">Заказы</a></li>
-            <li><a href="/profile">Мой профиль</a></li>
-            <!-- Если пользователь есть в сессии, выводим ссылку "Выход" -->
-            <ul>
-                <!-- Показываем "Выход", если пользователь залогинен -->
-                <li sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit">Выход</button>
-                    </form>
-                </li>
-                <!-- Показываем "Register" и "Login", если пользователь НЕ залогинен -->
-                <li sec:authorize="!isAuthenticated()">
-                    <a href="/register">Регистрация</a>
-                </li>
-                <li sec:authorize="!isAuthenticated()">
-                    <a href="/login">Вход</a>
-                </li>
-            </ul>
-        </ul>
-    </nav>
-</div>
-
-
-<script th:src="@{../js/burgerMenu.js}" th:inline="javascript"></script>
-</body>
-</html>
+<!--<script th:src="@{../js/burgerMenu.js}" th:inline="javascript"></script>-->
+<!--</body>-->
+<!--</html>-->
