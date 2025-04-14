@@ -1,6 +1,7 @@
-package org.example.mrdverkin.security;
+package org.example.mrdverkin.controllers;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
+import org.example.mrdverkin.security.RegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
 
 
 @Controller
@@ -19,11 +22,13 @@ public class RegistrationController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping
-    public ResponseEntity<String> processRegistration(@RequestBody RegistrationForm form) {
+    public ResponseEntity<Map<String, String>> processRegistration(@RequestBody RegistrationForm form) {
         if (!form.isPasswordMatching()){
-            return ResponseEntity.ok("Failed registration");
+            return ResponseEntity
+                    .badRequest() // возвращает статус 400
+                    .body(Map.of("message", "Passwords do not match"));
         }
         userRepo.save(form.toUser(passwordEncoder));
-        return ResponseEntity.ok("Register Successful");
+        return ResponseEntity.ok(Map.of("message", "Register Successful"));
     }
 }
