@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 
@@ -26,16 +28,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest,  HttpServletRequest httpRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest, HttpServletRequest httpRequest) {
         logger.info("Login attempt with username: {} and password: {}", loginRequest.getUsername(), loginRequest.getPassword());
 
         boolean succes = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
 
         if (succes) {
             httpRequest.getSession(true);
-            return ResponseEntity.ok("Login Successful");
+            return ResponseEntity.ok(Map.of("message", "Login Successful"));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
     }
 }
