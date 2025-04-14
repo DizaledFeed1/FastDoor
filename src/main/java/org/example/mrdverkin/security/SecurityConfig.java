@@ -41,7 +41,6 @@ public class SecurityConfig {
         // Возвращаем объект AuthenticationManager
         return authenticationManagerBuilder.build();
     }
-
     // Теперь возвращаем Optional<User>, а не просто User
     @Bean
     public UserDetailsService userDetailsService() {
