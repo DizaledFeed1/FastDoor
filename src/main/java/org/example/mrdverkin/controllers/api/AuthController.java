@@ -29,7 +29,8 @@ public class AuthController {
             httpRequest.getSession(true);
             return ResponseEntity.ok("Login Successful");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");        }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 }
 
