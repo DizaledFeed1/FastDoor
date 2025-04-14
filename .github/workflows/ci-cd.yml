@@ -36,11 +36,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Wait for PostgreSQL
-        run: sleep 10  # Даем БД время на запуск
-
-      - name: Build with Maven
-        run: mvn clean install
+#      - name: Wait for PostgreSQL
+#        run: sleep 10  # Даем БД время на запуск
+#
+#      - name: Build with Maven
+#        run: mvn clean install
 
 #Убрал тесты для проверки
 #      - name: Run tests

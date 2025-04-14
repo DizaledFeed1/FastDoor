@@ -1,7 +1,6 @@
 package org.example.mrdverkin.controllers.api;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.example.mrdverkin.dto.LoginRequest;
 import org.example.mrdverkin.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
