@@ -12,6 +12,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,48 +50,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomSuccessHandler customSuccessHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/login").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/home/seller/**", "/orders/**").hasRole("SELLER")
-                        .requestMatchers("/home/mainInstaller/**").hasRole("MainInstaller")
-                        .requestMatchers("edit/**").hasAnyRole("SELLER", "MainInstaller")
-                        .requestMatchers("/home/admin").hasRole("ADMIN")
-                        .requestMatchers("/style/**", "/images/**", "/**", "/login", "/register", "/h2-console/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/orders/create").hasAuthority("SCOPE_readOrders")
-                        .requestMatchers(HttpMethod.POST, "/orders").hasRole("SCOPE_writeOrders")
+                        .requestMatchers("/api/login","/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
-                .rememberMe(remember -> remember
-                        .tokenValiditySeconds(Integer.MAX_VALUE)
-                        .key("mrDverkin")
-                        .rememberMeParameter("rememberMe")
-                )
-                .sessionManagement(session -> session
-                        .maximumSessions(1) // Один юзер — одна сессия
-                        .expiredUrl("/login?expired=true") // Если сессия истекла — кидает на логин
-                )
-                .sessionManagement(session -> session
-                        .sessionFixation().migrateSession() // Новая сессия при каждой авторизации
-                        .invalidSessionUrl("/login") // Если сессия стала невалидной
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .successHandler(customSuccessHandler)
-                        .failureUrl("/login?error=true")
-                )
-                .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Разрешить использование фреймов только с того же источника
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/main")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                )
+                .sessionManagement(e -> e
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .build();
     }
 }

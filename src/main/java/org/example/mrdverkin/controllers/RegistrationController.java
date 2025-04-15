@@ -1,7 +1,7 @@
 package org.example.mrdverkin.controllers;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
-import org.example.mrdverkin.security.RegistrationForm;
+import org.example.mrdverkin.dto.RegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

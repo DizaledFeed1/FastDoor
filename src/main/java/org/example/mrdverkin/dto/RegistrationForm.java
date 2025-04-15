@@ -1,4 +1,4 @@
-package org.example.mrdverkin.security;
+package org.example.mrdverkin.dto;
 
 import lombok.Data;
 import org.example.mrdverkin.dataBase.Entitys.User;
