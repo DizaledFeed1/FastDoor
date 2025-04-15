@@ -12,9 +12,5 @@ public class AppConfig {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
 
 }
