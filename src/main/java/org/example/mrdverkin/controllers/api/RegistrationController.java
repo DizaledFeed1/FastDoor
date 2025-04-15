@@ -1,4 +1,4 @@
-package org.example.mrdverkin.controllers;
+package org.example.mrdverkin.controllers.api;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.RegistrationForm;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/register")
+@RequestMapping("/api/register")
 public class RegistrationController {
     @Autowired
     private UserRepository userRepo;
