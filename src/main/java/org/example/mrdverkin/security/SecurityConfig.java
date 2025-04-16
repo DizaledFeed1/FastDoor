@@ -35,10 +35,11 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .headers(headers -> headers.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/csrf").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .build();
     }
