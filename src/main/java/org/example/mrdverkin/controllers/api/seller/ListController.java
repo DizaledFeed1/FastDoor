@@ -1,4 +1,4 @@
-package org.example.mrdverkin.controllers.api;
+package org.example.mrdverkin.controllers.api.seller;
 
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;

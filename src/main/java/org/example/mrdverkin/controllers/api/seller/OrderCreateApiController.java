@@ -1,4 +1,4 @@
-package org.example.mrdverkin.controllers.api;
+package org.example.mrdverkin.controllers.api.seller;
 
 import jakarta.validation.Valid;
 import org.example.mrdverkin.dataBase.Entitys.Order;
@@ -30,7 +30,10 @@ public class OrderCreateApiController {
     @Autowired
     private UserRepository userRepository;
 
-
+    /**
+     * Метод для отображен тэмплейта.
+          * @return
+     */
     @GetMapping("/create")
     public ResponseEntity<Map<String, Object>> getAvailabilityList() {
         try {
@@ -44,6 +47,14 @@ public class OrderCreateApiController {
         }
     }
 
+    /**
+     * Метод для создания заказа, проверяет корректность введённых данных.
+        * @param order
+        * @param user
+        * @param sessionStatus
+        * @param bindingResult
+        * @return
+     */
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createOrder(@RequestBody @Valid Order order,
                               @AuthenticationPrincipal User user,

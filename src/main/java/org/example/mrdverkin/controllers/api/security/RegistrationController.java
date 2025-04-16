@@ -1,4 +1,4 @@
-package org.example.mrdverkin.controllers.api;
+package org.example.mrdverkin.controllers.api.security;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.RegistrationForm;
