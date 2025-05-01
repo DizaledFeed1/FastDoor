@@ -32,12 +32,13 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    private final Set<String> roles; // Может содержать "ROLE_USER", "ROLE_MainInstaller", "ROLE_ADMIN"
+    private final Set<String> roles; // Может содержать "ROLE_SELLER", "ROLE_MainInstaller", "ROLE_ADMIN"
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(SimpleGrantedAuthority::new) // Преобразуем роли в GrantedAuthority
+                .map(role -> new SimpleGrantedAuthority(role)) // Преобразуем роли в GrantedAuthority
                 .collect(Collectors.toList());
     }
 }

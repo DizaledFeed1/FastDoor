@@ -1,6 +1,7 @@
 package org.example.mrdverkin.services;
 
 import org.example.mrdverkin.dataBase.Entitys.Order;
+import org.example.mrdverkin.dataBase.Entitys.Role;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,12 @@ public class SellerService {
             bindingResult.addError(new FieldError("order", "inDoorQuantity", "Превышен лимит межкомнатных дверей на этот день"));
         }
         return bindingResult;
+    }
+
+    // Проверяем роли на допустимость
+    public void setRoles(String role) {
+        if (!Role.isValidRole(role)) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
     }
 }

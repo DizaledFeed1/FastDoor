@@ -2,6 +2,7 @@ package org.example.mrdverkin.controllers.api.security;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.RegistrationForm;
+import org.example.mrdverkin.services.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,8 @@ public class RegistrationController {
     @Autowired
     private UserRepository userRepo;
     @Autowired
+    private SellerService sellerService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping
@@ -28,7 +31,12 @@ public class RegistrationController {
                     .badRequest() // возвращает статус 400
                     .body(Map.of("message", "Passwords do not match"));
         }
-        userRepo.save(form.toUser(passwordEncoder));
-        return ResponseEntity.ok(Map.of("message", "Register Successful"));
+        try {
+            sellerService.setRoles(form.getRole());
+            userRepo.save(form.toUser(passwordEncoder));
+            return ResponseEntity.ok(Map.of("message", "Register Successful"));
+        }
+        catch (Exception e){}
+        return ResponseEntity.badRequest().body(Map.of("message", "Invalid role"));
     }
 }

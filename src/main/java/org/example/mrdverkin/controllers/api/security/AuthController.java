@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        List<String> answer = new ArrayList<>();
 
         try {
             UsernamePasswordAuthenticationToken authToken =
@@ -41,6 +43,18 @@ public class AuthController {
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
 
+            for (String role : roles) {
+                if (role.equals("ROLE_ADMIN")) {
+                    answer.add("administrator");
+                }
+                else if(role.equals("ROLE_SELLER")) {
+                    answer.add("salespeople");
+                }
+                else if(role.equals("ROLE_MainInstaller")) {
+                    answer.add("main");
+                }
+            }
+
             // Устанавливаем аутентификацию в SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
             request.getSession(true)
@@ -48,7 +62,7 @@ public class AuthController {
                             SecurityContextHolder.getContext());
 
             return ResponseEntity.ok(Map.of("message", "Login Successful",
-                    "roles", String.join(", ", roles)));
+                    "roles", String.join(", ", answer)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
