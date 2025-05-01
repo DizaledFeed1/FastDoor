@@ -12,7 +12,7 @@ import org.springframework.validation.FieldError;
 /**
  * Класс сервис для обработки запросов продавца.
  * @author Кирилл Селявский
- * @version 1.0
+ * @version 1.1
  */
 public class SellerService {
     @Autowired
@@ -35,7 +35,11 @@ public class SellerService {
         return bindingResult;
     }
 
-    // Проверяем роли на допустимость
+    /**
+     * Метод для проверки корректности введённых пользователем ролей
+     * @param role
+     * @exception IllegalArgumentException
+     */
     public void setRoles(String role) {
         if (!Role.isValidRole(role)) {
             throw new IllegalArgumentException("Invalid role: " + role);

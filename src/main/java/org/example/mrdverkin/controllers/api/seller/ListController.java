@@ -4,6 +4,7 @@ import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.OrderAttribute;
+import org.example.mrdverkin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +23,13 @@ import java.util.Map;
 public class ListController {
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/sellerList")
     public ResponseEntity<Map<String, Object>> sellerList(@AuthenticationPrincipal User user,
                                                           @RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size) {
-
         try {
             // Создаём пагинацию
             Pageable pageable = PageRequest.of(page, size);
@@ -51,4 +53,9 @@ public class ListController {
         }
     }
 
+    @DeleteMapping("/sellerList")
+    public ResponseEntity<Map<String, Object>>  deleteOrder(@AuthenticationPrincipal User user,
+                                                            @RequestParam Long id) {
+            return orderService.checkUser(user, id);
+    }
 }
