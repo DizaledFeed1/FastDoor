@@ -41,6 +41,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**").permitAll()
                         .anyRequest().authenticated())
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/api/logout")
+                        .permitAll()
+                )
                 .build();
     }
 
