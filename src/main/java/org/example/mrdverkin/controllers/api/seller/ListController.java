@@ -53,9 +53,45 @@ public class ListController {
         }
     }
 
-    @DeleteMapping("/sellerList")
+    /**
+     * Медот возвращает список всех заказов для админа с пагинацией.
+     * @param page
+     * @param size
+     * @return ResponseEntity<Map<String, Object>>
+     */
+    @GetMapping("/adminList")
+    public ResponseEntity<Map<String, Object>> adminPanel(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders = orderRepository.findAll(pageable);
+        List<OrderAttribute> adminMapping = OrderAttribute.fromOrderList(orders);
+
+        response.put("orders", adminMapping);
+        response.put("currentPage", page);
+        response.put("totalPages", orders.getTotalPages());
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Медот для удаления заказа по id
+     * @param user
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete")
     public ResponseEntity<Map<String, Object>>  deleteOrder(@AuthenticationPrincipal User user,
                                                             @RequestParam Long id) {
-            return orderService.checkUser(user, id);
+            return orderService.deleteOrderById(user, id);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> searchOrder(@RequestParam String nickname,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return orderService.searchOrderBySeller(nickname, pageable, page);
+    }
+
 }
