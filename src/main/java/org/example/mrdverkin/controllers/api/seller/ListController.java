@@ -4,6 +4,7 @@ import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.OrderAttribute;
+import org.example.mrdverkin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +23,13 @@ import java.util.Map;
 public class ListController {
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/sellerList")
     public ResponseEntity<Map<String, Object>> sellerList(@AuthenticationPrincipal User user,
                                                           @RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size) {
-
         try {
             // Создаём пагинацию
             Pageable pageable = PageRequest.of(page, size);
@@ -49,6 +51,47 @@ public class ListController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Error while fetching list"));
         }
+    }
+
+    /**
+     * Медот возвращает список всех заказов для админа с пагинацией.
+     * @param page
+     * @param size
+     * @return ResponseEntity<Map<String, Object>>
+     */
+    @GetMapping("/adminList")
+    public ResponseEntity<Map<String, Object>> adminPanel(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders = orderRepository.findAll(pageable);
+        List<OrderAttribute> adminMapping = OrderAttribute.fromOrderList(orders);
+
+        response.put("orders", adminMapping);
+        response.put("currentPage", page);
+        response.put("totalPages", orders.getTotalPages());
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Медот для удаления заказа по id
+     * @param user
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, Object>>  deleteOrder(@AuthenticationPrincipal User user,
+                                                            @RequestParam Long id) {
+            return orderService.deleteOrderById(user, id);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> searchOrder(@RequestParam String nickname,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return orderService.searchOrderBySeller(nickname, pageable, page);
     }
 
 }

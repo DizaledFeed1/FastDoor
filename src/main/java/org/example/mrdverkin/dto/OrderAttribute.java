@@ -24,7 +24,7 @@ public class OrderAttribute {
     private String messageSeller;
     private String messageMainInstaller;
 
-    private String userName;
+    private String nickname;
 
 
     // Метод для преобразования Order в OrderAttribute
@@ -38,7 +38,7 @@ public class OrderAttribute {
         orderAttr.setFrontDoorQuantity(order.getFrontDoorQuantity());
         orderAttr.setInDoorQuantity(order.getInDoorQuantity());
         if (order.getUser() != null) {
-            orderAttr.setUserName(order.getUser().getFullName());
+            orderAttr.setNickname(order.getUser().getNickname());
         }
         if (order.getInstaller() != null) {
             orderAttr.setInstallerName(order.getInstaller().getFullName());
