@@ -43,7 +43,7 @@ public class OrderService {
             existingOrder.setFullName(orderAttribute.getFullName());
             existingOrder.setAddress(orderAttribute.getAddress());
             existingOrder.setPhone(orderAttribute.getPhone());
-            existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
+            existingOrder.setMessageSeller(orderAttribute.getMessageSeller());
             existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
             existingOrder.setDateOrder(orderAttribute.getDateOrder());
             existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
