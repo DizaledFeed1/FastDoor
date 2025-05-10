@@ -1,4 +1,4 @@
-package org.example.mrdverkin.controllers.api.seller;
+package org.example.mrdverkin.controllers.api.orders;
 
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -75,23 +76,26 @@ public class ListController {
     }
 
     /**
-     * Медот для удаления заказа по id
-     * @param user
-     * @param id
+     * Метод для сортировки заказов по продавцам(для админа и установщика)
+     * @param nickname
+     * @param page
+     * @param size
      * @return
      */
-    @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, Object>>  deleteOrder(@AuthenticationPrincipal User user,
-                                                            @RequestParam Long id) {
-            return orderService.deleteOrderById(user, id);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<Map<String, Object>> searchOrder(@RequestParam String nickname,
-                                                           @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int size){
+    @GetMapping("/sort")
+    public ResponseEntity<Map<String, Object>> sortOrder(@RequestParam String nickname,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
         return orderService.searchOrderBySeller(nickname, pageable, page);
     }
+
+//    @PostMapping("/{id}")
+//    public String updateOrder(@PathVariable Long id, @ModelAttribute("orderAttribute") OrderAttribute orderAttribute) {
+//        if (orderService.updateOrder(id, orderAttribute).hasErrors()){
+//            return "editOrder";
+//        }
+//        return "redirect:/listOrdersSeller";
+//    }
 
 }
