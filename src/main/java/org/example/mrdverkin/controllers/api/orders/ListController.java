@@ -89,13 +89,4 @@ public class ListController {
         Pageable pageable = PageRequest.of(page, size);
         return orderService.searchOrderBySeller(nickname, pageable, page);
     }
-
-//    @PostMapping("/{id}")
-//    public String updateOrder(@PathVariable Long id, @ModelAttribute("orderAttribute") OrderAttribute orderAttribute) {
-//        if (orderService.updateOrder(id, orderAttribute).hasErrors()){
-//            return "editOrder";
-//        }
-//        return "redirect:/listOrdersSeller";
-//    }
-
 }

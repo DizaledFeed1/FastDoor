@@ -29,11 +29,11 @@ public class OrderController {
         return "editOrder";
     }
 
-    @PostMapping("/{id}")
-    public String updateOrder(@PathVariable Long id, @ModelAttribute("orderAttribute") OrderAttribute orderAttribute, BindingResult bindingResult) {
-        if (orderService.updateOrder(id, orderAttribute,bindingResult).hasErrors()){
-            return "editOrder";
-        }
-        return "redirect:/listOrdersSeller";
-    }
+//    @PostMapping("/{id}")
+//    public String updateOrder(@PathVariable Long id, @ModelAttribute("orderAttribute") OrderAttribute orderAttribute, BindingResult bindingResult) {
+//        if (orderService.updateOrder(id, orderAttribute,bindingResult).hasErrors()){
+//            return "editOrder";
+//        }
+//        return "redirect:/listOrdersSeller";
+//    }
 }

@@ -34,7 +34,7 @@ public class OrderService {
         return orderRepository.findByOrderId(id);
     }
 
-    public BindingResult updateOrder(Long id, OrderAttribute orderAttribute, BindingResult bindingResult) {
+    public ResponseEntity<Map<String, Object>> updateOrder(Long id, OrderAttribute orderAttribute) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
@@ -51,14 +51,11 @@ public class OrderService {
             if (orderAttribute.getInstallerName() != null) {
                 existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
             }
-            sellerService.check(bindingResult, existingOrder);
-            if (!bindingResult.hasErrors()) {
-                orderRepository.save(existingOrder); // Сохраняем изменения
-            }
+            orderRepository.save(existingOrder);
         } else {
-            throw new EntityNotFoundException("Заказ с ID " + id + " не найден");
+            return ResponseEntity.notFound().build();
         }
-        return bindingResult;
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<Map<String, Object>> deleteOrderById(User user, Long id) {

@@ -5,8 +5,6 @@ import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,8 +37,8 @@ public class ManagementOrder {
      * @param userDetails
      * @return
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> edit(@PathVariable Long id,
+    @GetMapping("/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable Long id,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
         System.out.println(userDetails.getAuthorities());
         Order order = orderService.findOrderById(id);
@@ -51,5 +49,12 @@ public class ManagementOrder {
         response.put("role",userDetails.getAuthorities());
 
         return ResponseEntity.ok(response);
+    }
+
+
+    @PatchMapping("/edit/{id}")
+    public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable Long id,
+                                                           @RequestBody OrderAttribute orderAttribute) {
+        return orderService.updateOrder(id, orderAttribute);
     }
 }
