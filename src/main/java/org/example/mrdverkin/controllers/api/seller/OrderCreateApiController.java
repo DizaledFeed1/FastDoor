@@ -1,5 +1,10 @@
 package org.example.mrdverkin.controllers.api.seller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -22,6 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "Order API", description = "Управление созданием заказов и доступностью дат")
 public class OrderCreateApiController {
     @Autowired
     private OrderRepository orderRepository;
@@ -30,10 +36,14 @@ public class OrderCreateApiController {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Метод для отображен тэмплейта.
-          * @return
-     */
+    @Operation(
+            summary = "Получить список доступных дат",
+            description = "Возвращает список доступных дат для создания заказа.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Успешно", content = @Content(schema = @Schema(implementation = Map.class))),
+                    @ApiResponse(responseCode = "401", description = "Ошибка авторизации", content = @Content)
+            }
+    )
     @GetMapping("/create")
     public ResponseEntity<Map<String, Object>> getAvailabilityList() {
         try {
@@ -47,14 +57,15 @@ public class OrderCreateApiController {
         }
     }
 
-    /**
-     * Метод для создания заказа, проверяет корректность введённых данных.
-        * @param order
-        * @param user
-        * @param sessionStatus
-        * @param bindingResult
-        * @return
-     */
+    @Operation(
+            summary = "Создать заказ",
+            description = "Создаёт новый заказ, проверяет валидность введённых данных.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Заказ успешно создан", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Ошибка валидации", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Неавторизован", content = @Content)
+            }
+    )
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createOrder(@RequestBody @Valid Order order,
                               @AuthenticationPrincipal User user,

@@ -1,5 +1,9 @@
 package org.example.mrdverkin.controllers.api.orders;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
@@ -21,12 +25,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/list")
+@Tag(name = "Order Listing API", description = "Получение и сортировка заказов с пагинацией")
 public class ListController {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private OrderService orderService;
 
+    @Operation(
+            summary = "Получить список заказов для продавца",
+            description = "Возвращает постраничный список заказов, созданных текущим продавцом.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Успешный ответ"),
+                    @ApiResponse(responseCode = "401", description = "Ошибка авторизации", content = @Content)
+            }
+    )
     @GetMapping("/sellerList")
     public ResponseEntity<Map<String, Object>> sellerList(@AuthenticationPrincipal User user,
                                                           @RequestParam(defaultValue = "0") int page,
@@ -54,12 +67,13 @@ public class ListController {
         }
     }
 
-    /**
-     * Медот возвращает список всех заказов для админа с пагинацией.
-     * @param page
-     * @param size
-     * @return ResponseEntity<Map<String, Object>>
-     */
+    @Operation(
+            summary = "Получить список всех заказов (для админа)",
+            description = "Возвращает постраничный список всех заказов в системе.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Успешный ответ")
+            }
+    )
     @GetMapping("/adminList")
     public ResponseEntity<Map<String, Object>> adminPanel(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size) {
@@ -75,13 +89,14 @@ public class ListController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Метод для сортировки заказов по продавцам(для админа и установщика)
-     * @param nickname
-     * @param page
-     * @param size
-     * @return
-     */
+    @Operation(
+            summary = "Отсортировать заказы по продавцу",
+            description = "Возвращает заказы, отфильтрованные по продавцу (по нику), с пагинацией.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Успешный ответ"),
+                    @ApiResponse(responseCode = "400", description = "Некорректный запрос", content = @Content)
+            }
+    )
     @GetMapping("/sort")
     public ResponseEntity<Map<String, Object>> sortOrder(@RequestParam String nickname,
                                                          @RequestParam(defaultValue = "0") int page,
