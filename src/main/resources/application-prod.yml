@@ -13,3 +13,12 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  # Настройки для Springdoc (Swagger)
+  doc:
+    swagger-ui:
+      enabled: true
+      path: /swagger-ui.html
+    api-docs:
+      enabled: true
+      path: /v3/api-docs
