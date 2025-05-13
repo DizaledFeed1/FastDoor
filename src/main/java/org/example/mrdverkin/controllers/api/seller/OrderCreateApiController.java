@@ -68,18 +68,8 @@ public class OrderCreateApiController {
     )
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createOrder(@RequestBody @Valid Order order,
-                              @AuthenticationPrincipal User user,
-                              SessionStatus sessionStatus, BindingResult bindingResult) {
-        sellerService.check(bindingResult,order);
+                              @AuthenticationPrincipal User user) {
 
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", bindingResult.getAllErrors().get(0).getDefaultMessage()));
-        }
-        order.setUser(user);
-        orderRepository.save(order);
-        userRepository.save(user);
-        sessionStatus.setComplete();
-
-        return ResponseEntity.ok(Map.of("message", "Order created"));
+        return sellerService.create(order,user);
     }
 }

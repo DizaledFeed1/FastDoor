@@ -1,6 +1,5 @@
 package org.example.mrdverkin.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,20 +36,19 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
-
-            // Обновляем поля заказа
-            existingOrder.setFullName(orderAttribute.getFullName());
-            existingOrder.setAddress(orderAttribute.getAddress());
-            existingOrder.setPhone(orderAttribute.getPhone());
-            existingOrder.setMessageSeller(orderAttribute.getMessageSeller());
-            existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
-            existingOrder.setDateOrder(orderAttribute.getDateOrder());
-            existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
-            existingOrder.setInDoorQuantity(orderAttribute.getInDoorQuantity());
-            if (orderAttribute.getInstallerName() != null) {
-                existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
-            }
-            orderRepository.save(existingOrder);
+                // Обновляем поля заказа
+                existingOrder.setFullName(orderAttribute.getFullName());
+                existingOrder.setAddress(orderAttribute.getAddress());
+                existingOrder.setPhone(orderAttribute.getPhone());
+                existingOrder.setMessageSeller(orderAttribute.getMessageSeller());
+                existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
+                existingOrder.setDateOrder(orderAttribute.getDateOrder());
+                existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
+                existingOrder.setInDoorQuantity(orderAttribute.getInDoorQuantity());
+                if (orderAttribute.getInstallerName() != null) {
+                    existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
+                }
+                orderRepository.save(existingOrder);
         } else {
             return ResponseEntity.notFound().build();
         }
