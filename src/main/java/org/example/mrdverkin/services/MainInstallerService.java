@@ -31,9 +31,9 @@ public class MainInstallerService {
         try {
             String phoneNumber = order.getInstaller().getPhone();
             String message = "Вам назначен заказ по адресу: " + order.getAddress() +
-                    "\\nДата: " + order.getDateOrder() +
-                    "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
-                    "\\nКоличество межкомнатных дверей: " + order.getInDoorQuantity() +
+//                    "\\nДата: " + order.getDateOrder() +
+//                    "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
+//                    "\\nКоличество межкомнатных дверей: " + order.getInDoorQuantity() +
                     "\\nКомментарий от установщика: " + (order.getMessageMainInstaller() != null ? order.getMessageMainInstaller() : "Нет") +
                     "\\nКомментарий от продавца: " + (order.getMessageSeller() != null ? order.getMessageSeller() : "Нет");
 

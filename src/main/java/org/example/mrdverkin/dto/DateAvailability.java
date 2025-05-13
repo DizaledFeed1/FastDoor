@@ -10,10 +10,10 @@ import java.util.List;
 @Data
 public class DateAvailability {
     private LocalDate date;
-    private Integer frontDoorQuantity;
-    private Integer inDoorQuantity;
+    private Long frontDoorQuantity;
+    private Long inDoorQuantity;
 
-    public DateAvailability(LocalDate date, Integer frontDoorQuantity, Integer inDoorQuantity) {
+    public DateAvailability(LocalDate date, Long frontDoorQuantity, Long inDoorQuantity) {
         this.date = date;
         this.frontDoorQuantity = frontDoorQuantity;
         this.inDoorQuantity = inDoorQuantity;
@@ -23,8 +23,8 @@ public class DateAvailability {
         List<DateAvailability> availabilityList = new ArrayList<>();
         LocalDate today = LocalDate.now();
         for (int i = 0; i < 14; i++ ){
-            DateAvailability availability = new DateAvailability(today, orderRepository.numberOfFrontDoorsToInstallation(today),orderRepository.numberOfInDoorsToInstallation(today));
-            availabilityList.add(availability);
+//            DateAvailability availability = new DateAvailability(today, orderRepository.numberOfFrontDoorsToInstallation(today),orderRepository.numberOfInDoorsToInstallation(today));
+//            availabilityList.add(availability);
             today = today.plusDays(1);
         }
 
