@@ -27,7 +27,7 @@ public class Order {
     private String messageSeller;
     private String messageMainInstaller;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "door_limits_id")
     private DoorLimits doorLimits;
 
