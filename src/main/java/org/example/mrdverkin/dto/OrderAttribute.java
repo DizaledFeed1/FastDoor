@@ -34,9 +34,9 @@ public class OrderAttribute {
         orderAttr.setFullName(order.getFullName());
         orderAttr.setAddress(order.getAddress());
         orderAttr.setPhone(order.getPhone());
-//        orderAttr.setDateOrder(order.getDateOrder());
-//        orderAttr.setFrontDoorQuantity(order.getFrontDoorQuantity());
-//        orderAttr.setInDoorQuantity(order.getInDoorQuantity());
+        orderAttr.setDateOrder(order.getDateOrder());
+        orderAttr.setFrontDoorQuantity(order.getFrontDoorQuantity());
+        orderAttr.setInDoorQuantity(order.getInDoorQuantity());
         if (order.getUser() != null) {
             orderAttr.setNickname(order.getUser().getNickname());
         }

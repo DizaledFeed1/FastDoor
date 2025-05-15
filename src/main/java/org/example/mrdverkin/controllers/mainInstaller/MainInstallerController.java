@@ -1,6 +1,7 @@
 package org.example.mrdverkin.controllers.mainInstaller;
 
 import org.example.mrdverkin.dataBase.Entitys.Order;
+import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
@@ -31,6 +32,8 @@ public class MainInstallerController {
     private InstallerRepository installerRepository;
     @Autowired
     private MainInstallerService mainInstallerService;
+    @Autowired
+    private DoorLimitsRepository doorLimitsRepository;
 
     @ModelAttribute("selectInstaller")
     public InstallerInfo selectInstaller() {
@@ -62,7 +65,7 @@ public class MainInstallerController {
                                 @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Order> ordersPage = orderRepository.findByInstallerNull(pageable);
-        List<DateAvailability> availabilityList = DateAvailability.fromDates(orderRepository);
+        List<DateAvailability> availabilityList = DateAvailability.fromDates(doorLimitsRepository, orderRepository);
 
         List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);
 

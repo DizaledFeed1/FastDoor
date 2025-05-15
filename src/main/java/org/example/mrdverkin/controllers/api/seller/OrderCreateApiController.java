@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
@@ -35,6 +36,8 @@ public class OrderCreateApiController {
     private SellerService sellerService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DoorLimitsRepository doorLimitsRepository;
 
     @Operation(
             summary = "Получить список доступных дат",
@@ -48,7 +51,7 @@ public class OrderCreateApiController {
     public ResponseEntity<Map<String, Object>> getAvailabilityList() {
         try {
             Map<String, Object> response = new HashMap<>();
-            List<DateAvailability> availabilityList = DateAvailability.fromDates(orderRepository);
+            List<DateAvailability> availabilityList = DateAvailability.fromDates(doorLimitsRepository,orderRepository);
             response.put("availabilityList", availabilityList);
             return ResponseEntity.ok(response);
         }
