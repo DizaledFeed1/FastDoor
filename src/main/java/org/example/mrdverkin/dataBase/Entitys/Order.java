@@ -27,12 +27,15 @@ public class Order {
     private String messageSeller;
     private String messageMainInstaller;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "door_limits_id")
+    private DoorLimits doorLimits;
+
     @Column(name = "date_order")
     private LocalDate dateOrder;
 
     private Date placeAt = new Date();
 
-    @NotNull(message = "Колличество дверей не указано")
     @Column(name = "FRONTDOORQUANTITY")
     private int frontDoorQuantity;
 

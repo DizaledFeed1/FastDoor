@@ -1,17 +1,19 @@
 package org.example.mrdverkin.services;
 
+import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.Role;
 import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
+import org.example.mrdverkin.dto.DateAvailability;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @Service
@@ -25,28 +27,36 @@ public class SellerService {
     private OrderRepository orderRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DoorLimitsRepository doorLimitsRepository;
 
     /**
      * Метод для проверки введённых значений пользователя.
      * @param order объект заказа
      * @return объект BindingResult с возможными ошибками
      */
-    public boolean check( Order order) {
+    public boolean checkcreate( Order order, DoorLimits doorLimits) {
         //Проверяем коректность ввода
-        if ((orderRepository.numberOfFrontDoorsToInstallation(order.getDateOrder()) - order.getFrontDoorQuantity()) < 0) {
-            return false;
-//            bindingResult.addError(new FieldError("order", "frontDoorQuantity", "Превышен лимит входных дверей на этот день"));
+        LocalDate today = doorLimits.getLimitDate().toLocalDate();
+        DateAvailability availability = orderRepository.getDoorCountsByDate(today);
+        if (availability == null) {
+            availability = new DateAvailability(today,0L,0L);
         }
-        if ((orderRepository.numberOfInDoorsToInstallation(order.getDateOrder()) - order.getInDoorQuantity()) < 0) {
+        availability.setFrontDoorQuantity(availability.getFrontDoorQuantity() + order.getFrontDoorQuantity());
+        availability.setInDoorQuantity(availability.getInDoorQuantity() + order.getInDoorQuantity());
+        if (availability.getFrontDoorQuantity() > doorLimits.getFrontDoorQuantity() ||
+                availability.getInDoorQuantity() > doorLimits.getInDoorQuantity()) {
             return false;
-//            bindingResult.addError(new FieldError("order", "inDoorQuantity", "Превышен лимит межкомнатных дверей на этот день"));
         }
         return true;
     }
 
     public ResponseEntity<Map<String, String>> create(Order order, User user) {
 
-        if (check(order)) {
+        DoorLimits doorLimits = doorLimitsRepository.findByLimitDate(order.getDoorLimits().getLimitDate());
+
+        if (checkcreate(order,doorLimits)) {
+            order.setDoorLimits(doorLimits);
             order.setUser(user);
             orderRepository.save(order);
             userRepository.save(user);
