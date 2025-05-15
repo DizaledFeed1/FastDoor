@@ -42,9 +42,9 @@ public class OrderService {
                 existingOrder.setPhone(orderAttribute.getPhone());
                 existingOrder.setMessageSeller(orderAttribute.getMessageSeller());
                 existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
-//                existingOrder.setDateOrder(orderAttribute.getDateOrder());
-//                existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
-//                existingOrder.setInDoorQuantity(orderAttribute.getInDoorQuantity());
+                existingOrder.setDateOrder(orderAttribute.getDateOrder());
+                existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
+                existingOrder.setInDoorQuantity(orderAttribute.getInDoorQuantity());
                 if (orderAttribute.getInstallerName() != null) {
                     existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
                 }
