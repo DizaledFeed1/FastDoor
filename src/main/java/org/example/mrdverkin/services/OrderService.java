@@ -1,7 +1,9 @@
 package org.example.mrdverkin.services;
 
+import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
@@ -10,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +29,7 @@ public class OrderService {
     @Autowired
     private InstallerRepository installerRepository;
     @Autowired
-    private SellerService sellerService;
+    private DoorLimitsRepository doorLimitsRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -89,5 +94,30 @@ public class OrderService {
         response.put("totalPages", ordersByNickname.getTotalPages());
 
         return ResponseEntity.ok(response);
+    }
+
+    @Scheduled(cron = "0 */1 * * * *")
+    public void generateMonthlyLimits(){
+
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(1);
+        int defaultFrontDoors = 2;
+        int defaultInDoors = 50;
+
+        for (int i = 0; i < startDate.lengthOfMonth(); i++) {
+            LocalDate date = startDate.plusDays(i);
+
+            // Проверка: существует ли уже запись
+            if (doorLimitsRepository.findByLimitDate(Date.valueOf(date)) != null) {
+                continue;
+            }
+
+            DoorLimits limit = new DoorLimits();
+            limit.setLimitDate(Date.valueOf(date));
+            limit.setFrontDoorQuantity(defaultFrontDoors);
+            limit.setInDoorQuantity(defaultInDoors);
+            doorLimitsRepository.save(limit);
+        }
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Генерация!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
     }
 }

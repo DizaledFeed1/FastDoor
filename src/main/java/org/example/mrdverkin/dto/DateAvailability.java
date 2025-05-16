@@ -23,6 +23,9 @@ public class DateAvailability {
         this.inDoorQuantity = inDoorQuantity;
     }
 
+    //Проблема: при большом количестве записей возвращаемый список будет очень большим
+    //например если в сущности будет записей на год то все записи будут возвращаться даже если даты уже не ликвидны
+    //как вариант удалять прошедшие даты
     public static List<DateAvailability> fromDates(DoorLimitsRepository doorLimitsRepository, OrderRepository orderRepository) {
         List<DateAvailability> availabilityList = new ArrayList<>();
         List<DoorLimits> doorLimits = doorLimitsRepository.findAll();
