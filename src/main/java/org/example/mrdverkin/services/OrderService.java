@@ -96,7 +96,7 @@ public class OrderService {
         return ResponseEntity.ok(response);
     }
 
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void generateMonthlyLimits(){
 
         LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(1);
