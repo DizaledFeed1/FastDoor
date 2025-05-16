@@ -7,6 +7,7 @@ import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
+import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Сервис для управления заказами.
+ */
 @Service
 public class OrderService {
     @Autowired
@@ -33,15 +37,51 @@ public class OrderService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Находит заказ по его ID.
+     *
+     * @param id ID заказа
+     * @return заказ
+     */
     public Order findOrderById(Long id) {
         return orderRepository.findByOrderId(id);
     }
 
+    /**
+     * Проверяет, возможно ли обновить заказ с новыми параметрами, не превышая лимиты.
+     *
+     * @param order     исходный заказ
+     * @param attribute новые параметры заказа
+     * @return true, если обновление допустимо; false в противном случае
+     */
+    public boolean checkUpdate(Order order, OrderAttribute attribute) {
+        DoorLimits doorLimits = doorLimitsRepository.findByLimitDate(order.getDoorLimits().getLimitDate());
+
+        DateAvailability dateAvailabilities = orderRepository.getDoorCountsByDate(order.getDateOrder());
+        dateAvailabilities.setInDoorQuantity((dateAvailabilities.getInDoorQuantity() - order.getInDoorQuantity()) + attribute.getInDoorQuantity());
+        dateAvailabilities.setFrontDoorQuantity((dateAvailabilities.getFrontDoorQuantity() - order.getFrontDoorQuantity()) + attribute.getFrontDoorQuantity());
+
+        if (dateAvailabilities.getFrontDoorQuantity() > doorLimits.getFrontDoorQuantity() ||
+                dateAvailabilities.getInDoorQuantity() > doorLimits.getInDoorQuantity()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Обновляет заказ по ID с новыми атрибутами.
+     *
+     * @param id             ID заказа
+     * @param orderAttribute новые параметры заказа
+     * @return HTTP-ответ: OK — успешное обновление, BadRequest — превышение лимитов, NotFound — заказ не найден
+     */
     public ResponseEntity<Map<String, Object>> updateOrder(Long id, OrderAttribute orderAttribute) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
                 // Обновляем поля заказа
+            if (checkUpdate(existingOrder, orderAttribute)) {
                 existingOrder.setFullName(orderAttribute.getFullName());
                 existingOrder.setAddress(orderAttribute.getAddress());
                 existingOrder.setPhone(orderAttribute.getPhone());
@@ -54,12 +94,20 @@ public class OrderService {
                     existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
                 }
                 orderRepository.save(existingOrder);
+            } else return ResponseEntity.badRequest().build();
         } else {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Удаляет заказ по ID, если он принадлежит указанному пользователю.
+     *
+     * @param user пользователь, пытающийся удалить заказ
+     * @param id   ID заказа
+     * @return HTTP-ответ с сообщением об успехе или ошибке
+     */
     public ResponseEntity<Map<String, Object>> deleteOrderById(User user, Long id) {
         Optional<Order> orderOpt = orderRepository.findById(id);
 
@@ -77,6 +125,14 @@ public class OrderService {
         return ResponseEntity.ok().body(Map.of("message", "Заказ успешно удалён"));
     }
 
+    /**
+     * Поиск заказов, созданных продавцом по его нику.
+     *
+     * @param nickname никнейм продавца
+     * @param pageable параметры пагинации
+     * @param page     текущая страница
+     * @return список заказов и информация о страницах или сообщение об ошибке
+     */
     public ResponseEntity<Map<String, Object>> searchOrderBySeller(String nickname, Pageable pageable, int page) {
         Optional<User> user = userRepository.findByNickname(nickname);
         if (user.isEmpty()){
@@ -96,6 +152,11 @@ public class OrderService {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Запланированная задача, которая создаёт лимиты на следующий месяц в начале каждого месяца.
+     * Запускается 1-го числа каждого месяца в 00:00.
+     * Значения по умолчанию: 2 входных двери и 50 межкомнатных дверей на день.
+     */
     @Scheduled(cron = "0 0 0 1 * *")
     public void generateMonthlyLimits(){
 
@@ -117,7 +178,5 @@ public class OrderService {
             limit.setInDoorQuantity(defaultInDoors);
             doorLimitsRepository.save(limit);
         }
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Генерация!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
     }
 }

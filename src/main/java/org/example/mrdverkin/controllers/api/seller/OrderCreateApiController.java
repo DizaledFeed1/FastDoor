@@ -34,8 +34,7 @@ public class OrderCreateApiController {
     private OrderRepository orderRepository;
     @Autowired
     private SellerService sellerService;
-    @Autowired
-    private UserRepository userRepository;
+
     @Autowired
     private DoorLimitsRepository doorLimitsRepository;
 

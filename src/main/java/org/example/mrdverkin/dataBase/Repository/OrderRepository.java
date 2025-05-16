@@ -17,12 +17,6 @@ import java.time.LocalDate;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findAll(Pageable pageable);
 
-//    @Query("SELECT 70 - COALESCE(SUM(o.inDoorQuantity), 0) FROM Order o WHERE o.dateOrder = :data")
-//    int numberOfInDoorsToInstallation(@Param("data") LocalDate data);
-//
-//    @Query("SELECT 2 - COALESCE(SUM(o.frontDoorQuantity), 0) FROM Order o WHERE o.dateOrder = :data")
-//    int numberOfFrontDoorsToInstallation(@Param("data") LocalDate data);
-
     @Modifying
     @Transactional
     @Query(value = "UPDATE Order o set o.installer = :newInstaller where o.id = :orderId")
