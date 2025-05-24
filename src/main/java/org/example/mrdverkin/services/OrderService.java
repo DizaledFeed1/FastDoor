@@ -126,11 +126,12 @@ public class OrderService {
         if (orderOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Такой заказ не существует"));
         }
-
         Order order = orderOpt.get();
-        if (!order.getUser().equals(user)) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Юзер не принадлежит данному заказу"));
-        }
+
+            if (!order.getUser().equals(user)) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Юзер не принадлежит данному заказу"));
+            }
+
 
         // Если заказ найден и юзер соответствует
         orderRepository.deleteById(id);  // Удаление заказа

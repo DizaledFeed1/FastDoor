@@ -16,7 +16,11 @@ public class InstallerService {
 
     public Installer findInstallerById(Long id) {return installerRepository.findInstallersById(id);}
 
-    public void deleteInstallerById(Long id) {installerRepository.deleteById(id);}
+    public void deleteInstallerById(Long id) {
+        if (!installerRepository.existsById(id)) {
+            throw new IllegalArgumentException("Установщик не найден");
+        }
+        installerRepository.deleteById(id);}
 
     public void createInstaller(String fullName, String phone) {
         Installer installer = new Installer();
