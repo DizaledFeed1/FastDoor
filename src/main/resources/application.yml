@@ -6,6 +6,12 @@ spring:
   profiles:
     active: prod
 
+#logging:
+#  file:
+#    name: logs/app.log
+#  level:
+#    root: INFO
+
   logging:
     level:
       org.springframework.security: DEBUG

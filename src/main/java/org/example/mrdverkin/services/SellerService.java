@@ -8,6 +8,8 @@ import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ public class SellerService {
     @Autowired
     private DoorLimitsRepository doorLimitsRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(SellerService.class);
+
     /**
      * Метод для проверки введённых значений пользователя.
      * @param order объект заказа
@@ -40,7 +44,8 @@ public class SellerService {
         LocalDate today = doorLimits.getLimitDate().toLocalDate();
         DateAvailability availability = orderRepository.getDoorCountsByDate(today);
         if (availability == null) {
-            availability = new DateAvailability(today,0L,0L);
+            availability = new DateAvailability(today,0L,0L, true);
+            logger.error("Попытались добавить заказ на тот день где нет DoorLimits");
         }
         availability.setFrontDoorQuantity(availability.getFrontDoorQuantity() + order.getFrontDoorQuantity());
         availability.setInDoorQuantity(availability.getInDoorQuantity() + order.getInDoorQuantity());

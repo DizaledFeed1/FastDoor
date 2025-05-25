@@ -16,11 +16,13 @@ public class DateAvailability {
     private LocalDate date;
     private Long frontDoorQuantity;
     private Long inDoorQuantity;
+    private boolean available;
 
-    public DateAvailability(LocalDate date, Long frontDoorQuantity, Long inDoorQuantity) {
+    public DateAvailability(LocalDate date, Long frontDoorQuantity, Long inDoorQuantity, boolean available) {
         this.date = date;
         this.frontDoorQuantity = frontDoorQuantity;
         this.inDoorQuantity = inDoorQuantity;
+        this.available = available;
     }
 
     //Проблема: при большом количестве записей возвращаемый список будет очень большим
@@ -33,7 +35,8 @@ public class DateAvailability {
             DateAvailability availability = new DateAvailability(
                     doorLimit.getLimitDate().toLocalDate(),
                     Long.valueOf(doorLimit.getFrontDoorQuantity()),
-                    Long.valueOf(doorLimit.getInDoorQuantity())
+                    Long.valueOf(doorLimit.getInDoorQuantity()),
+                    doorLimit.getAvailability()
             );
             DateAvailability dateAvailability = orderRepository.getDoorCountsByDate(availability.getDate());
             if (dateAvailability == null) {

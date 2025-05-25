@@ -25,6 +25,13 @@ public class DoorLimits {
     @Column(nullable = false)
     private int inDoorQuantity;
 
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean availability = true;
+
     @OneToMany(mappedBy = "doorLimits", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    public boolean getAvailability() {
+        return availability;
+    }
 }

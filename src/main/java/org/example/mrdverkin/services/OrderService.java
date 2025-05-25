@@ -9,6 +9,8 @@ import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.OrderAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +38,7 @@ public class OrderService {
     private DoorLimitsRepository doorLimitsRepository;
     @Autowired
     private UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     /**
      * Находит заказ по его ID.
@@ -60,7 +63,8 @@ public class OrderService {
         DateAvailability dateAvailabilities = orderRepository.getDoorCountsByDate(attribute.getDateOrder());
         //Проверяем есть ли заказы на этот день, если нет приравниваем значения к 0.
         if (dateAvailabilities == null){
-            dateAvailabilities = new DateAvailability(attribute.getDateOrder(), 0L, 0L);
+            dateAvailabilities = new DateAvailability(attribute.getDateOrder(), 0L, 0L, true);
+            logger.error("Попытались добавить заказ на тот день где нет DoorLimits");
         }
 
         //Если в заказе поменялась дата то к количестве дверей добавляем новые и проверяем.

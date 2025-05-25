@@ -39,10 +39,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT new org.example.mrdverkin.dto.DateAvailability(" +
             "o.dateOrder, " +
             "CAST(COALESCE(SUM(o.frontDoorQuantity), 0) AS long), " +
-            "CAST(COALESCE(SUM(o.inDoorQuantity), 0) AS long)) " +
+            "CAST(COALESCE(SUM(o.inDoorQuantity), 0) AS long), " +
+            "o.doorLimits.availability) " +  // или false, или любое выражение
             "FROM Order o WHERE o.dateOrder = :date " +
             "GROUP BY o.dateOrder")
     DateAvailability getDoorCountsByDate(@Param("date") LocalDate date);
+
 
 
 }

@@ -5,6 +5,12 @@ spring:
     password: Porfik10
     driver-class-name: org.postgresql.Driver
 
+logging:
+  file:
+    name: logs/app.log
+  level:
+    root: INFO
+
   jpa:
     properties:
       hibernate.transaction.jta.platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
