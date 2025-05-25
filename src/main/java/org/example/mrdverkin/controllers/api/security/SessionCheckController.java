@@ -28,6 +28,7 @@ public class SessionCheckController {
         switch (role) {
             case "ROLE_SELLER": role = "salespeople"; break;
             case "ROLE_ADMIN": role = "administrator"; break;
+            case "ROLE_MainInstaller": role = "main"; break;
         }
 
         return ResponseEntity.ok(new SessionStatus(true, role));
