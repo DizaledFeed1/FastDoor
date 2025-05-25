@@ -25,6 +25,10 @@ public class SessionCheckController {
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .orElse("ROLE_UNKNOWN");
 
+        switch (role) {
+            case "ROLE_SELLER": role = "salespeople"; break;
+            case "ROLE_ADMIN": role = "administrator"; break;
+        }
 
         return ResponseEntity.ok(new SessionStatus(true, role));
     }
