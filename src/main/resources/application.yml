@@ -3,8 +3,8 @@ spring:
     address: 0.0.0.0
     port: 8080
 
-  profiles:
-    active: prod
+#  profiles:
+#    active: prod
 
 #logging:
 #  file:
@@ -34,7 +34,7 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: embedded
 
   jpa:
     hibernate:
