@@ -120,10 +120,9 @@ public class MainInstallerController {
     @PostMapping()
     public ResponseEntity<?> addInstaller(@RequestBody InstallerInfo installerInfo) {
         try {
-
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
             orderRepository.updateInstaller(installerRepository.findByName(installerInfo.getInstallerFullName()), installerInfo.getOrderId());
-            mainInstallerService.sendMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+//            mainInstallerService.sendMessage(orderRepository.findById(installerInfo.getOrderId()).get());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();

@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -43,6 +44,7 @@ public class Order {
     private int inDoorQuantity;
 
     @ManyToOne
+    @JsonBackReference
     private Installer installer;
 
     @ManyToOne
