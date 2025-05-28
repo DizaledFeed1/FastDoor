@@ -30,7 +30,7 @@ public class DoorLimits {
     private boolean availability = true;
 
     @OneToMany(mappedBy = "doorLimits", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
     public boolean getAvailability() {

@@ -30,7 +30,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "door_limits_id")
-    @JsonBackReference
+//    @JsonBackReference
     private DoorLimits doorLimits;
 
     @Column(name = "date_order")
@@ -45,7 +45,7 @@ public class Order {
     private int inDoorQuantity;
 
     @ManyToOne
-    @JsonBackReference
+//    @JsonBackReference
     private Installer installer;
 
     @ManyToOne

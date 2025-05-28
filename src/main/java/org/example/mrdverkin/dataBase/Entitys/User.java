@@ -23,22 +23,16 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
-    @JsonIgnore
     private final String username;
-    @JsonIgnore
     private final String password;
     private final String nickname;
-    @JsonIgnore
     private final String email;
-    @JsonIgnore
     private final String phone;
 
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    @JsonIgnore
     private final Set<String> roles; // Может содержать "ROLE_SELLER", "ROLE_MainInstaller", "ROLE_ADMIN"
 
 
