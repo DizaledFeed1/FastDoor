@@ -30,7 +30,9 @@ public class User implements UserDetails {
     @JsonIgnore
     private final String password;
     private final String nickname;
+    @JsonIgnore
     private final String email;
+    @JsonIgnore
     private final String phone;
 
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей

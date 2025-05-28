@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class Installer {
 
     @OneToMany(mappedBy = "installer", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 }
