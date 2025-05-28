@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private final String username;
+    @JsonIgnore
     private final String password;
     private final String nickname;
     private final String email;
