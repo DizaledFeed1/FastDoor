@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,6 +30,7 @@ public class DoorLimits {
     private boolean availability = true;
 
     @OneToMany(mappedBy = "doorLimits", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
     public boolean getAvailability() {
