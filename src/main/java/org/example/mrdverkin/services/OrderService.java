@@ -174,7 +174,7 @@ public class OrderService {
      * Запускается 1-го числа каждого месяца в 00:00.
      * Значения по умолчанию: 2 входных двери и 50 межкомнатных дверей на день.
      */
-    @Scheduled(cron = "0 0 0 1 * *")
+    @Scheduled(fixedDelay = 2000)
     public void generateMonthlyLimits(){
 
         LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(1);
