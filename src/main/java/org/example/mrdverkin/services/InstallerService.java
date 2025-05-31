@@ -24,10 +24,12 @@ public class InstallerService {
         installerRepository.deleteById(id);}
 
     public void createInstaller(String fullName, String phone) {
-        Installer installer = new Installer();
-        installer.setFullName(fullName);
-        installer.setPhone(phone);
-        installerRepository.save(installer);
+        try {
+            Installer installer = new Installer();
+            installer.setFullName(fullName);
+            installer.setPhone(phone);
+            installerRepository.save(installer);
+        } catch (Exception e) {}
     }
 
     public ResponseEntity<?> updateInstaller(Long id, String fullName, String phone) {
