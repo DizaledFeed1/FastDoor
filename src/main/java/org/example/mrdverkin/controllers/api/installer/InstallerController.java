@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/installer")
-@Tag(name = "Installers", description = "Изменение установщиков")
+@Tag(name = "InstallersEdit", description = "Изменение установщиков")
 public class InstallerController {
     @Autowired
     private InstallerService installerService;
