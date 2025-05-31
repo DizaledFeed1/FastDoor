@@ -3,6 +3,7 @@ package org.example.mrdverkin.services;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,9 +30,14 @@ public class InstallerService {
         installerRepository.save(installer);
     }
 
-    public void updateInstaller(Long id, String fullName, String phone) {
+    public ResponseEntity<?> updateInstaller(Long id, String fullName, String phone) {
         Installer installer = findInstallerById(id);
+        if (installer == null) {
+            return ResponseEntity.notFound().build();
+        }
         installer.setFullName(fullName);
         installer.setPhone(phone);
-        installerRepository.save(installer);}
+        installerRepository.save(installer);
+        return ResponseEntity.ok().build();
+    }
 }
