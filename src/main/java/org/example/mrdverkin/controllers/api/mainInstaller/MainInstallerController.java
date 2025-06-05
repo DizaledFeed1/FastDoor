@@ -72,10 +72,8 @@ public class MainInstallerController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            // Можно логировать ошибку, если используешь логгер
             Map<String, Object> error = new HashMap<>();
             error.put("error", "Внутренняя ошибка сервера");
-//            error.put("details", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -106,7 +104,6 @@ public class MainInstallerController {
 
             Map<String, Object> error = new HashMap<>();
             error.put("error", "Внутренняя ошибка сервера");
-//            error.put("details", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -152,17 +149,5 @@ public class MainInstallerController {
         response.put("totalPages", ordersPage.getTotalPages());
 
         return ResponseEntity.ok(response);
-    }
-    @Operation(
-            summary = "Закрыть день для добавления заказов",
-            description = "Указывать нужно только date всё остальное мусор",
-            parameters = {
-                    @Parameter(name = "date", description = "Дата которую нужно закрыть", example = "2025-06-06")
-            }
-    )
-    @PatchMapping("/closeDate")
-    public ResponseEntity<?> closeDate(@RequestBody DateAvailability dateAvailability) {
-        doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
-        return ResponseEntity.ok().body("Дата закрыта!");
     }
 }
