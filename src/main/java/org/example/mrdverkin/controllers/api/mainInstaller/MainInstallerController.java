@@ -1,6 +1,7 @@
 package org.example.mrdverkin.controllers.api.mainInstaller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -152,6 +153,13 @@ public class MainInstallerController {
 
         return ResponseEntity.ok(response);
     }
+    @Operation(
+            summary = "Закрыть день для добавления заказов",
+            description = "Указывать нужно только date всё остальное мусор",
+            parameters = {
+                    @Parameter(name = "date", description = "Дата которую нужно закрыть", example = "2025-06-06")
+            }
+    )
     @PatchMapping("/closeDate")
     public ResponseEntity<?> closeDate(@RequestBody DateAvailability dateAvailability) {
         doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
