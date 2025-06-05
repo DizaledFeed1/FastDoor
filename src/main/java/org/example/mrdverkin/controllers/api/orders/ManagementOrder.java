@@ -51,7 +51,7 @@ public class ManagementOrder {
     @GetMapping("/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println(userDetails.getAuthorities());
+//        System.out.println(userDetails.getAuthorities());
         Order order = orderService.findOrderById(id);
         OrderAttribute orderAttribute = new OrderAttribute().fromOrder(order);
 
