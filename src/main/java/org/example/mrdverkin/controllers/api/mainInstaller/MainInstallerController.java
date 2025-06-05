@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,5 +151,10 @@ public class MainInstallerController {
         response.put("totalPages", ordersPage.getTotalPages());
 
         return ResponseEntity.ok(response);
+    }
+    @PatchMapping("/closeDate")
+    public ResponseEntity<?> closeDate(@RequestBody DateAvailability dateAvailability) {
+        doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
+        return ResponseEntity.ok().body("Дата закрыта!");
     }
 }

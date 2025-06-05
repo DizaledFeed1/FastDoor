@@ -7,7 +7,6 @@ import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.services.InstallerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
 

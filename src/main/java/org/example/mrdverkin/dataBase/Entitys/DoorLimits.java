@@ -1,6 +1,5 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
