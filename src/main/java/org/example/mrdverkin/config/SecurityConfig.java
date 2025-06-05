@@ -35,6 +35,12 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session").permitAll()
+                        .requestMatchers("/api/orders/**", "/api/list/sellerList", "/api/delete").hasAnyRole("SELLER")
+                        .requestMatchers("/api/list/adminList").hasAnyRole("ADMIN")
+                        .requestMatchers( "/api/doorLimits/**", "/api/listInstallers/**", "/api/listInstallers"
+                                ,"/api/mainInstaller/**", "/api/installer/**").hasAnyRole("MainInstaller")
+                        .requestMatchers("/api/edit/**").hasAnyRole("SELLER", "MainInstaller")
+                        .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", "MainInstaller")
                         .anyRequest().authenticated())
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/api/logout")

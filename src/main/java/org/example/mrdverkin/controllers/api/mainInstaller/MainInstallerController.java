@@ -1,6 +1,7 @@
 package org.example.mrdverkin.controllers.api.mainInstaller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,10 +71,8 @@ public class MainInstallerController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            // Можно логировать ошибку, если используешь логгер
             Map<String, Object> error = new HashMap<>();
             error.put("error", "Внутренняя ошибка сервера");
-//            error.put("details", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -105,7 +103,6 @@ public class MainInstallerController {
 
             Map<String, Object> error = new HashMap<>();
             error.put("error", "Внутренняя ошибка сервера");
-//            error.put("details", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -151,10 +148,5 @@ public class MainInstallerController {
         response.put("totalPages", ordersPage.getTotalPages());
 
         return ResponseEntity.ok(response);
-    }
-    @PatchMapping("/closeDate")
-    public ResponseEntity<?> closeDate(@RequestBody DateAvailability dateAvailability) {
-        doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
-        return ResponseEntity.ok().body("Дата закрыта!");
     }
 }
