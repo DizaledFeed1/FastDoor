@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findAll(Pageable pageable);
@@ -45,6 +46,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "GROUP BY o.dateOrder, o.doorLimits.availability")
     DateAvailability getDoorCountsByDate(@Param("date") LocalDate date);
 
+    @Query("""
+    SELECT new org.example.mrdverkin.dto.DateAvailability(
+        o.dateOrder,
+        CAST(COALESCE(SUM(o.frontDoorQuantity), 0) AS long),
+        CAST(COALESCE(SUM(o.inDoorQuantity), 0) AS long),
+        o.doorLimits.availability)
+    FROM Order o
+    GROUP BY o.dateOrder, o.doorLimits.availability
+    """)
+    List<DateAvailability> getDoorCountsGroupedByDate();
 
 
 
