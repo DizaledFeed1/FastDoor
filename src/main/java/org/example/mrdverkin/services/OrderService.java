@@ -61,6 +61,7 @@ public class OrderService {
         DoorLimits doorLimits = doorLimitsRepository.findByLimitDate(order.getDoorLimits().getLimitDate());
 
         DateAvailability dateAvailabilities = orderRepository.getDoorCountsByDate(attribute.getDateOrder());
+        System.out.println(dateAvailabilities);
         //Проверяем есть ли заказы на этот день, если нет приравниваем значения к 0.
         if (dateAvailabilities == null){
             dateAvailabilities = new DateAvailability(attribute.getDateOrder(), 0L, 0L, true);
@@ -68,14 +69,14 @@ public class OrderService {
         }
 
         //Если в заказе поменялась дата то к количестве дверей добавляем новые и проверяем.
-        if (order.getDateOrder() != attribute.getDateOrder()){
+        if (!order.getDateOrder().equals(attribute.getDateOrder())){
             dateAvailabilities.setInDoorQuantity(dateAvailabilities.getInDoorQuantity() + attribute.getInDoorQuantity());
             dateAvailabilities.setFrontDoorQuantity(dateAvailabilities.getFrontDoorQuantity() + attribute.getFrontDoorQuantity());
+        }else {
+            // Елси в заказе не поменялась дата то отнимаем старые значения и прибавляем новые.
+            dateAvailabilities.setInDoorQuantity((dateAvailabilities.getInDoorQuantity() - order.getInDoorQuantity()) + attribute.getInDoorQuantity());
+            dateAvailabilities.setFrontDoorQuantity((dateAvailabilities.getFrontDoorQuantity() - order.getFrontDoorQuantity()) + attribute.getFrontDoorQuantity());
         }
-
-        // Елси в заказе не поменялась дата то отнимаем старые значения и прибавляем новые.
-        dateAvailabilities.setInDoorQuantity((dateAvailabilities.getInDoorQuantity() - order.getInDoorQuantity()) + attribute.getInDoorQuantity());
-        dateAvailabilities.setFrontDoorQuantity((dateAvailabilities.getFrontDoorQuantity() - order.getFrontDoorQuantity()) + attribute.getFrontDoorQuantity());
 
         if (dateAvailabilities.getFrontDoorQuantity() > doorLimits.getFrontDoorQuantity() ||
                 dateAvailabilities.getInDoorQuantity() > doorLimits.getInDoorQuantity()) {
