@@ -8,6 +8,8 @@ import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -30,23 +32,31 @@ public class DateAvailability {
     public static List<DateAvailability> fromDates(DoorLimitsRepository doorLimitsRepository, OrderRepository orderRepository) {
         List<DateAvailability> availabilityList = new ArrayList<>();
         List<DoorLimits> doorLimits = doorLimitsRepository.findAll();
-        for (DoorLimits doorLimit : doorLimits ) {
+
+        // Получаем все суммы заказов по датам одним запросом
+        List<DateAvailability> ordersByDate = orderRepository.getDoorCountsGroupedByDate();
+
+        // Преобразуем в Map для быстрого поиска
+        Map<LocalDate, DateAvailability> ordersByDateMap = ordersByDate.stream()
+                .collect(Collectors.toMap(DateAvailability::getDate, o -> o));
+
+        for (DoorLimits doorLimit : doorLimits) {
             DateAvailability availability = new DateAvailability(
                     doorLimit.getLimitDate().toLocalDate(),
-                    Long.valueOf(doorLimit.getFrontDoorQuantity()),
-                    Long.valueOf(doorLimit.getInDoorQuantity()),
+                    (long) doorLimit.getFrontDoorQuantity(),
+                    (long) doorLimit.getInDoorQuantity(),
                     doorLimit.getAvailability()
             );
-            DateAvailability dateAvailability = orderRepository.getDoorCountsByDate(availability.getDate());
-            if (dateAvailability == null) {
-                availabilityList.add(availability);
-            }else {
-                availability.setFrontDoorQuantity(availability.getFrontDoorQuantity() - dateAvailability.getFrontDoorQuantity());
-                availability.setInDoorQuantity(availability.getInDoorQuantity() - dateAvailability.getInDoorQuantity());
-                availabilityList.add(availability);
-            }
-        }
 
+            DateAvailability ordered = ordersByDateMap.get(availability.getDate());
+            if (ordered != null) {
+                availability.setFrontDoorQuantity(availability.getFrontDoorQuantity() - ordered.getFrontDoorQuantity());
+                availability.setInDoorQuantity(availability.getInDoorQuantity() - ordered.getInDoorQuantity());
+            }
+
+            availabilityList.add(availability);
+        }
         return availabilityList;
     }
+
 }
