@@ -4,6 +4,7 @@ import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/orders/create").hasAnyRole("MainInstaller","SELLER")
                         .requestMatchers("/api/orders/**", "/api/list/sellerList", "/api/delete").hasAnyRole("SELLER")
                         .requestMatchers("/api/list/adminList").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/doorLimits/**", "/api/listInstallers/**", "/api/listInstallers"
