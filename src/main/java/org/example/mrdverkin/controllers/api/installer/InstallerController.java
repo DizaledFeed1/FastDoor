@@ -34,7 +34,7 @@ public class InstallerController {
             description = "Обновляет данные выбранного установщика")
     @ApiResponse(responseCode = "200", description = "Данные обновлены")
     @ApiResponse(responseCode = "404", description = "Установщик не найден")
-    @PostMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> updateInstaller(@PathVariable Long id, @RequestParam String fullName, @RequestParam String phone) {
         return installerService.updateInstaller(id, fullName, phone);
     }
