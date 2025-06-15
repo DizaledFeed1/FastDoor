@@ -30,8 +30,29 @@ public class DoorLimitsController {
     )
     @PatchMapping("/closeDate")
     public ResponseEntity<?> closeDate(@RequestBody DateAvailability dateAvailability) {
-        doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
-        return ResponseEntity.ok().body("Дата закрыта!");
+        try {
+            doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
+            return ResponseEntity.ok().body("Дата закрыта!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка данных!");
+        }
+    }
+
+    @Operation(
+            summary = "Открыть день для добавления заказов",
+            description = "Указывать нужно только date всё остальное мусор",
+            parameters = {
+                    @Parameter(name = "date", description = "Дата которую нужно закрыть", example = "2025-06-06")
+            }
+    )
+    @PatchMapping("/openDate")
+    public ResponseEntity<?> openDate(@RequestBody DateAvailability dateAvailability) {
+        try {
+            doorLimitsRepository.openDate(Date.valueOf(dateAvailability.getDate()));
+            return ResponseEntity.ok().body("Дата открыта!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка данных!");
+        }
     }
 
     @Operation(

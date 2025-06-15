@@ -18,4 +18,9 @@ public interface DoorLimitsRepository extends JpaRepository<DoorLimits, Long> {
     @Transactional
     @Query("UPDATE DoorLimits d SET d.availability = false WHERE d.limitDate = :date")
     void closeDate(@Param("date") Date data);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE DoorLimits d SET d.availability = true WHERE d.limitDate = :date")
+    void openDate(@Param("date") Date data);
 }
