@@ -2,6 +2,7 @@ package org.example.mrdverkin.config;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,6 +29,11 @@ public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
+//    @Autowired
+//    private UserDetailsService userDetailsService;
+    @Value("${security.remember-me.key}")
+    private String rememberMeKey;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,6 +53,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/edit/**").hasAnyRole("SELLER", "MainInstaller")
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", "MainInstaller")
                         .anyRequest().authenticated())
+                .rememberMe(remember -> remember
+                        .rememberMeServices(rememberMeServices())
+                )
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/api/logout")
                         .permitAll()
@@ -58,6 +69,7 @@ public class SecurityConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
@@ -69,6 +81,16 @@ public class SecurityConfig {
         return servletContext -> servletContext.setSessionTimeout(-1);
     }
 
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        TokenBasedRememberMeServices services =
+                new TokenBasedRememberMeServices(rememberMeKey, userDetailsService());
+        services.setCookieName("remember-me");
+        services.setUseSecureCookie(false); // <<< отключить secure
+        return services;
+    }
+
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -77,6 +99,8 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(List.of("*"));
+
+        config.setExposedHeaders(List.of("Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

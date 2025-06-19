@@ -27,9 +27,15 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private org.springframework.security.web.authentication.RememberMeServices rememberMeServices;
+
+
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest,
+                                                     HttpServletRequest request,
+                                                     HttpServletResponse response) {
         List<String> answer = new ArrayList<>();
 
         try {
@@ -57,9 +63,15 @@ public class AuthController {
 
             // Устанавливаем аутентификацию в SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            if (Boolean.TRUE.equals(loginRequest.isRememberMe())) {
+                rememberMeServices.loginSuccess(request, response, authentication);
+            }
+
             request.getSession(true)
                     .setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                             SecurityContextHolder.getContext());
+
 
             return ResponseEntity.ok(Map.of("message", "Login Successful",
                     "roles", String.join(", ", answer)));
