@@ -2,6 +2,7 @@ package org.example.mrdverkin.config;
 
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -62,6 +63,12 @@ public class SecurityConfig {
             throws Exception {
         return config.getAuthenticationManager();
     }
+
+    @Bean
+    public ServletContextInitializer servletContextInitializer() {
+        return servletContext -> servletContext.setSessionTimeout(-1);
+    }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
