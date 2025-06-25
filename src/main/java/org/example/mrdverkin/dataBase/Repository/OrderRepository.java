@@ -27,7 +27,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByInstallerNull(Pageable pageable);
 
     @Query(value = "SELECT o FROM Order o WHERE o.user = :actualUser " +
-            "ORDER BY o.placeAt")
+            "ORDER BY o.placeAt DESC")
     Page<Order> findOrdersByUser(@Param("actualUser") User user, Pageable pageable);
 
     @Query(value = "select O from Order O where O.id = :orderid")
