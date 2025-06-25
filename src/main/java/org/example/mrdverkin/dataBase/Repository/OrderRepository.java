@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
+    @Query("SELECT o FROM Order o ORDER BY o.placeAt DESC")
     Page<Order> findAll(Pageable pageable);
 
     @Modifying
