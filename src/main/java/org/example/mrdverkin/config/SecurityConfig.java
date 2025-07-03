@@ -86,7 +86,7 @@ public class SecurityConfig {
         TokenBasedRememberMeServices services =
                 new TokenBasedRememberMeServices(rememberMeKey, userDetailsService());
         services.setCookieName("remember-me");
-        services.setUseSecureCookie(false); // <<< отключить secure
+        services.setUseSecureCookie(true); // <<< отключить secure
         return services;
     }
 

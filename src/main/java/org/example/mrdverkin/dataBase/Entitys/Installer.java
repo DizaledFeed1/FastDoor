@@ -21,7 +21,6 @@ public class Installer {
     private String phone;
 
     @OneToMany(mappedBy = "installer", cascade = CascadeType.ALL)
-//    @JsonManagedReference
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 }
