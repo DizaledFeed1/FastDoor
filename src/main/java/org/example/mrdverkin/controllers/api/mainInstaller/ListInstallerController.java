@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,5 +63,13 @@ public class ListInstallerController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Неверные данные!");
         }
+    }
+
+    @Operation(summary = "Получить количество дверей назначеных установщику на определённую дату",
+            description = "Возвращает количество дверей для установщиков")
+    @ApiResponse(responseCode = "200", description = "Данные")
+    @GetMapping("/workload")
+    public ResponseEntity<?> getWorkload(@RequestParam Date date) {
+        return installerService.getWorkloadDate(date);
     }
 }

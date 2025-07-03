@@ -4,14 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
-import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.services.InstallerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Date;
 
 @RestController
 @RequestMapping("/api/installer")
@@ -40,13 +37,5 @@ public class InstallerController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateInstaller(@PathVariable Long id, @RequestParam String fullName, @RequestParam String phone) {
         return installerService.updateInstaller(id, fullName, phone);
-    }
-
-    @Operation(summary = "Получить количество дверей назначеных установщику на определённую дату",
-            description = "Возвращает количество дверей для установщиков")
-    @ApiResponse(responseCode = "200", description = "Данные")
-    @GetMapping("/workload")
-    public ResponseEntity<?> getWorkload(@RequestParam Date date) {
-        return installerService.getWorkloadDate(date);
     }
 }
