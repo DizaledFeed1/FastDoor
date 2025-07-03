@@ -29,8 +29,6 @@ public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private UserDetailsService userDetailsService;
     @Value("${security.remember-me.key}")
     private String rememberMeKey;
 
