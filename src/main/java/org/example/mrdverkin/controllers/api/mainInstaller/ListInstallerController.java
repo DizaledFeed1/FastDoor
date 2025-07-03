@@ -1,9 +1,12 @@
 package org.example.mrdverkin.controllers.api.mainInstaller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.services.InstallerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,7 +70,9 @@ public class ListInstallerController {
 
     @Operation(summary = "Получить количество дверей назначеных установщику на определённую дату",
             description = "Возвращает количество дверей для установщиков")
-    @ApiResponse(responseCode = "200", description = "Данные")
+    @ApiResponse(responseCode = "200", description = "Данные",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = InstallerInfo.class))))
     @GetMapping("/workload")
     public ResponseEntity<?> getWorkload(@RequestParam Date date) {
         return installerService.getWorkloadDate(date);
