@@ -42,6 +42,9 @@ public class InstallerController {
         return installerService.updateInstaller(id, fullName, phone);
     }
 
+    @Operation(summary = "Получить количество дверей назначеных установщику на определённую дату",
+            description = "Возвращает количество дверей для установщиков")
+    @ApiResponse(responseCode = "200", description = "Данные")
     @GetMapping("/workload")
     public ResponseEntity<?> getWorkload(@RequestParam Date date) {
         return installerService.getWorkloadDate(date);

@@ -15,10 +15,15 @@ public interface InstallerRepository extends JpaRepository<Installer, Long> {
 
     Installer findInstallersById(Long id);
 
-    @Query(value = "SELECT i.id, i.full_name, COALESCE(SUM(o.frontdoorquantity), 0) AS frontdoorquantitysum, COALESCE(SUM(o.indoorquantity), 0) AS indoorquantitysum " +
+    @Query(value = "SELECT " +
+            "i.id, " +
+            "i.full_name, " +
+            "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder THEN o.frontdoorquantity ELSE 0 END), 0) AS frontdoorquantitysum, " +
+            "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder THEN o.indoorquantity ELSE 0 END), 0) AS indoorquantitysum " +
             "FROM installer i " +
-            "JOIN \"order\" o ON i.id = o.installer_id " +
-            "WHERE o.date_order = :dataOrder " +
-            "GROUP BY i.id", nativeQuery = true)
+            "LEFT JOIN \"order\" o ON i.id = o.installer_id " +
+            "GROUP BY i.id, i.full_name",
+            nativeQuery = true)
     List<InstallerInfo> searchDoorbyDate(@Param("dateOrder") Date dateOrder);
+
 }

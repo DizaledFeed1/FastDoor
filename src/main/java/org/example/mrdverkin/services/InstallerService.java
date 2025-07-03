@@ -2,12 +2,12 @@ package org.example.mrdverkin.services;
 
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
-import org.example.mrdverkin.dto.InstallerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -46,7 +46,6 @@ public class InstallerService {
     }
 
     public ResponseEntity<?> getWorkloadDate(Date date) {
-
-        return  ResponseEntity.ok().build();
+        return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date));
     }
 }
