@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
+    @Query("SELECT o FROM Order o ORDER BY o.placeAt DESC")
     Page<Order> findAll(Pageable pageable);
 
     @Modifying
@@ -26,7 +27,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT o FROM Order o WHERE o.installer IS null")
     Page<Order> findByInstallerNull(Pageable pageable);
 
-    @Query(value = "SELECT o FROM Order o WHERE o.user = :actualUser")
+    @Query(value = "SELECT o FROM Order o WHERE o.user = :actualUser " +
+            "ORDER BY o.placeAt DESC")
     Page<Order> findOrdersByUser(@Param("actualUser") User user, Pageable pageable);
 
     @Query(value = "select O from Order O where O.id = :orderid")
