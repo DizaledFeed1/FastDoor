@@ -8,10 +8,10 @@ insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuant
 insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-03-01', '70','70');
 insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-03-01', '70','70');
 insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-03-01', '70','70');
-insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-03-01', '10','10', '1');
-insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-06-10', '10','10', '1');
-insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-03-01', '20','20', '2');
-insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-03-01', '10','10', '3');
+insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-07-10', '10','10', '1');
+insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-07-10', '10','10', '1');
+insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-07-10', '20','20', '2');
+insert into "order" (address, phone, DATE_ORDER  , inDoorQuantity,frontDoorQuantity,installer_id) values ('Ул. Пушкина, д. Колатушкина', '88005553535', '2025-07-10', '10','10', '3');
 
 INSERT INTO door_limits (limit_date, front_door_quantity, in_door_quantity) VALUES ('2025-05-16', 2, 50);
 INSERT INTO door_limits (limit_date, front_door_quantity, in_door_quantity) VALUES ('2025-05-17', 2, 50);

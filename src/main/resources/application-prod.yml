@@ -5,27 +5,28 @@ spring:
     password: Porfik10
     driver-class-name: org.postgresql.Driver
 
-logging:
-  file:
-    name: logs/app.log
-  level:
-    root: INFO
-
-
   jpa:
     properties:
-      hibernate.transaction.jta.platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
+      hibernate:
+        transaction:
+          jta:
+            platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
     hibernate:
       ddl-auto: update
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  # Настройки для Springdoc (Swagger)
-  doc:
-    swagger-ui:
-      enabled: true
-      path: /swagger-ui.html
-    api-docs:
-      enabled: true
-      path: /v3/api-docs
+logging:
+  file:
+    name: logs/app.log
+  level:
+    root: INFO
+
+doc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs:
+    enabled: true
+    path: /v3/api-docs

@@ -29,8 +29,9 @@ public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
-    @Value("${security.remember-me.key}")
+    @Value("${spring.security.remember-me.key}")
     private String rememberMeKey;
+
 
 
     @Bean
