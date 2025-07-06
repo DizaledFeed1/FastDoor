@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @RestController
@@ -101,6 +102,6 @@ public class ListController {
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        return orderService.searchOrderBySeller(nickname, pageable, page);
+        return orderService.searchOrderBySeller(nickname.toLowerCase(Locale.ROOT), pageable, page);
     }
 }

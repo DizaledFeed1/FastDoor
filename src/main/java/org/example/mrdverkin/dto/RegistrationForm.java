@@ -4,6 +4,7 @@ import lombok.Data;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Locale;
 import java.util.Set;
 
 @Data
@@ -17,7 +18,7 @@ public class RegistrationForm {
     public User toUser(PasswordEncoder passwordEncoder) {
         return new User(
                 username, passwordEncoder.encode(password),
-                fullname, Set.of(role));
+                fullname.toLowerCase(Locale.ROOT), Set.of(role));
     }
     public boolean isPasswordMatching() {
         return password.equals(confirm);
