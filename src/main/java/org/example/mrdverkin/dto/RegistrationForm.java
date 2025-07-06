@@ -12,14 +12,12 @@ public class RegistrationForm {
     private String password;
     private String confirm;
     private String fullname;
-    private String email;
-    private String phone;
     private String role;
 
     public User toUser(PasswordEncoder passwordEncoder) {
         return new User(
                 username, passwordEncoder.encode(password),
-                fullname,email, phone, Set.of(role));
+                fullname, Set.of(role));
     }
     public boolean isPasswordMatching() {
         return password.equals(confirm);
