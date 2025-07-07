@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dataBase.Repository;
 
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -16,20 +17,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("SELECT o FROM Order o ORDER BY o.placeAt DESC")
-    Page<Order> findAll(Pageable pageable);
+    @Query("SELECT o FROM Order o where o.condition != :condition ORDER BY o.placeAt DESC")
+    Page<Order> findAll(Pageable pageable, @Param("condition") Condition condition);
 
     @Modifying
     @Transactional
     @Query(value = "UPDATE Order o set o.installer = :newInstaller where o.id = :orderId")
     void updateInstaller(@Param("newInstaller") Installer installer, @Param("orderId") Long orderId);
 
-    @Query(value = "SELECT o FROM Order o WHERE o.installer IS null")
-    Page<Order> findByInstallerNull(Pageable pageable);
+    @Query(value = "SELECT o FROM Order o WHERE o.installer IS null AND o.condition != :condition")
+    Page<Order> findByInstallerNull(Pageable pageable, @Param("condition") Condition condition);
 
     @Query(value = "SELECT o FROM Order o WHERE o.user = :actualUser " +
             "ORDER BY o.placeAt DESC")
-    Page<Order> findOrdersByUser(@Param("actualUser") User user, Pageable pageable);
+    Page<Order> findOrdersByUserAll(@Param("actualUser") User user, Pageable pageable);
+
+
+    @Query(value = "SELECT o FROM Order o WHERE o.user = :actualUser AND o.condition != :condition " +
+            "ORDER BY o.placeAt DESC")
+    Page<Order> findOrdersByUser(@Param("actualUser") User user, @Param("condition") Condition condition, Pageable pageable);
 
     @Query(value = "select O from Order O where O.id = :orderid")
     Order findByOrderId(@Param("orderid")Long orderId);

@@ -1,5 +1,6 @@
 package org.example.mrdverkin.services;
 
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -133,13 +134,12 @@ public class OrderService {
         }
         Order order = orderOpt.get();
 
-            if (!order.getUser().equals(user)) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Юзер не принадлежит данному заказу"));
-            }
+//            if (!order.getUser().equals(user)) {
+//                return ResponseEntity.badRequest().body(Map.of("message", "Юзер не принадлежит данному заказу"));
+//            }
 
-
-        // Если заказ найден и юзер соответствует
-        orderRepository.deleteById(id);  // Удаление заказа
+            order.setCondition(Condition.DELETED);
+            orderRepository.save(order);
         return ResponseEntity.ok().body(Map.of("message", "Заказ успешно удалён"));
     }
 
@@ -156,7 +156,7 @@ public class OrderService {
         if (user.isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "Такого пользователя не существует"));
         }
-        Page<Order> ordersByNickname = orderRepository.findOrdersByUser(user.get(), pageable);
+        Page<Order> ordersByNickname = orderRepository.findOrdersByUserAll(user.get(), pageable);
         if (ordersByNickname.isEmpty()){
             return ResponseEntity.badRequest().body(Map.of("message", "У данного пользователя нет созданых заказов"));
         }

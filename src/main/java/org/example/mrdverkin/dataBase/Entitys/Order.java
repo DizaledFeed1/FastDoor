@@ -30,7 +30,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "door_limits_id")
-//    @JsonBackReference
     private DoorLimits doorLimits;
 
     @Column(name = "date_order")
@@ -45,10 +44,14 @@ public class Order {
     private int inDoorQuantity;
 
     @ManyToOne
-//    @JsonBackReference
     private Installer installer;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'ACTIVE'")
+    private Condition condition = Condition.ACTIVE;
 }
+

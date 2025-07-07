@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
@@ -49,7 +50,7 @@ public class ListController {
             Pageable pageable = PageRequest.of(page, size);
 
             // Получаем список заказов для пользователя
-            Page<Order> ordersPage = orderRepository.findOrdersByUser(user, pageable);
+            Page<Order> ordersPage = orderRepository.findOrdersByUser(user, Condition.DELETED, pageable);
 
             // Преобразуем заказы в формат OrderAttribute (можно изменить в зависимости от нужд)
             List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);

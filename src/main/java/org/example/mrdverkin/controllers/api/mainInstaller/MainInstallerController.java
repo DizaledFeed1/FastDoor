@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
@@ -57,7 +58,7 @@ public class MainInstallerController {
             }
 
             Pageable pageable = PageRequest.of(page, size);
-            Page<Order> ordersPage = orderRepository.findByInstallerNull(pageable);
+            Page<Order> ordersPage = orderRepository.findByInstallerNull(pageable, Condition.DELETED);
             List<DateAvailability> availabilityList = DateAvailability.fromDates(doorLimitsRepository, orderRepository);
             List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);
 
@@ -89,7 +90,7 @@ public class MainInstallerController {
                                             @RequestParam(defaultValue = "10") int size){
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Order> ordersPage = orderRepository.findByInstallerNull(pageable);
+            Page<Order> ordersPage = orderRepository.findByInstallerNull(pageable, Condition.DELETED);
             List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);
 
             Map<String, Object> response = new HashMap<>();
@@ -139,7 +140,7 @@ public class MainInstallerController {
     public ResponseEntity<?> listOrders(@RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Order> ordersPage = orderRepository.findAll(pageable);
+        Page<Order> ordersPage = orderRepository.findAll(pageable, Condition.DELETED);
         List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);
 
         Map<String, Object> response = new HashMap<>();
