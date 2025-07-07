@@ -9,10 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Date;
+import java.util.List;
 
 
 public interface DoorLimitsRepository extends JpaRepository<DoorLimits, Long> {
     DoorLimits findByLimitDate(Date limitDate);
+
+    @Query("SELECT d FROM DoorLimits d WHERE d.limitDate > CURRENT_TIMESTAMP")
+    List<DoorLimits> findAll();
 
     @Modifying
     @Transactional
