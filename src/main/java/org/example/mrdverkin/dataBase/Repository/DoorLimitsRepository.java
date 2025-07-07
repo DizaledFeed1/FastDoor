@@ -15,7 +15,7 @@ import java.util.List;
 public interface DoorLimitsRepository extends JpaRepository<DoorLimits, Long> {
     DoorLimits findByLimitDate(Date limitDate);
 
-    @Query("SELECT d FROM DoorLimits d WHERE d.limitDate > CURRENT_TIMESTAMP")
+    @Query("SELECT d FROM DoorLimits d WHERE d.limitDate > CURRENT_TIMESTAMP ORDER BY d.limitDate ASC")
     List<DoorLimits> findAll();
 
     @Modifying
