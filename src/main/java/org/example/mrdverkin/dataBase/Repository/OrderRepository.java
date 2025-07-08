@@ -61,9 +61,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         CAST(COALESCE(SUM(o.inDoorQuantity), 0) AS long),
         o.doorLimits.availability)
     FROM Order o
+    WHERE o.condition != :condition
     GROUP BY o.dateOrder, o.doorLimits.availability
     """)
-    List<DateAvailability> getDoorCountsGroupedByDate();
+    List<DateAvailability> getDoorCountsGroupedByDate(@Param("condition")  Condition condition);
 
 
 

@@ -1,6 +1,7 @@
 package org.example.mrdverkin.dto;
 
 import lombok.Data;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
@@ -34,7 +35,7 @@ public class DateAvailability {
         List<DoorLimits> doorLimits = doorLimitsRepository.findAll();
 
         // Получаем все суммы заказов по датам одним запросом
-        List<DateAvailability> ordersByDate = orderRepository.getDoorCountsGroupedByDate();
+        List<DateAvailability> ordersByDate = orderRepository.getDoorCountsGroupedByDate(Condition.DELETED);
 
         // Преобразуем в Map для быстрого поиска
         Map<LocalDate, DateAvailability> ordersByDateMap = ordersByDate.stream()
