@@ -61,7 +61,7 @@ public class OrderService {
     public boolean checkUpdate(Order order, OrderAttribute attribute) {
         DoorLimits doorLimits = doorLimitsRepository.findByLimitDate(order.getDoorLimits().getLimitDate());
 
-        DateAvailability dateAvailabilities = orderRepository.getDoorCountsByDate(attribute.getDateOrder());
+        DateAvailability dateAvailabilities = orderRepository.getDoorCountsByDate(attribute.getDateOrder(), Condition.DELETED);
         System.out.println(dateAvailabilities);
         //Проверяем есть ли заказы на этот день, если нет приравниваем значения к 0.
         if (dateAvailabilities == null){

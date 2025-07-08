@@ -1,9 +1,6 @@
 package org.example.mrdverkin.services;
 
-import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
-import org.example.mrdverkin.dataBase.Entitys.Order;
-import org.example.mrdverkin.dataBase.Entitys.Role;
-import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Entitys.*;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
@@ -42,7 +39,7 @@ public class SellerService {
     public boolean checkcreate( Order order, DoorLimits doorLimits) {
         //Проверяем коректность ввода
         LocalDate today = doorLimits.getLimitDate().toLocalDate();
-        DateAvailability availability = orderRepository.getDoorCountsByDate(today);
+        DateAvailability availability = orderRepository.getDoorCountsByDate(today, Condition.DELETED);
         if (availability == null) {
             availability = new DateAvailability(today,0L,0L, true);
             logger.error("Попытались добавить заказ на тот день где нет DoorLimits");
