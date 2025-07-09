@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,10 +27,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private Long id;
     @JsonIgnore
-    private final String username;
+    private final String username; //логин
     @JsonIgnore
     private final String password;
-    private final String nickname;
+    private final String nickname;// либо название магазина либо ФИО владельца магазина
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Report> reports;
 
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -41,7 +45,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.name())) // Преобразуем роли в GrantedAuthority
+                .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
     }
 }

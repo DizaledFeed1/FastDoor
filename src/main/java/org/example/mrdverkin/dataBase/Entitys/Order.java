@@ -18,7 +18,6 @@ import java.util.Date;
  * @version 1.0
  */
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

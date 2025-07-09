@@ -66,6 +66,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     """)
     List<DateAvailability> getDoorCountsGroupedByDate(@Param("condition")  Condition condition);
 
-
-
+    @Query("SELECT o " +
+            "FROM Order o " +
+            "JOIN  User u ON o.user " +
+            "WHERE u.nickname = 'бм' and (o.placeAt >= '2025-07-07' and o.placeAt <= '2025-07-07 23:59:59.999')  "
+            )
+    List<Order> findByDateOrderAndByNickname(@Param("dateFrom") LocalDate dateFrom,
+                                             @Param("dateTo") LocalDate dateTo,
+                                             @Param("nicknames") List<String> nickname);
 }
