@@ -3,8 +3,8 @@ package org.example.mrdverkin.dataBase.Entitys;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,6 +23,8 @@ public class Report {
 
     @Column(name = "date_to", nullable = false)
     private LocalDate dateTo;
+
+    private Date dateCreated = new Date();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")

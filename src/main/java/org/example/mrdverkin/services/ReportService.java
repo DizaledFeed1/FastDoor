@@ -7,7 +7,8 @@ import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.ReportRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
-import org.example.mrdverkin.dto.ReportRequest;
+import org.example.mrdverkin.dto.ReportDTO;
+
 import org.example.mrdverkin.dto.ResponceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class ReportService {
@@ -34,7 +37,7 @@ public class ReportService {
      * @param owner
      * @return ResponceDTO
      */
-    public ResponceDTO createReport(ReportRequest reportRequest, User owner) {
+    public ResponceDTO createReport(ReportDTO reportRequest, User owner) {
         ResponceDTO responceDTO = new ResponceDTO();
         User apdateowner = userRepository.findByNickname(owner.getNickname()).get();
 
@@ -75,5 +78,21 @@ public class ReportService {
         responceDTO.setMessage("Report created");
 
         return responceDTO;
+    }
+
+    public List<ReportDTO> getAllReportByUser(User user) {
+        List<Report> results = reportRepository.findAllByOwner(user.getId());
+        List<ReportDTO> reportDTOS = results.stream()
+                .map(r -> new ReportDTO(
+                        r.getTitle(),
+                        r.getDateFrom(),
+                        r.getDateTo(),
+                        r.getRelatedUsers().stream()
+                                .map(User::getNickname)
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+
+        return reportDTOS;
     }
 }

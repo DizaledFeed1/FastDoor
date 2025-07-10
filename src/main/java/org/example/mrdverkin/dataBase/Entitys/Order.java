@@ -1,12 +1,9 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
