@@ -10,10 +10,12 @@ import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.ReportDTO;
 
 import org.example.mrdverkin.dto.ResponceDTO;
+import org.example.mrdverkin.reportCreators.ExcelCreater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class ReportService {
     private UserRepository userRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private ExcelCreater excelCreater;
 
     /**
      * Метод для генирации отчёта
@@ -80,19 +84,47 @@ public class ReportService {
         return responceDTO;
     }
 
+    /**
+     * Метод возвращает все отчёты для определённого пользователя
+     * @param user
+     * @return List<ReportDTO>
+     */
     public List<ReportDTO> getAllReportByUser(User user) {
         List<Report> results = reportRepository.findAllByOwner(user.getId());
         List<ReportDTO> reportDTOS = results.stream()
                 .map(r -> new ReportDTO(
+                        r.getId(),
                         r.getTitle(),
                         r.getDateFrom(),
                         r.getDateTo(),
                         r.getRelatedUsers().stream()
                                 .map(User::getNickname)
-                                .collect(Collectors.toList())
+                                .collect(Collectors.toList()),
+                        r.getDateCreated(),
+                        null
                 ))
                 .collect(Collectors.toList());
 
         return reportDTOS;
+    }
+
+    public byte[] dowloadReport(ReportDTO reportDTO) {
+        return excelCreater.convertReport(reportDTO);
+    }
+
+    public ReportDTO getReportById(Long id) {
+        ReportDTO report = reportRepository.findByIdWithOrders(id)
+                .map(r -> new ReportDTO(
+                        r.getId(),
+                        r.getTitle(),
+                        r.getDateFrom(),
+                        r.getDateTo(),
+                        r.getRelatedUsers().stream()
+                                .map(User::getNickname)
+                                .collect(Collectors.toList()),
+                        r.getDateCreated(),
+                        r.getOrders()
+                )).orElse(null);
+        return report;
     }
 }
