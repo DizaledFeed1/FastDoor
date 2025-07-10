@@ -1,15 +1,20 @@
 package org.example.mrdverkin.services;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.Report;
 import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.ReportRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.ReportRequest;
 import org.example.mrdverkin.dto.ResponceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +25,30 @@ public class ReportService {
     private ReportRepository reportRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
+    /**
+     * Метод для генирации отчёта
+     * @param reportRequest
+     * @param owner
+     * @return ResponceDTO
+     */
     public ResponceDTO createReport(ReportRequest reportRequest, User owner) {
         ResponceDTO responceDTO = new ResponceDTO();
+        User apdateowner = userRepository.findByNickname(owner.getNickname()).get();
 
         Report report = new Report();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(reportRequest.getTitle()).append(owner.getNickname());
+
         report.setTitle(stringBuilder.toString());
+
         report.setDateFrom(reportRequest.getDateFrom());
         report.setDateTo(reportRequest.getDateTo());
+
+        report.setOwner(owner);
+
         //добавляем данные о магазинах
         List<User> users = new ArrayList<>();
         for (String relatedUsers: reportRequest.getRelatedUsers()) {
@@ -37,8 +56,24 @@ public class ReportService {
         }
         report.setRelatedUsers(users);
 
-        report.setOwner(owner);
+        LocalDateTime dateFrom = reportRequest.getDateFrom().atStartOfDay();
+        LocalDateTime dateTo = reportRequest.getDateTo().atTime(LocalTime.MAX);
 
-        return null;
+        //добавляем заказы
+        List<Order> orders =orderRepository.findOrdersByNicknamesAndDateRange(dateFrom, dateTo,reportRequest.getRelatedUsers());
+        System.out.println(orders.size());
+        report.setOrders(orders);
+
+        //сейвим отчёт
+        reportRepository.save(report);
+
+        //затем сейвим юзера
+        apdateowner.getReports().add(report);
+        userRepository.save(apdateowner);
+
+        responceDTO.setStatus(HttpStatus.CREATED);
+        responceDTO.setMessage("Report created");
+
+        return responceDTO;
     }
 }

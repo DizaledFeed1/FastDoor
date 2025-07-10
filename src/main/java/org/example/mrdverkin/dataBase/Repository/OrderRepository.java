@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -68,10 +69,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o " +
             "FROM Order o " +
-            "JOIN  User u ON o.user " +
-            "WHERE u.nickname = 'бм' and (o.placeAt >= '2025-07-07' and o.placeAt <= '2025-07-07 23:59:59.999')  "
+            "JOIN  o.user u " +
+            "WHERE u.nickname IN :nicknames and (o.placeAt >= :dateFrom and o.placeAt <= :dateTo)  "
             )
-    List<Order> findByDateOrderAndByNickname(@Param("dateFrom") LocalDate dateFrom,
-                                             @Param("dateTo") LocalDate dateTo,
+    List<Order> findOrdersByNicknamesAndDateRange(@Param("dateFrom") LocalDateTime dateFrom,
+                                             @Param("dateTo") LocalDateTime dateTo,
                                              @Param("nicknames") List<String> nickname);
 }
