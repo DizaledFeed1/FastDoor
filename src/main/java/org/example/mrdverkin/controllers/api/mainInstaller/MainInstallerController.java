@@ -38,7 +38,7 @@ public class MainInstallerController {
     @Autowired
     private InstallerRepository installerRepository;
     @Autowired
-    private BotService mainInstallerService;
+    private BotService botService;
 
     @Operation(
             summary = "Получить список заказов без установщика с дополнительной информацией",
@@ -109,7 +109,7 @@ public class MainInstallerController {
     }
 
     @Operation(
-            summary = "Выбрать установщика для заказа",
+            summary = "Выбрать установщика для заказа или измениние заказа",
             description = "Обновляет заказ, устанавливая выбранного установщика и комментарий",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Установщик успешно выбран"),
@@ -117,11 +117,20 @@ public class MainInstallerController {
             }
     )
     @PostMapping()
-    public ResponseEntity<?> addInstaller(@RequestBody InstallerInfo installerInfo) {
+    public ResponseEntity<?> selectInstaller(@RequestBody InstallerInfo installerInfo) {
         try {
+            Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
             orderRepository.updateInstaller(installerRepository.findByName(installerInfo.getInstallerFullName()), installerInfo.getOrderId());
-            mainInstallerService.selectMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+
+            if (oldOrder.getInstaller() == null) {
+                botService.selectMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+            }else if (oldOrder.getInstaller().getFullName() == installerInfo.getInstallerFullName()){
+                botService.modificationMessage(orderRepository.findByOrderId(installerInfo.getOrderId()), oldOrder);
+            } else {
+                botService.selectMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+                botService.deleteMessage(oldOrder);
+            }
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();

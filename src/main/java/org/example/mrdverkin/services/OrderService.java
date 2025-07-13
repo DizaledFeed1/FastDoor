@@ -100,7 +100,6 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
-            Order copy = existingOrder;
 
                 // Обновляем поля заказа
             if (checkUpdate(existingOrder, orderAttribute)) {
@@ -108,41 +107,22 @@ public class OrderService {
                 existingOrder.setAddress(orderAttribute.getAddress());
                 existingOrder.setPhone(orderAttribute.getPhone());
                 existingOrder.setMessageSeller(orderAttribute.getMessageSeller());
-                existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
+//                existingOrder.setMessageMainInstaller(orderAttribute.getMessageMainInstaller());
                 existingOrder.setDateOrder(orderAttribute.getDateOrder());
                 existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
                 existingOrder.setInDoorQuantity(orderAttribute.getInDoorQuantity());
 
-                if (orderAttribute.getInstallerName() != null) {
-                    existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
-                }
+//                if (orderAttribute.getInstallerName() != null) {
+//                    existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
+//                }
 
                 orderRepository.save(existingOrder);
-
-                checkTypeMessage(existingOrder, copy);
 
             } else return ResponseEntity.badRequest().build();
         } else {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
-    }
-
-    private void checkTypeMessage(Order newOrder, Order copy) {
-        if (newOrder.getInstaller() != null && copy.getInstaller() != null) {
-
-            if (newOrder.getInstaller() == copy.getInstaller()) {
-                botService.modificationMessage(newOrder, copy);
-            }
-            else {
-                botService.deleteMessage(copy);
-                botService.selectMessage(newOrder);
-            }
-        }
-
-        else if (copy.getInstaller() == null && newOrder.getInstaller() != null) {
-            botService.selectMessage(newOrder);
-        }
     }
 
     /**
