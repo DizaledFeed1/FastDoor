@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dataBase.Repository;
 
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,9 +22,11 @@ public interface InstallerRepository extends JpaRepository<Installer, Long> {
             "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder THEN o.frontdoorquantity ELSE 0 END), 0) AS frontdoorquantitysum, " +
             "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder THEN o.indoorquantity ELSE 0 END), 0) AS indoorquantitysum " +
             "FROM installer i " +
-            "LEFT JOIN \"order\" o ON i.id = o.installer_id " +
+            "LEFT JOIN \"order\" o ON i.id = o.installer_id != :condition " +
+            "WHERE o.condition != " +
             "GROUP BY i.id, i.full_name",
             nativeQuery = true)
-    List<InstallerInfo> searchDoorbyDate(@Param("dateOrder") Date dateOrder);
+    List<InstallerInfo> searchDoorbyDate(@Param("dateOrder") Date dateOrder,
+                                         @Param("condition") Condition condition);
 
 }

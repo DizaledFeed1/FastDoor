@@ -1,5 +1,6 @@
 package org.example.mrdverkin.services;
 
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dto.InstallerInfo;
@@ -47,7 +48,7 @@ public class InstallerService {
     }
 
     public ResponseEntity<?> getWorkloadDate(Date date) {
-        List<InstallerInfo> installerInfos = installerRepository.searchDoorbyDate(date);
-        return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date));
+//        List<InstallerInfo> installerInfos = installerRepository.searchDoorbyDate(date);
+        return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
 }
