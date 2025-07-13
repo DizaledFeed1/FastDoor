@@ -39,6 +39,8 @@ public class OrderService {
     private DoorLimitsRepository doorLimitsRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BotService botService;
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     /**
@@ -98,6 +100,8 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
+            Order copy = existingOrder;
+
                 // Обновляем поля заказа
             if (checkUpdate(existingOrder, orderAttribute)) {
                 existingOrder.setFullName(orderAttribute.getFullName());
@@ -108,15 +112,37 @@ public class OrderService {
                 existingOrder.setDateOrder(orderAttribute.getDateOrder());
                 existingOrder.setFrontDoorQuantity(orderAttribute.getFrontDoorQuantity());
                 existingOrder.setInDoorQuantity(orderAttribute.getInDoorQuantity());
+
                 if (orderAttribute.getInstallerName() != null) {
                     existingOrder.setInstaller(installerRepository.findByName(orderAttribute.getInstallerName()));
                 }
+
                 orderRepository.save(existingOrder);
+
+                checkTypeMessage(existingOrder, copy);
+
             } else return ResponseEntity.badRequest().build();
         } else {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
+    }
+
+    private void checkTypeMessage(Order newOrder, Order copy) {
+        if (newOrder.getInstaller() != null && copy.getInstaller() != null) {
+
+            if (newOrder.getInstaller() == copy.getInstaller()) {
+                botService.modificationMessage(newOrder, copy);
+            }
+            else {
+                botService.deleteMessage(copy);
+                botService.selectMessage(newOrder);
+            }
+        }
+
+        else if (copy.getInstaller() == null && newOrder.getInstaller() != null) {
+            botService.selectMessage(newOrder);
+        }
     }
 
     /**
@@ -137,9 +163,10 @@ public class OrderService {
 //                return ResponseEntity.badRequest().body(Map.of("message", "Юзер не принадлежит данному заказу"));
 //            }
 
-            order.setCondition(Condition.DELETED);
-            orderRepository.save(order);
-        return ResponseEntity.ok().body(Map.of("message", "Заказ успешно удалён"));
+        order.setCondition(Condition.DELETED);
+        orderRepository.save(order);
+        botService.deleteMessage(order);
+    return ResponseEntity.ok().body(Map.of("message", "Заказ успешно удалён"));
     }
 
     /**

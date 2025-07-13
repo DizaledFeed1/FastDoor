@@ -13,7 +13,7 @@ import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.OrderAttribute;
-import org.example.mrdverkin.services.MainInstallerService;
+import org.example.mrdverkin.services.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,7 +38,7 @@ public class MainInstallerController {
     @Autowired
     private InstallerRepository installerRepository;
     @Autowired
-    private MainInstallerService mainInstallerService;
+    private BotService mainInstallerService;
 
     @Operation(
             summary = "Получить список заказов без установщика с дополнительной информацией",
@@ -121,7 +121,7 @@ public class MainInstallerController {
         try {
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
             orderRepository.updateInstaller(installerRepository.findByName(installerInfo.getInstallerFullName()), installerInfo.getOrderId());
-            mainInstallerService.sendMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+            mainInstallerService.selectMessage(orderRepository.findById(installerInfo.getOrderId()).get());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
