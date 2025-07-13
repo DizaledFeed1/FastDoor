@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class ListInstallerController {
 
     @Autowired
     private InstallerService installerService;
+    @Autowired
+    private OrderService orderService;
 
     @Operation(summary = "Получить список всех установщиков",
             description = "Возвращает список всех установщиков в системе")

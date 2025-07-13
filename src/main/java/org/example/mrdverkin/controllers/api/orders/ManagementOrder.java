@@ -35,9 +35,8 @@ public class ManagementOrder {
             }
     )
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, Object>> deleteOrder(@AuthenticationPrincipal User user,
-                                                           @RequestParam Long id) {
-        return orderService.deleteOrderById(user, id);
+    public ResponseEntity<Map<String, Object>> deleteOrder(@RequestParam Long id) {
+        return orderService.deleteOrderById( id);
     }
 
     @Operation(

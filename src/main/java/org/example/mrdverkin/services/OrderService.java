@@ -122,11 +122,10 @@ public class OrderService {
     /**
      * Удаляет заказ по ID, если он принадлежит указанному пользователю.
      *
-     * @param user пользователь, пытающийся удалить заказ
      * @param id   ID заказа
      * @return HTTP-ответ с сообщением об успехе или ошибке
      */
-    public ResponseEntity<Map<String, Object>> deleteOrderById(User user, Long id) {
+    public ResponseEntity<Map<String, Object>> deleteOrderById(Long id) {
         Optional<Order> orderOpt = orderRepository.findById(id);
 
         if (orderOpt.isEmpty()) {
