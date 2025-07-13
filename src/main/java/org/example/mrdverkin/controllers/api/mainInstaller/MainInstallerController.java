@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
+import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
@@ -121,14 +122,18 @@ public class MainInstallerController {
         try {
             Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
-            orderRepository.updateInstaller(installerRepository.findByName(installerInfo.getInstallerFullName()), installerInfo.getOrderId());
+            Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
+            orderRepository.updateInstaller(installer, installerInfo.getOrderId());
+            Order newOrder = oldOrder;
+            newOrder.setMessageMainInstaller(installerInfo.getInstallerFullName());
+            newOrder.setInstaller(installer);
 
             if (oldOrder.getInstaller() == null) {
-                botService.selectMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+                botService.selectMessage(newOrder);
             }else if (oldOrder.getInstaller().getFullName() == installerInfo.getInstallerFullName()){
-                botService.modificationMessage(orderRepository.findByOrderId(installerInfo.getOrderId()), oldOrder);
+                botService.modificationMessage(newOrder, oldOrder);
             } else {
-                botService.selectMessage(orderRepository.findById(installerInfo.getOrderId()).get());
+                botService.selectMessage(newOrder);
                 botService.deleteMessage(oldOrder);
             }
             return ResponseEntity.ok().build();
