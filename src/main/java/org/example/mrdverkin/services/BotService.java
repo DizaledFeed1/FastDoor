@@ -44,6 +44,8 @@ public class BotService {
                 "\\nКоличество межкомнатных дверей: " + newOrder.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (newOrder.getMessageMainInstaller() != null ? newOrder.getMessageMainInstaller() : "Нет") +
                 "\\nКомментарий от продавца: " + (newOrder.getMessageSeller() != null ? newOrder.getMessageSeller() : "Нет");
+
+        sendMessage(phoneNumber, message);
     }
 
     public void deleteMessage(Order order) {
