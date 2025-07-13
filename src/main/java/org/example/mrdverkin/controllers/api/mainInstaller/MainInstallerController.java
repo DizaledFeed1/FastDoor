@@ -124,9 +124,19 @@ public class MainInstallerController {
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
             Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
             orderRepository.updateInstaller(installer, installerInfo.getOrderId());
-            Order newOrder = oldOrder;
-            newOrder.setMessageMainInstaller(installerInfo.getInstallerFullName());
+
+            Order newOrder = new Order();
+            newOrder.setFullName(oldOrder.getFullName());
+            newOrder.setAddress(oldOrder.getAddress());
+            newOrder.setPhone(oldOrder.getPhone());
+            newOrder.setMessageSeller(oldOrder.getMessageSeller());
+            newOrder.setMessageMainInstaller(installerInfo.getInstallerComment());
+            newOrder.setDoorLimits(oldOrder.getDoorLimits());
+            newOrder.setFrontDoorQuantity(oldOrder.getFrontDoorQuantity());
+            newOrder.setInDoorQuantity(oldOrder.getInDoorQuantity());
             newOrder.setInstaller(installer);
+            newOrder.setUser(oldOrder.getUser());
+
 
             if (oldOrder.getInstaller() == null) {
                 botService.selectMessage(newOrder);
