@@ -100,6 +100,7 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
+            Order copy = existingOrder;
 
                 // Обновляем поля заказа
             if (checkUpdate(existingOrder, orderAttribute)) {
@@ -117,6 +118,9 @@ public class OrderService {
 //                }
 
                 orderRepository.save(existingOrder);
+                if (existingOrder.getInstaller() != null) {
+                    botService.modificationMessage(existingOrder, copy);
+                }
 
             } else return ResponseEntity.badRequest().build();
         } else {
@@ -124,6 +128,7 @@ public class OrderService {
         }
         return ResponseEntity.ok().build();
     }
+
 
     /**
      * Удаляет заказ по ID, если он принадлежит указанному пользователю.
