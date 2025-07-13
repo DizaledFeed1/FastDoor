@@ -19,11 +19,10 @@ public interface InstallerRepository extends JpaRepository<Installer, Long> {
     @Query(value = "SELECT " +
             "i.id, " +
             "i.full_name, " +
-            "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder THEN o.frontdoorquantity ELSE 0 END), 0) AS frontdoorquantitysum, " +
-            "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder THEN o.indoorquantity ELSE 0 END), 0) AS indoorquantitysum " +
+            "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder AND o.condition != 'DELETED' THEN o.frontdoorquantity ELSE 0 END), 0) AS frontdoorquantitysum, " +
+            "COALESCE(SUM(CASE WHEN o.date_order = :dateOrder AND o.condition != 'DELETED' THEN o.indoorquantity ELSE 0 END), 0) AS indoorquantitysum " +
             "FROM installer i " +
             "LEFT JOIN \"order\" o ON i.id = o.installer_id " +
-            "WHERE o.condition != :condition " +
             "GROUP BY i.id, i.full_name",
             nativeQuery = true)
     List<InstallerInfo> searchDoorbyDate(@Param("dateOrder") Date dateOrder,
