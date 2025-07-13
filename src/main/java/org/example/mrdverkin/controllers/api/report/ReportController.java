@@ -1,5 +1,8 @@
 package org.example.mrdverkin.controllers.api.report;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dto.ReportDTO;
@@ -18,11 +21,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/report")
+@Tag(name = "ReportController",
+        description = "Контроллер для работы с отчётами")
 public class ReportController {
     @Autowired
     private ReportService reportService;
 
 
+    @Operation(summary = "Создать отчёт",
+    description = "Создаёт отчёт с о магазинах relatedUsers, промежутке дат от dateFrom до dateTo, названием title",
+    responses = {
+            @ApiResponse(responseCode = "200", description = "Report created")
+    })
     @PostMapping("/create")
     @Transactional
     public ResponseEntity<?> createReport(@RequestBody @Valid ReportDTO reportDTO,
@@ -33,12 +43,21 @@ public class ReportController {
         return ResponseEntity.status(responce.getStatus()).body(responce.getMessage());
     }
 
+    @Operation(summary = "Список отчётов",
+            description = "Возвращает все данные отчёта кроме orders для владельца этих отчётов"
+    )
     @GetMapping("/all")
     public ResponseEntity<?> getAllReportsByUser(@AuthenticationPrincipal User user) {
         List<ReportDTO> response = reportService.getAllReportByUser(user);
         return ResponseEntity.ok(response);
     }
 
+
+    @Operation(summary = "Скачивание отчёта",
+            description = "Возвращает массив байт\n" +
+                    "ContentDisposition: .xls\n" +
+                    "ContentType: APPLICATION_OCTET_STREAM (бинарноесодержимое файла)"
+    )
     @GetMapping("/download")
     public ResponseEntity<byte []> downloadReport(@RequestParam Long reportId) {
         ReportDTO reportDTO = reportService.getReportById(reportId);
