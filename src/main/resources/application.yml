@@ -1,10 +1,25 @@
-spring:
-  server:
-    address: 0.0.0.0
-    port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
-  profiles:
-    active: prod  # если хочешь включить профилирование
+
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        instance:
+          service-url: http://localhost:8080
+        username: admin
+        password: admin
+  #  server:
+#    address: 0.0.0.0
+#    port: 8080
+
+#  profiles:
+#    active: prod  # если хочешь включить профилирование
 
   datasource:
     url: jdbc:h2:mem:testdb

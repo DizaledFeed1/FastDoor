@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session","/admin/**", "/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/orders/create").hasAnyRole("MainInstaller","SELLER")
                         .requestMatchers("/api/orders/**", "/api/list/sellerList").hasAnyRole("SELLER")
                         .requestMatchers("/api/list/adminList").hasAnyRole("ADMIN")
