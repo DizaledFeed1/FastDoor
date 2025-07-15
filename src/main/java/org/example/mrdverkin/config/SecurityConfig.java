@@ -32,8 +32,6 @@ public class SecurityConfig {
     @Value("${spring.security.remember-me.key}")
     private String rememberMeKey;
 
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
