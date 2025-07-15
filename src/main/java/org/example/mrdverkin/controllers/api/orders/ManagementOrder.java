@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Order;
-import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
