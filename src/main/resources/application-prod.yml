@@ -10,8 +10,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/fastdoors
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${DB_USERNAME:test}
+    password: ${DB_PASSWORD:test}
     driver-class-name: org.postgresql.Driver
 
   jpa:
