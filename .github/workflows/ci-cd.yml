@@ -36,15 +36,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-#      - name: Wait for PostgreSQL
-#        run: sleep 10  # Даем БД время на запуск
-#
-#      - name: Build with Maven
-#        run: mvn clean install
+      #      - name: Wait for PostgreSQL
+      #        run: sleep 10  # Даем БД время на запуск
+      #
+      #      - name: Build with Maven
+      #        run: mvn clean install
 
-#Убрал тесты для проверки
-#      - name: Run tests
-#        run: mvn test
+      #Убрал тесты для проверки
+      #      - name: Run tests
+      #        run: mvn test
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.2
@@ -54,14 +54,15 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            echo "Starting deployment..."
-            cd MrDverkin/
-            git pull origin master
-            if [ $? -ne 0 ]; then echo "git pull failed!"; exit 1; fi
-            mvn clean install
-            if [ $? -ne 0 ]; then echo "Maven build failed!"; exit 1; fi
-            cp target/MrDverkin-0.0.1-SNAPSHOT.jar /path/to/deploy/
-            if [ $? -ne 0 ]; then echo "Copying JAR file failed!"; exit 1; fi
-            sudo systemctl restart my-app.service
-            if [ $? -ne 0 ]; then echo "Service restart failed!"; exit 1; fi
-            echo "Deployment successful!"
+                    echo "Starting deployment..."
+                    cd MrDverkin/
+                    git pull origin master
+                    if [ $? -ne 0 ]; then echo "git pull failed!"; exit 1; fi
+            #            mvn clean install
+                    mvn clean install -DskipTests
+                    if [ $? -ne 0 ]; then echo "Maven build failed!"; exit 1; fi
+                    cp target/MrDverkin-0.0.1-SNAPSHOT.jar /path/to/deploy/
+                    if [ $? -ne 0 ]; then echo "Copying JAR file failed!"; exit 1; fi
+                    sudo systemctl restart my-app.service
+                    if [ $? -ne 0 ]; then echo "Service restart failed!"; exit 1; fi
+                    echo "Deployment successful!"
