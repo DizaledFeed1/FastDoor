@@ -46,6 +46,10 @@ jobs:
 #      - name: Run tests
 #        run: mvn test
 
+      - name: Build without tests
+        run: mvn clean install -DskipTests
+
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.2
         with:
