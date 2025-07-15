@@ -16,8 +16,8 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_DB: fastdoors
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: Porfik10
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
         ports:
           - 5432:5432
         options: >-
