@@ -4,7 +4,6 @@ management:
       exposure:
         include: "*"
 
-
 spring:
   server:
   address: 0.0.0.0
