@@ -58,8 +58,7 @@ jobs:
             cd MrDverkin/
             git pull origin master
             if [ $? -ne 0 ]; then echo "git pull failed!"; exit 1; fi
-#            mvn clean install
-            mvn clean install -DskipTests                    
+            mvn clean install -DskipTests
             if [ $? -ne 0 ]; then echo "Maven build failed!"; exit 1; fi
             cp target/MrDverkin-0.0.1-SNAPSHOT.jar /path/to/deploy/
             if [ $? -ne 0 ]; then echo "Copying JAR file failed!"; exit 1; fi
