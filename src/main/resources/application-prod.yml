@@ -5,8 +5,8 @@ spring:
         url: http://localhost:9090/admin
         instance:
           service-url: http://localhost:8080
-        username: admin
-        password: admin
+        username: ${BOOT_ADMIN_USERNAME}
+        password: ${BOOT_ADMIN_PASSWORD}
 
   datasource:
     url: jdbc:postgresql://localhost:5432/fastdoors
