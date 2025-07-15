@@ -36,7 +36,7 @@ spring:
 
   security:
     remember-me:
-      key: "M671PLlzHcjMg4pcnR7PYPRI6d0amNRGDm1TLulh7eLk4vBdiaodyxEDzLMscrSWzGCi7Ir7spFDZtDv19ltrLHW01BbatKeX7p5Qjsda0ZnQLB9i5sT7j9wwQbQ8YJnPyvUUZ3QVbuhHyLdnqIVpAlH4KbCncoyzChEW0xXG2X6Adrl2jkKHuACRTY7nSk5brulO2G5UaDRJttTeMvmsFreD9hsFhibTRQZGegN7fccRwEBKc1ns0BmPEqt12kqjcUrNq4dktdR2P6vAoaluAAtNpedYoc9G1rJzeSa1ZhY"
+      key: ${REMEMBER_ME_KEY}
 
   logging:
     level:
