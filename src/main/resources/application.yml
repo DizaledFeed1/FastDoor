@@ -14,9 +14,9 @@ spring:
           service-url: http://localhost:8080
         username: admin
         password: admin
-  #  server:
-#    address: 0.0.0.0
-#    port: 8080
+    server:
+    address: 0.0.0.0
+    port: 8080
 
   profiles:
     active: prod  # если хочешь включить профилирование
