@@ -1,5 +1,6 @@
 package org.example.mrdverkin.services;
 
+import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,12 +50,16 @@ public class BotService {
     }
 
     public void deleteMessage(Order order) {
-        String phoneNumber = order.getInstaller().getPhone();
-        String message = "Ваш заказ по адресу: " + order.getAddress() +
-                "\\nДата: " + order.getDateOrder() +
-                "\\nОтменён";
+        Installer installer = order.getInstaller();
+        if (installer != null) {
+            String phoneNumber = installer.getPhone();
 
-        sendMessage(phoneNumber, message);
+            String message = "Ваш заказ по адресу: " + order.getAddress() +
+                    "\\nДата: " + order.getDateOrder() +
+                    "\\nОтменён";
+
+            sendMessage(phoneNumber, message);
+        }
     }
 
     public void sendMessage(String phoneNumber, String message) {
