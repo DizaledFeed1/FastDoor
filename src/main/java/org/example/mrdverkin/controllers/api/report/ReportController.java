@@ -52,7 +52,6 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
-
     @Operation(summary = "Скачивание отчёта",
             description = "Возвращает массив байт\n" +
                     "ContentDisposition: .xls\n" +
