@@ -20,6 +20,7 @@ public class ReportDTO {
     //Промежуток дат отчёта
     @NotNull
     private LocalDate dateFrom;
+
     @NotNull
     private LocalDate dateTo;
 
