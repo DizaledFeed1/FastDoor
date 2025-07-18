@@ -64,7 +64,7 @@ public class ReportController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(ContentDisposition.attachment().filename(reportDTO.getTitle() + ".xls").build());
-        headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.setContentType(MediaType.parseMediaType("application/vnd.ms-excel"));
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(bytes);
