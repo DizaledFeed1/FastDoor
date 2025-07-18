@@ -126,8 +126,7 @@ public class MainInstallerController {
             orderRepository.updateInstaller(installer, installerInfo.getOrderId());
 
             Order newOrder = new Order();
-            newOrder.setFullName(oldOrder.getFullName());
-            newOrder.setAddress(oldOrder.getAddress());
+            newOrder.setFullName(oldOrder.getFullName());            newOrder.setAddress(oldOrder.getAddress());
             newOrder.setPhone(oldOrder.getPhone());
             newOrder.setMessageSeller(oldOrder.getMessageSeller());
             newOrder.setMessageMainInstaller(installerInfo.getInstallerComment());
