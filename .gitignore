@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Игнорируем DevUserInitializer.java
+/src/main/java/org/example/mrdverkin/config/DevUserInitializer.java
+

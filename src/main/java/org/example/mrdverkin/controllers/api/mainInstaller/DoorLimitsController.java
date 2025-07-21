@@ -76,4 +76,9 @@ public class DoorLimitsController {
 
         return ResponseEntity.ok().body("Значение обновлено!");
     }
+
+    @GetMapping("/allDays")
+    public ResponseEntity<?> allDays() {
+        return ResponseEntity.ok().body(doorLimitsRepository.findAllByNoLimit());
+    }
 }

@@ -18,6 +18,9 @@ public interface DoorLimitsRepository extends JpaRepository<DoorLimits, Long> {
     @Query("SELECT d FROM DoorLimits d WHERE d.limitDate > CURRENT_TIMESTAMP ORDER BY d.limitDate ASC")
     List<DoorLimits> findAll();
 
+    @Query("SELECT d FROM DoorLimits d")
+    List<DoorLimits> findAllByNoLimit();
+
     @Modifying
     @Transactional
     @Query("UPDATE DoorLimits d SET d.availability = false WHERE d.limitDate = :date")
