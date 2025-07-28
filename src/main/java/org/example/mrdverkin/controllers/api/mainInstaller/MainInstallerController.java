@@ -126,7 +126,8 @@ public class MainInstallerController {
             orderRepository.updateInstaller(installer, installerInfo.getOrderId());
 
             Order newOrder = new Order();
-            newOrder.setFullName(oldOrder.getFullName());            newOrder.setAddress(oldOrder.getAddress());
+            newOrder.setFullName(oldOrder.getFullName());
+            newOrder.setAddress(oldOrder.getAddress());
             newOrder.setPhone(oldOrder.getPhone());
             newOrder.setMessageSeller(oldOrder.getMessageSeller());
             newOrder.setMessageMainInstaller(installerInfo.getInstallerComment());
@@ -139,7 +140,7 @@ public class MainInstallerController {
 
             if (oldOrder.getInstaller() == null) {
                 botService.selectMessage(newOrder);
-            }else if (oldOrder.getInstaller().getFullName() == installerInfo.getInstallerFullName()){
+            }else if (oldOrder.getInstaller().getFullName().equalsIgnoreCase(installerInfo.getInstallerFullName())){
                 botService.modificationMessage(newOrder, oldOrder);
             } else {
                 botService.selectMessage(newOrder);
