@@ -76,4 +76,15 @@ public class DoorLimitsController {
 
         return ResponseEntity.ok().body("Значение обновлено!");
     }
+
+    @Operation(
+            summary = "Получить все дни календаря",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Данные календаря"),
+            }
+    )
+    @GetMapping("/allDays")
+    public ResponseEntity<?> allDays() {
+        return ResponseEntity.ok().body(doorLimitsRepository.findAllByNoLimit());
+    }
 }
