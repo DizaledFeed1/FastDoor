@@ -53,7 +53,6 @@ public class InstallerService {
     }
 
     public ResponseEntity<List<InstallerInfo>> getWorkloadDate(Date date) {
-//        List<InstallerInfo> installerInfos = installerRepository.searchDoorbyDate(date);
         return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
 

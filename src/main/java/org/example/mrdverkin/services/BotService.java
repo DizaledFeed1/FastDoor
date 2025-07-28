@@ -24,7 +24,7 @@ public class BotService {
     public void selectMessage(Order order) {
         String phoneNumber = order.getInstaller().getPhone();
         String message = "Вам назначен заказ по адресу: " + order.getAddress() +
-                "\\nДата: " + order.getDateOrder() +
+                "\\nДата: " + order.getDateOrder().toString() +
                 "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + order.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (order.getMessageMainInstaller() != null ? order.getMessageMainInstaller() : "Нет") +
@@ -40,7 +40,7 @@ public class BotService {
 
                 "\\nИзменён\\nНовые данные:" +
                 "\\nАдрес:" + newOrder.getAddress() +
-                "\\nДата: " + newOrder.getDateOrder() +
+                "\\nДата: " + newOrder.getDateOrder().toString() +
                 "\\nКоличество входных дверей: " + newOrder.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + newOrder.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (newOrder.getMessageMainInstaller() != null ? newOrder.getMessageMainInstaller() : "Нет") +
@@ -55,7 +55,7 @@ public class BotService {
             String phoneNumber = installer.getPhone();
 
             String message = "Ваш заказ по адресу: " + order.getAddress() +
-                    "\\nДата: " + order.getDateOrder() +
+                    "\\nДата: " + order.getDateOrder().toString() +
                     "\\nОтменён";
 
             sendMessage(phoneNumber, message);
