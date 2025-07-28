@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 /**
@@ -30,6 +32,22 @@ public class SellerService {
     private DoorLimitsRepository doorLimitsRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(SellerService.class);
+
+    public String getAllSellar() {
+        List<User> allSeller = userRepository.findAllSellers(Role.ROLE_SELLER);
+
+        if (allSeller.isEmpty()) {
+            throw new IllegalStateException("Нет продавцов в системе");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (User user : allSeller) {
+            sb.append(user.getNickname()).append("\n");
+        }
+
+        return sb.toString();
+    }
+
 
     /**
      * Метод для проверки введённых значений пользователя.

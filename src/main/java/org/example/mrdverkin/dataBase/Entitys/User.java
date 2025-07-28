@@ -41,6 +41,8 @@ public class User implements UserDetails {
     @JsonIgnore
     private final Set<Role> roles;
 
+    private boolean hints = true;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

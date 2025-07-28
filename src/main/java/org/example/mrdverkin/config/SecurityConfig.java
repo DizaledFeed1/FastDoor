@@ -42,13 +42,14 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session", "/actuator/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/orders/create").hasAnyRole("MainInstaller","SELLER")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/create", "/api/edit/**", "/api/delete").hasAnyRole("MainInstaller","SELLER")
                         .requestMatchers("/api/orders/**", "/api/list/sellerList").hasAnyRole("SELLER")
-                        .requestMatchers("/api/list/adminList").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/list/adminList", "/api/seller/**").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/doorLimits/**", "/api/listInstallers/**", "/api/listInstallers"
                                 ,"/api/mainInstaller/**", "/api/installer/**").hasAnyRole("MainInstaller")
-                        .requestMatchers("/api/edit/**", "/api/delete").hasAnyRole("SELLER", "MainInstaller")
+//                        .requestMatchers("/api/edit/**", "/api/delete").hasAnyRole("SELLER", "MainInstaller")
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", "MainInstaller")
+                        .requestMatchers("/api/hints").authenticated()
                         .anyRequest().authenticated())
                 .rememberMe(remember -> remember
                         .rememberMeServices(rememberMeServices())

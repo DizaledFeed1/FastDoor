@@ -48,3 +48,5 @@ spring:
   output:
     ansi:
       enabled: always
+
+#REMEMBER_ME_KEY: my-strong-remember-me-key
