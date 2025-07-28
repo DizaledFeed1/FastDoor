@@ -30,6 +30,8 @@ public class SecurityConfig {
     @Value("${spring.security.remember-me.key}")
     private String rememberMeKey;
 
+    private final String MAININSTALLER = "MainInstaller";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
         return http
@@ -40,13 +42,13 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session", "/actuator/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/orders/create", "/api/edit/**", "/api/delete").hasAnyRole("MainInstaller","SELLER")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/create", "/api/edit/**", "/api/delete").hasAnyRole(MAININSTALLER,"SELLER")
                         .requestMatchers("/api/orders/**", "/api/list/sellerList").hasAnyRole("SELLER")
                         .requestMatchers("/api/list/adminList", "/api/seller/**").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/doorLimits/**", "/api/listInstallers/**", "/api/listInstallers"
-                                ,"/api/mainInstaller/**", "/api/installer/**").hasAnyRole("MainInstaller")
+                                ,"/api/mainInstaller/**", "/api/installer/**").hasAnyRole(MAININSTALLER)
 //                        .requestMatchers("/api/edit/**", "/api/delete").hasAnyRole("SELLER", "MainInstaller")
-                        .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", "MainInstaller")
+                        .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", MAININSTALLER)
                         .requestMatchers("/api/hints").authenticated()
                         .anyRequest().authenticated())
                 .rememberMe(remember -> remember

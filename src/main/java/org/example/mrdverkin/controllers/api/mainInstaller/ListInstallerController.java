@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,7 +33,7 @@ public class ListInstallerController {
             description = "Возвращает список всех установщиков в системе")
     @ApiResponse(responseCode = "200", description = "Список установщиков успешно получен")
     @GetMapping
-    public ResponseEntity<?> listInstallers() {
+    public ResponseEntity<Map<String, Object>> listInstallers() {
 
         Map<String, Object> response = new HashMap<>();
         response.put("installers",installerService.getAllInstallers());
@@ -46,7 +47,7 @@ public class ListInstallerController {
     @ApiResponse(responseCode = "404", description = "Установщик с таким ID не найден", content = @Content)
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteInstaller(@PathVariable Long id) {
+    public ResponseEntity<String> deleteInstaller(@PathVariable Long id) {
         try {
             installerService.deleteInstallerById(id);
             return ResponseEntity.ok().build();
@@ -62,7 +63,7 @@ public class ListInstallerController {
     @ApiResponse(responseCode = "200", description = "Установщик успешно создан")
     @ApiResponse(responseCode = "400", description = "Неверные данные для создания установщика", content = @Content)
     @PostMapping("/create")
-    public ResponseEntity<?> createInstaller(@RequestParam String fullName, @RequestParam String phone) {
+    public ResponseEntity<String> createInstaller(@RequestParam String fullName, @RequestParam String phone) {
         try {
             installerService.createInstaller(fullName, phone);
             return ResponseEntity.ok().build();
@@ -77,7 +78,7 @@ public class ListInstallerController {
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = InstallerInfo.class))))
     @GetMapping("/workload")
-    public ResponseEntity<?> getWorkload(@RequestParam Date date) {
+    public ResponseEntity<List<InstallerInfo>> getWorkload(@RequestParam Date date) {
         return installerService.getWorkloadDate(date);
     }
 }

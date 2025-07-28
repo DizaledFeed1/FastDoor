@@ -15,6 +15,7 @@ import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.BotService;
+import org.example.mrdverkin.services.InstallerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +42,10 @@ public class MainInstallerController {
     private InstallerRepository installerRepository;
     @Autowired
     private BotService botService;
+    @Autowired
+    private InstallerService installerService;
+
+    private final String ERROR = "error";
 
     @Operation(
             summary = "Получить список заказов без установщика с дополнительной информацией",
@@ -51,11 +57,11 @@ public class MainInstallerController {
             }
     )
     @GetMapping
-    public ResponseEntity<?> mainInstaller(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Map<String, Object>> mainInstaller(@RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "10") int size) {
         try {
             if (page < 0 || size <= 0 || size > 100) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Неверные параметры страницы или размера"));
+                return ResponseEntity.badRequest().body(Map.of(ERROR, "Неверные параметры страницы или размера"));
             }
 
             Pageable pageable = PageRequest.of(page, size);
@@ -74,7 +80,7 @@ public class MainInstallerController {
 
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("error", "Внутренняя ошибка сервера");
+            error.put(ERROR, "Внутренняя ошибка сервера");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -87,7 +93,7 @@ public class MainInstallerController {
             }
     )
     @GetMapping("/pageable")
-    public ResponseEntity<?> pageableOrders(@RequestParam(defaultValue = "1") int page,
+    public ResponseEntity<Map<String, Object>> pageableOrders(@RequestParam(defaultValue = "1") int page,
                                             @RequestParam(defaultValue = "10") int size){
         try {
             Pageable pageable = PageRequest.of(page, size);
@@ -104,7 +110,7 @@ public class MainInstallerController {
         } catch (Exception e){
 
             Map<String, Object> error = new HashMap<>();
-            error.put("error", "Внутренняя ошибка сервера");
+            error.put(ERROR, "Внутренняя ошибка сервера");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -118,40 +124,9 @@ public class MainInstallerController {
             }
     )
     @PostMapping()
-    public ResponseEntity<?> selectInstaller(@RequestBody InstallerInfo installerInfo) {
-        try {
-            Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
-            orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
-            Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
-            orderRepository.updateInstaller(installer, installerInfo.getOrderId());
-
-            Order newOrder = new Order();
-            newOrder.setFullName(oldOrder.getFullName());
-            newOrder.setAddress(oldOrder.getAddress());
-            newOrder.setPhone(oldOrder.getPhone());
-            newOrder.setMessageSeller(oldOrder.getMessageSeller());
-            newOrder.setMessageMainInstaller(installerInfo.getInstallerComment());
-            newOrder.setDoorLimits(oldOrder.getDoorLimits());
-            newOrder.setFrontDoorQuantity(oldOrder.getFrontDoorQuantity());
-            newOrder.setInDoorQuantity(oldOrder.getInDoorQuantity());
-            newOrder.setInstaller(installer);
-            newOrder.setUser(oldOrder.getUser());
-
-
-            if (oldOrder.getInstaller() == null) {
-                botService.selectMessage(newOrder);
-            }else if (oldOrder.getInstaller().getFullName().equalsIgnoreCase(installerInfo.getInstallerFullName())){
-                botService.modificationMessage(newOrder, oldOrder);
-            } else {
-                botService.selectMessage(newOrder);
-                botService.deleteMessage(oldOrder);
-            }
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("error", "Ошибка выбора");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-        }
+    public ResponseEntity<Map<String, Object>> selectInstaller(@RequestBody InstallerInfo installerInfo) {
+        installerService.selectInstaller(installerInfo, orderRepository, botService);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -161,7 +136,7 @@ public class MainInstallerController {
             }
     )
     @GetMapping("/listOrdersMainInstaller")
-    public ResponseEntity<?> listOrders(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Map<String, Object>> listOrders(@RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Order> ordersPage = orderRepository.findAll(pageable, Condition.DELETED);
@@ -173,5 +148,10 @@ public class MainInstallerController {
         response.put("totalPages", ordersPage.getTotalPages());
 
         return ResponseEntity.ok(response);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleInvalidEnum(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 }

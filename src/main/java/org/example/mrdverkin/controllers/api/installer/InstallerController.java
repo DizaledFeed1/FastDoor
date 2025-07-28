@@ -22,7 +22,7 @@ public class InstallerController {
     @ApiResponse(responseCode = "200", description = "Данные установщика")
     @ApiResponse(responseCode = "404", description = "Установщик не найден")
     @GetMapping("/{id}")
-    public ResponseEntity<?> installer(@PathVariable Long id) {
+    public ResponseEntity<Installer> installer(@PathVariable Long id) {
         Installer installer = installerService.findInstallerById(id);
         if (installer == null) {
             return ResponseEntity.notFound().build();
@@ -35,7 +35,7 @@ public class InstallerController {
     @ApiResponse(responseCode = "200", description = "Данные обновлены")
     @ApiResponse(responseCode = "404", description = "Установщик не найден")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateInstaller(@PathVariable Long id, @RequestParam String fullName, @RequestParam String phone) {
+    public ResponseEntity<Void> updateInstaller(@PathVariable Long id, @RequestParam String fullName, @RequestParam String phone) {
         return installerService.updateInstaller(id, fullName, phone);
     }
 }

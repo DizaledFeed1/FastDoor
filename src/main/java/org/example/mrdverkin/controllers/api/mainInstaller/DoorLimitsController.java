@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/doorLimits")
@@ -29,7 +30,7 @@ public class DoorLimitsController {
             }
     )
     @PatchMapping("/closeDate")
-    public ResponseEntity<?> closeDate(@RequestBody DateAvailability dateAvailability) {
+    public ResponseEntity<String> closeDate(@RequestBody DateAvailability dateAvailability) {
         try {
             doorLimitsRepository.closeDate(Date.valueOf(dateAvailability.getDate()));
             return ResponseEntity.ok().body("Дата закрыта!");
@@ -46,7 +47,7 @@ public class DoorLimitsController {
             }
     )
     @PatchMapping("/openDate")
-    public ResponseEntity<?> openDate(@RequestBody DateAvailability dateAvailability) {
+    public ResponseEntity<String> openDate(@RequestBody DateAvailability dateAvailability) {
         try {
             doorLimitsRepository.openDate(Date.valueOf(dateAvailability.getDate()));
             return ResponseEntity.ok().body("Дата открыта!");
@@ -63,7 +64,7 @@ public class DoorLimitsController {
             }
     )
     @PatchMapping("/editDate")
-    public ResponseEntity<?> editDate(@RequestBody DateAvailability dateAvailability) {
+    public ResponseEntity<String> editDate(@RequestBody DateAvailability dateAvailability) {
         DoorLimits doorLimits = doorLimitsRepository.findByLimitDate(Date.valueOf(dateAvailability.getDate()));
         if (doorLimits == null) {
             return ResponseEntity.notFound().build();
@@ -84,7 +85,7 @@ public class DoorLimitsController {
             }
     )
     @GetMapping("/allDays")
-    public ResponseEntity<?> allDays() {
+    public ResponseEntity<List<DoorLimits>> allDays() {
         return ResponseEntity.ok().body(doorLimitsRepository.findAllByNoLimit());
     }
 }
