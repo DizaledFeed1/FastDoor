@@ -66,6 +66,7 @@ public class InstallerService {
             Order newOrder = new Order();
             newOrder.setFullName(oldOrder.getFullName());
             newOrder.setAddress(oldOrder.getAddress());
+            newOrder.setDateOrder(oldOrder.getDateOrder());
             newOrder.setPhone(oldOrder.getPhone());
             newOrder.setMessageSeller(oldOrder.getMessageSeller());
             newOrder.setMessageMainInstaller(installerInfo.getInstallerComment());

@@ -14,17 +14,21 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class BotService {
     @Autowired
     private RestTemplate restTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(BotService.class);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
 
     public void selectMessage(Order order) {
         String phoneNumber = order.getInstaller().getPhone();
         String message = "Вам назначен заказ по адресу: " + order.getAddress() +
-                "\\nДата: " + order.getDateOrder().toString() +
+                "\\nДата: " + order.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + order.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (order.getMessageMainInstaller() != null ? order.getMessageMainInstaller() : "Нет") +
@@ -40,7 +44,7 @@ public class BotService {
 
                 "\\nИзменён\\nНовые данные:" +
                 "\\nАдрес:" + newOrder.getAddress() +
-                "\\nДата: " + newOrder.getDateOrder().toString() +
+                "\\nДата: " + newOrder.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + newOrder.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + newOrder.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (newOrder.getMessageMainInstaller() != null ? newOrder.getMessageMainInstaller() : "Нет") +
@@ -55,7 +59,7 @@ public class BotService {
             String phoneNumber = installer.getPhone();
 
             String message = "Ваш заказ по адресу: " + order.getAddress() +
-                    "\\nДата: " + order.getDateOrder().toString() +
+                    "\\nДата: " + order.getDateOrder().format(formatter) +
                     "\\nОтменён";
 
             sendMessage(phoneNumber, message);
