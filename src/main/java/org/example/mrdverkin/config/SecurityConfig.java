@@ -27,13 +27,11 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private UserRepository userRepository;
     @Value("${spring.security.remember-me.key}")
     private String rememberMeKey;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -52,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/hints").authenticated()
                         .anyRequest().authenticated())
                 .rememberMe(remember -> remember
-                        .rememberMeServices(rememberMeServices())
+                        .rememberMeServices(rememberMeServices)
                 )
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/api/logout")
@@ -62,7 +60,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(@Autowired UserRepository userRepository) {
         return username -> userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
@@ -80,11 +78,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public RememberMeServices rememberMeServices() {
+    public RememberMeServices rememberMeServices(UserRepository userRepository) {
         TokenBasedRememberMeServices services =
-                new TokenBasedRememberMeServices(rememberMeKey, userDetailsService());
+                new TokenBasedRememberMeServices(rememberMeKey, userDetailsService(userRepository));
         services.setCookieName("remember-me");
-        services.setUseSecureCookie(true); // <<< отключить secure
+        services.setUseSecureCookie(true);
         return services;
     }
 
