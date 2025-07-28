@@ -21,7 +21,7 @@ public class SellerController {
     @Operation(description = "Метод возвращает список всех магазинов")
     @GetMapping("/all")
     public String getSeller() {
-        return sellerService.getAllSellar();
+        return sellerService.getAllSeller();
     }
 
     @ExceptionHandler(IllegalStateException.class)

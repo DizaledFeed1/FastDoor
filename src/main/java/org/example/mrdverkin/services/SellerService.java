@@ -33,7 +33,7 @@ public class SellerService {
 
     private static final Logger logger = LoggerFactory.getLogger(SellerService.class);
 
-    public String getAllSellar() {
+    public String getAllSeller() {
         List<User> allSeller = userRepository.findAllSellers(Role.ROLE_SELLER);
 
         if (allSeller.isEmpty()) {
