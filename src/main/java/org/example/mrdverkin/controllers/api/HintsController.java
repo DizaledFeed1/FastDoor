@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/hints")
-@Tag(name = "Контроллер подсказок", description = "Контроллер реализует получение статуса подсказок пользователя" +
+@Tag(name = "Контроллер подсказок", description = "Контроллер реализует получение статуса подсказок пользователя " +
         "и замены статуса")
 public class HintsController {
     @Autowired UserService userService;
