@@ -30,7 +30,7 @@ public class SecurityConfig {
     @Value("${spring.security.remember-me.key}")
     private String rememberMeKey;
 
-    private final String MAININSTALLER = "MainInstaller";
+    private final String MAININSTALLER = "MAIN_INSTALLER";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
