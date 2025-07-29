@@ -47,7 +47,7 @@ public class ManagementOrder {
             }
     )
     @GetMapping("/edit/{id}")
-    public ResponseEntity<?> edit(@PathVariable Long id,
+    public ResponseEntity<Map<String, Object>> edit(@PathVariable Long id,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
 
         Order order = orderService.findOrderById(id);

@@ -25,7 +25,7 @@ public class SellerController {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<?> handleInvalidEnum(IllegalStateException ex) {
+    public ResponseEntity<String> handleInvalidEnum(IllegalStateException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

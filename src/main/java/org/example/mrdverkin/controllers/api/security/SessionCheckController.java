@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionCheckController {
 
     @GetMapping("/api/check-session")
-    public ResponseEntity<?> checkSession() {
+    public ResponseEntity<SessionStatus> checkSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
             // Пользователь не залогинен
-            return ResponseEntity.status(401).body("Unauthorized");
+            return ResponseEntity.status(401).body(new SessionStatus(false, "Unauthorized"));
         }
 
         // Если залогинен, вернуть роль и другие данные
@@ -29,6 +29,7 @@ public class SessionCheckController {
             case "ROLE_SELLER": role = "salespeople"; break;
             case "ROLE_ADMIN": role = "administrator"; break;
             case "ROLE_MainInstaller": role = "main"; break;
+            default: role = "ROLE_UNKNOWN"; break;
         }
 
         return ResponseEntity.ok(new SessionStatus(true, role));

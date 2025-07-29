@@ -2,7 +2,8 @@ package org.example.mrdverkin.dataBase.Entitys;
 
 public enum Role {
     ROLE_SELLER,
-    ROLE_MainInstaller,
+    ROLE_MAIN_INSTALLER,
+//    ROLE_MainInstaller,
     ROLE_ADMIN;
 
     public static boolean isValidRole(String role) {

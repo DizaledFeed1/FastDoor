@@ -35,7 +35,7 @@ public class ReportController {
     })
     @PostMapping("/create")
     @Transactional
-    public ResponseEntity<?> createReport(@RequestBody @Valid ReportDTO reportDTO,
+    public ResponseEntity<String> createReport(@RequestBody @Valid ReportDTO reportDTO,
                                           @AuthenticationPrincipal User user) {
 
         ResponceDTO responce = reportService.createReport(reportDTO, user);
@@ -47,7 +47,7 @@ public class ReportController {
             description = "Возвращает все данные отчёта кроме orders для владельца этих отчётов"
     )
     @GetMapping("/all")
-    public ResponseEntity<?> getAllReportsByUser(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<ReportDTO>> getAllReportsByUser(@AuthenticationPrincipal User user) {
         List<ReportDTO> response = reportService.getAllReportByUser(user);
         return ResponseEntity.ok(response);
     }
