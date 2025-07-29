@@ -56,7 +56,7 @@ public class AuthController {
                 else if(role.equals("ROLE_SELLER")) {
                     answer.add("salespeople");
                 }
-                else if(role.equals("ROLE_MainInstaller")) {
+                else if(role.equals("ROLE_MAIN_INSTALLER")) {
                     answer.add("main");
                 }
             }
