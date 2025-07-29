@@ -8,12 +8,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.OrderService;
+import org.example.mrdverkin.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ import java.util.Map;
 public class ManagementOrder {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     @Operation(
             summary = "Удалить заказ",
@@ -34,8 +37,9 @@ public class ManagementOrder {
             }
     )
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, Object>> deleteOrder(@RequestParam Long id) {
-        return orderService.deleteOrderById( id);
+    public ResponseEntity<Map<String, Object>> deleteOrder(@RequestParam Long id,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+        return orderService.deleteOrderById(id, userDetails, userService);
     }
 
     @Operation(
@@ -73,5 +77,10 @@ public class ManagementOrder {
     public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable Long id,
                                                            @RequestBody OrderAttribute orderAttribute) {
         return orderService.updateOrder(id, orderAttribute);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleInvalidEnum(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 }
