@@ -5,7 +5,6 @@ import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
-import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
@@ -14,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -33,8 +32,6 @@ import java.util.Optional;
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private InstallerRepository installerRepository;
     @Autowired
     private DoorLimitsRepository doorLimitsRepository;
     @Autowired
@@ -51,6 +48,52 @@ public class OrderService {
      */
     public Order findOrderById(Long id) {
         return orderRepository.findByOrderId(id);
+    }
+
+    /**
+     * Метод возвращает все заказы для Админа
+     * @param page
+     * @param size
+     * @return
+     */
+    public ResponseEntity<Map<String, Object>> adminPanel(int page, int size){
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders = orderRepository.findAll(pageable, null);
+        List<OrderAttribute> adminMapping = OrderAttribute.fromOrderList(orders);
+
+        response.put("orders", adminMapping);
+        response.put("currentPage", page);
+        response.put("totalPages", orders.getTotalPages());
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Метод возвращает список активных заказов для магазина
+     * @param user
+     * @param page
+     * @param size
+     * @return ResponseEntity<Map<String, Object>>
+     */
+    public ResponseEntity<Map<String, Object>> sellerList(User user, int page, int size){
+        // Создаём пагинацию
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Получаем список заказов для пользователя
+        Page<Order> ordersPage = orderRepository.findOrdersByUser(user, Condition.DELETED, pageable);
+
+        // Преобразуем заказы в формат OrderAttribute (можно изменить в зависимости от нужд)
+        List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);
+
+        // Формируем ответ
+        Map<String, Object> response = new HashMap<>();
+        response.put("orders", orderAttributes);
+        response.put("currentPage", page);
+        response.put("totalPages", ordersPage.getTotalPages());
+
+        // Возвращаем JSON-ответ
+        return ResponseEntity.ok(response);
     }
 
     /**
