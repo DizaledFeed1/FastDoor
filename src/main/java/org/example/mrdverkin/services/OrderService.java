@@ -60,7 +60,7 @@ public class OrderService {
     public ResponseEntity<Map<String, Object>> adminPanel(int page, int size){
         Map<String, Object> response = new HashMap<>();
         Pageable pageable = PageRequest.of(page, size);
-        Page<Order> orders = orderRepository.findAll(pageable, null);
+        Page<Order> orders = orderRepository.findAllForAdmin(pageable);
         List<OrderAttribute> adminMapping = OrderAttribute.fromOrderList(orders);
 
         response.put("orders", adminMapping);

@@ -21,6 +21,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o where o.condition != :condition ORDER BY o.placeAt DESC")
     Page<Order> findAll(Pageable pageable, @Param("condition") Condition condition);
 
+    @Query("SELECT o FROM Order o ORDER BY o.placeAt DESC")
+    Page<Order> findAllForAdmin(Pageable pageable);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE Order o set o.installer = :newInstaller where o.id = :orderId")
