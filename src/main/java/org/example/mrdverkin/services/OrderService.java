@@ -9,14 +9,12 @@ import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.OrderAttribute;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -30,15 +28,18 @@ import java.util.Optional;
  */
 @Service
 public class OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private DoorLimitsRepository doorLimitsRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BotService botService;
-    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
+    private final OrderRepository orderRepository;
+    private final DoorLimitsRepository doorLimitsRepository;
+    private final UserRepository userRepository;
+    private final BotService botService;
+
+    public OrderService (OrderRepository orderRepository, DoorLimitsRepository doorLimitsRepository, UserRepository userRepository, BotService botService) {
+        this.orderRepository = orderRepository;
+        this.doorLimitsRepository = doorLimitsRepository;
+        this.userRepository = userRepository;
+        this.botService = botService;
+    }
 
     /**
      * Находит заказ по его ID.
@@ -107,11 +108,10 @@ public class OrderService {
         DoorLimits doorLimits = doorLimitsRepository.findByLimitDate(order.getDoorLimits().getLimitDate());
 
         DateAvailability dateAvailabilities = orderRepository.getDoorCountsByDate(attribute.getDateOrder(), Condition.DELETED);
-        System.out.println(dateAvailabilities);
+
         //Проверяем есть ли заказы на этот день, если нет приравниваем значения к 0.
         if (dateAvailabilities == null){
             dateAvailabilities = new DateAvailability(attribute.getDateOrder(), 0L, 0L, true);
-            logger.error("Попытались добавить заказ на тот день где нет DoorLimits");
         }
 
         //Если в заказе поменялась дата то к количестве дверей добавляем новые и проверяем.
@@ -143,7 +143,11 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
-            Order copy = existingOrder;
+
+            Order copy = new Order();
+            copy.setInstaller(existingOrder.getInstaller());
+            copy.setAddress(existingOrder.getAddress());
+            copy.setDateOrder(existingOrder.getDateOrder());
 
                 // Обновляем поля заказа
             if (checkUpdate(existingOrder, orderAttribute)) {
@@ -174,12 +178,12 @@ public class OrderService {
 
 
     /**
-     * Удаляет заказ по ID, если он принадлежит указанному пользователю.
+     * Удаляет заказ по ID
      *
      * @param id   ID заказа
      * @return HTTP-ответ с сообщением об успехе или ошибке
      */
-    public ResponseEntity<Map<String, Object>> deleteOrderById(Long id) {
+    public ResponseEntity<Map<String, Object>> deleteOrderById(Long id, UserDetails user, UserService userService) {
         Optional<Order> orderOpt = orderRepository.findById(id);
 
         if (orderOpt.isEmpty()) {
@@ -187,9 +191,7 @@ public class OrderService {
         }
         Order order = orderOpt.get();
 
-//            if (!order.getUser().equals(user)) {
-//                return ResponseEntity.badRequest().body(Map.of("message", "Юзер не принадлежит данному заказу"));
-//            }
+        userService.checkDeletedUser(user, order); // Проверка права пользователя на удаление заказа
 
         order.setCondition(Condition.DELETED);
         orderRepository.save(order);
