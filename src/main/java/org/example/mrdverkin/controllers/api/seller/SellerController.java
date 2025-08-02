@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/seller")
 @Tag(name = "Контроллер магазинов")
 public class SellerController {
-    @Autowired
-    private SellerService sellerService;
 
+    private final SellerService sellerService;
+
+    public SellerController(SellerService sellerService) {
+        this.sellerService = sellerService;
+    }
 
     @Operation(description = "Метод возвращает список всех магазинов")
     @GetMapping("/all")

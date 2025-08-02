@@ -13,9 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 /**
@@ -34,7 +36,14 @@ public class SellerService {
     private static final Logger logger = LoggerFactory.getLogger(SellerService.class);
 
     public String getAllSeller() {
-        List<User> allSeller = userRepository.findAllSellers(Role.ROLE_SELLER);
+//        List<User> allSeller = userRepository.findAllSellers(Role.ROLE_SELLER.getCode());
+        List<User> allUser = userRepository.findAll();
+        List<User> allSeller = allUser.stream()
+                .filter(user -> user.getRoles().contains(Role.ROLE_SELLER))
+                .toList();
+
+
+
 
         if (allSeller.isEmpty()) {
             throw new IllegalStateException("Нет продавцов в системе");

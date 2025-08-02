@@ -1,12 +1,10 @@
 package org.example.mrdverkin.controllers.api.mainInstaller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
-import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
@@ -16,15 +14,12 @@ import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.BotService;
 import org.example.mrdverkin.services.InstallerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +34,7 @@ public class MainInstallerController {
     private final InstallerRepository installerRepository;
     private final BotService botService;
     private final InstallerService installerService;
+    private final String ERROR = "error";
 
     public MainInstallerController(OrderRepository orderRepository, DoorLimitsRepository doorLimitsRepository,
                                    InstallerRepository installerRepository, BotService botService, InstallerService installerService) {
@@ -48,8 +44,6 @@ public class MainInstallerController {
         this.botService = botService;
         this.installerService = installerService;
     }
-
-    private final String ERROR = "error";
 
     @Operation(
             summary = "Получить список заказов без установщика с дополнительной информацией",

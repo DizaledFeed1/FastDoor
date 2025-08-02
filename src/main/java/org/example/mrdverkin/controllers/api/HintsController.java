@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Контроллер подсказок", description = "Контроллер реализует получение статуса подсказок пользователя " +
         "и замены статуса")
 public class HintsController {
-    @Autowired UserService userService;
+    private final UserService userService;
+
+    public HintsController(UserService userService) {
+        this.userService = userService;
+    }
 
     @Operation(description = "Возвращает true - если у пользователя включены подсказки и fase - если иначе")
     @GetMapping()

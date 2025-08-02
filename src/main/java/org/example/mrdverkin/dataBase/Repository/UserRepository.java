@@ -1,6 +1,5 @@
 package org.example.mrdverkin.dataBase.Repository;
 
-import org.example.mrdverkin.dataBase.Entitys.Role;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByNickname(String nickname);
 
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r = :role")
-    List<User> findAllSellers(@Param("role") Role role);
+//    @Query("SELECT u FROM User u JOIN u.roles r WHERE r = :roleCode")
+//    List<User> findAllSellers(@Param("roleCode") String roleCode);
 
 }

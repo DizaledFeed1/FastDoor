@@ -30,13 +30,16 @@ import java.util.Map;
 @RequestMapping("/api/orders")
 @Tag(name = "Order API", description = "Управление созданием заказов и доступностью дат")
 public class OrderCreateApiController {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private SellerService sellerService;
 
-    @Autowired
-    private DoorLimitsRepository doorLimitsRepository;
+    private final OrderRepository orderRepository;
+    private final SellerService sellerService;
+    private final DoorLimitsRepository doorLimitsRepository;
+
+    public OrderCreateApiController(OrderRepository orderRepository, SellerService sellerService, DoorLimitsRepository doorLimitsRepository) {
+        this.orderRepository = orderRepository;
+        this.sellerService = sellerService;
+        this.doorLimitsRepository = doorLimitsRepository;
+    }
 
     @Operation(
             summary = "Получить список доступных дат",

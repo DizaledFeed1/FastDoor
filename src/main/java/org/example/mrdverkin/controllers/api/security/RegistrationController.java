@@ -3,7 +3,6 @@ package org.example.mrdverkin.controllers.api.security;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.RegistrationForm;
 import org.example.mrdverkin.services.SellerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,12 +16,16 @@ import java.util.Map;
 @Controller
 @RequestMapping("/api/register")
 public class RegistrationController {
-    @Autowired
-    private UserRepository userRepo;
-    @Autowired
-    private SellerService sellerService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepo;
+    private final SellerService sellerService;
+    private final PasswordEncoder passwordEncoder;
+
+    public RegistrationController(UserRepository userRepo, SellerService sellerService, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.sellerService = sellerService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> processRegistration(@RequestBody RegistrationForm form) {
