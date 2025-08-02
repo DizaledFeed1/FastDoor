@@ -8,7 +8,6 @@ import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dto.ReportDTO;
 import org.example.mrdverkin.dto.ResponceDTO;
 import org.example.mrdverkin.services.ReportService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,8 +23,12 @@ import java.util.List;
 @Tag(name = "ReportController",
         description = "Контроллер для работы с отчётами")
 public class ReportController {
-    @Autowired
-    private ReportService reportService;
+
+    private final ReportService reportService;
+
+    public ReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
 
 
     @Operation(summary = "Создать отчёт",

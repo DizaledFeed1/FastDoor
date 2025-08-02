@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.services.InstallerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/installer")
 @Tag(name = "InstallersEdit", description = "Изменение установщиков")
 public class InstallerController {
-    @Autowired
-    private InstallerService installerService;
+
+    private final InstallerService installerService;
+
+    public InstallerController(InstallerService installerService) {
+        this.installerService = installerService;
+    }
 
     @Operation(summary = "Получить установщика по id",
             description = "Возвращает выбранного установщика для edit")

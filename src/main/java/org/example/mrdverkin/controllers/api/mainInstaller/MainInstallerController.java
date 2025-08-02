@@ -34,16 +34,20 @@ import java.util.Map;
 @Tag(name = "Main Installer", description = "API для работы с основным установщиком")
 public class MainInstallerController {
 
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private DoorLimitsRepository doorLimitsRepository;
-    @Autowired
-    private InstallerRepository installerRepository;
-    @Autowired
-    private BotService botService;
-    @Autowired
-    private InstallerService installerService;
+    private final OrderRepository orderRepository;
+    private final DoorLimitsRepository doorLimitsRepository;
+    private final InstallerRepository installerRepository;
+    private final BotService botService;
+    private final InstallerService installerService;
+
+    public MainInstallerController(OrderRepository orderRepository, DoorLimitsRepository doorLimitsRepository,
+                                   InstallerRepository installerRepository, BotService botService, InstallerService installerService) {
+        this.orderRepository = orderRepository;
+        this.doorLimitsRepository = doorLimitsRepository;
+        this.installerRepository = installerRepository;
+        this.botService = botService;
+        this.installerService = installerService;
+    }
 
     private final String ERROR = "error";
 

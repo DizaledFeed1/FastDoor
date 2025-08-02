@@ -24,10 +24,11 @@ import java.util.Map;
 @Tag(name = "Installers", description = "Управление установщиками")
 public class ListInstallerController {
 
-    @Autowired
-    private InstallerService installerService;
-    @Autowired
-    private OrderService orderService;
+    private final InstallerService installerService;
+
+    public ListInstallerController(InstallerService installerService) {
+        this.installerService = installerService;
+    }
 
     @Operation(summary = "Получить список всех установщиков",
             description = "Возвращает список всех установщиков в системе")

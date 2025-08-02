@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dto.DateAvailability;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.mrdverkin.services.DoorLimitsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +19,14 @@ import java.util.List;
 @RequestMapping("/api/doorLimits")
 @Tag(name = "Door Limits", description = "API для работы с датой установки")
 public class DoorLimitsController {
-    @Autowired
-    private DoorLimitsRepository doorLimitsRepository;
+
+    private final DoorLimitsRepository doorLimitsRepository;
+    private final DoorLimitsService doorLimitsService;
+
+    public DoorLimitsController(DoorLimitsRepository doorLimitsRepository, DoorLimitsService doorLimitsService) {
+        this.doorLimitsRepository = doorLimitsRepository;
+        this.doorLimitsService = doorLimitsService;
+    }
 
     @Operation(
             summary = "Закрыть день для добавления заказов",
@@ -81,11 +87,11 @@ public class DoorLimitsController {
     @Operation(
             summary = "Получить все дни календаря",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Данные календаря"),
+                    @ApiResponse(responseCode = "200", description = "Даты календаря"),
             }
     )
     @GetMapping("/allDays")
-    public ResponseEntity<List<DoorLimits>> allDays() {
-        return ResponseEntity.ok().body(doorLimitsRepository.findAllByNoLimit());
+    public ResponseEntity<List<String>> allDays() {
+        return doorLimitsService.allDays();
     }
 }
