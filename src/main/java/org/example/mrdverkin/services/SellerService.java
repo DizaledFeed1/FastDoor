@@ -35,26 +35,20 @@ public class SellerService {
 
     private static final Logger logger = LoggerFactory.getLogger(SellerService.class);
 
-    public String getAllSeller() {
+    public List<String> getAllSeller() {
 //        List<User> allSeller = userRepository.findAllSellers(Role.ROLE_SELLER.getCode());
         List<User> allUser = userRepository.findAll();
-        List<User> allSeller = allUser.stream()
+        List<String> allSeller = allUser.stream()
                 .filter(user -> user.getRoles().contains(Role.ROLE_SELLER))
+                .map(User::getNickname)
                 .toList();
-
-
 
 
         if (allSeller.isEmpty()) {
             throw new IllegalStateException("Нет продавцов в системе");
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (User user : allSeller) {
-            sb.append(user.getNickname()).append("\n");
-        }
-
-        return sb.toString();
+        return allSeller;
     }
 
 
