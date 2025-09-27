@@ -1,4 +1,4 @@
-MRDVERKIN
+FastDoors
 Streamlining Success Through Seamless Order Coordination
 
 MrDverkin is a versatile backend solution crafted to optimize order processing, installer coordination, and user management within a secure and scalable environment. Leveraging Spring Boot and Docker, it ensures consistent deployment and robust security configurations, including role-based access control and session management. The system features RESTful APIs, data transfer objects, and integrated database repositories to facilitate seamless data handling and operational workflows. Its web interface templates support user interactions, while automated notifications streamline communication. Designed for developers, MrDverkin empowers teams to build maintainable, efficient backend systems with ease. Why MrDverkin?
