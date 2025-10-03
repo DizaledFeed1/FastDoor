@@ -15,19 +15,18 @@ public enum Role {
         return code;
     }
 
-    public static Role fromName(String name) {
+    public static Role fromCode(String code) {
         for (Role role : Role.values()) {
-            if (role.name().equals(name)) {
+            if (role.getCode().equals(code)) {
                 return role;
             }
         }
-        throw new IllegalArgumentException("Unknown role name: " + name);
+        throw new IllegalArgumentException("Unknown role code: " + code);
     }
-
 
     public static boolean isValidRole(String role) {
         try {
-            fromName(role);
+            fromCode(role);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
