@@ -23,7 +23,7 @@ public class SellerController {
     public SellerController(SellerService sellerService) {
         this.sellerService = sellerService;
     }
-
+    //test
     @Operation(description = "Метод возвращает список всех магазинов")
     @GetMapping("/all")
     public List<String> getSeller() {
