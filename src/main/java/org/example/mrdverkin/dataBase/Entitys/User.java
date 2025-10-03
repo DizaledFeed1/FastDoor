@@ -38,6 +38,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     @JsonIgnore
     private final Set<Role> roles;
 
