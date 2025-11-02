@@ -1,13 +1,26 @@
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fastdoors
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
+
   security:
     remember-me:
       key: ${REMEMBER_ME_KEY}
+
   boot:
     admin:
       client:
@@ -17,34 +30,9 @@ spring:
         username: ${BOOT_ADMIN_USERNAME}
         password: ${BOOT_ADMIN_PASSWORD}
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/fastdoors
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    properties:
-      hibernate:
-        transaction:
-          jta:
-            platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
 logging:
   file:
     name: logs/app.log
   level:
     root: INFO
-
-doc:
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui.html
-  api-docs:
-    enabled: true
-    path: /v3/api-docs
+    org.springframework.security: WARN

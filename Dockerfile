@@ -11,4 +11,4 @@ COPY target/MrDverkin-0.0.1-SNAPSHOT.jar /app/MrDverkin-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
 
 # Запускаем приложение с продакшн профилем
-CMD ["java", "-jar","-Dspring.profiles.active=prod", "MrDverkin-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar","-Dspring.profiles.active=dev", "MrDverkin-0.0.1-SNAPSHOT.jar"]
