@@ -1,14 +1,27 @@
-# Используем официальный образ с Java
-FROM openjdk:21-jdk-slim
+# === Этап 1: Сборка ===
+FROM maven:3.9-eclipse-temurin-21 AS builder
 
-# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем файл jar в контейнер
-COPY target/MrDverkin-0.0.1-SNAPSHOT.jar /app/MrDverkin-0.0.1-SNAPSHOT.jar
+# Копируем pom.xml для кэширования зависимостей
+COPY pom.xml .
 
-# Открываем порт 8080
+# Копируем исходный код
+COPY src ./src
+
+# Собираем JAR без запуска тестов
+RUN mvn clean package -DskipTests
+
+# === Этап 2: Запуск ===
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+# Копируем JAR из builder-этапа
+# Убедитесь, что имя артефакта совпадает с тем, что генерирует Maven (обычно ${artifactId}-${version}.jar)
+COPY --from=builder /app/target/FastDoor-*.jar ./app.jar
+
 EXPOSE 8080
 
-# Запускаем приложение с продакшн профилем
-CMD ["java", "-jar","-Dspring.profiles.active=dev", "MrDverkin-0.0.1-SNAPSHOT.jar"]
+# Передаём профиль Spring через системное свойство
+CMD ["java", "-Dspring.profiles.active=dev", "-jar", "app.jar"]
