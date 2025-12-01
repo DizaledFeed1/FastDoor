@@ -3,6 +3,7 @@ package org.example.mrdverkin.dataBase.Entitys;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.mrdverkin.dataBase.AesGcmEncryptor;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -18,7 +19,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Convert(converter = AesGcmEncryptor.class)
     private String fullName;
+
+    @Convert(converter = AesGcmEncryptor.class)
     private String address;
     private String phone;
     private String messageSeller;

@@ -20,6 +20,7 @@ spring:
   security:
     remember-me:
       key: ${REMEMBER_ME_KEY}
+      PERSONAL_DATA_KEY: ${PERSONAL_DATA_KEY}
 
   boot:
     admin:

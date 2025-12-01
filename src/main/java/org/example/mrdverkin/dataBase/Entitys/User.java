@@ -2,10 +2,7 @@ package org.example.mrdverkin.dataBase.Entitys;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +29,7 @@ public class User implements UserDetails {
     private final String password;
     private final String nickname;// либо название магазина либо ФИО владельца магазина
 
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY)
     private List<Report> reports;
 

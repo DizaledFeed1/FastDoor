@@ -231,6 +231,7 @@ public class OrderService {
      * Запускается 1-го числа каждого месяца в 00:00.
      * Значения по умолчанию: 2 входных двери и 50 межкомнатных дверей на день.
      */
+    //todo @Scheduled(cron = "0 0 0 1 * *") раз в месяц
     @Scheduled(cron = "0 0 0 1 * *")
     public void generateMonthlyLimits(){
 

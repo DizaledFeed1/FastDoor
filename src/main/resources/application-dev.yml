@@ -19,17 +19,30 @@ spring:
   security:
     remember-me:
       key: dev-remember-me-key
+      PERSONAL_DATA_KEY: "12345678901234567890123456789012"
 
   boot:
     admin:
       client:
         enabled: false
 
+
+  jmx:
+    enabled: false
+
 logging:
   level:
-    root: DEBUG
     org.springframework.security: DEBUG
     org.springframework.security.web: DEBUG
     org.springframework.security.authentication: DEBUG
     org.springframework.security.web.authentication.rememberme: DEBUG
     org.springframework.security.web.authentication: DEBUG
+
+
+
+
+management:
+  endpoints:
+    jmx:
+      exposure:
+        exclude: "*"
