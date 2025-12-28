@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface InstallerRepository extends JpaRepository<Installer, Long> {
     @Query(value = "SELECT i FROM Installer i where i.fullName = :fullSelectName")
@@ -28,4 +29,5 @@ public interface InstallerRepository extends JpaRepository<Installer, Long> {
     List<InstallerInfo> searchDoorbyDate(@Param("dateOrder") Date dateOrder,
                                          @Param("condition") Condition condition);
 
+    Optional<Installer>  findByPhone(String phone);
 }

@@ -1,11 +1,15 @@
 package org.example.mrdverkin.services;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
+import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
+import org.example.mrdverkin.mapper.InstallerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +20,9 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+@Slf4j
 @Service
 public class InstallerService {
     @Autowired
@@ -50,6 +56,21 @@ public class InstallerService {
         installer.setPhone(phone);
         installerRepository.save(installer);
         return ResponseEntity.ok().build();
+    }
+
+    public void updateInstaller(InstallerDto installerDto) {
+        Installer installer = installerRepository.findById(installerDto.getId())
+                .orElseThrow(() -> {
+                    log.warn("Installer not found. id={}", installerDto.getId());
+                    return new EntityNotFoundException();
+                });
+
+        installer.setFullName(installerDto.getFullName());
+        installer.setPhone(installerDto.getPhone());
+        installer.setTgId(installerDto.getTgId());
+        installer.setMaxId(installerDto.getMaxId());
+
+        installerRepository.save(installer);
     }
 
     public ResponseEntity<List<InstallerInfo>> getWorkloadDate(Date date) {
@@ -88,5 +109,10 @@ public class InstallerService {
         } catch (Exception e) {
             throw new RuntimeException("Ошибка выбора");
         }
+    }
+
+    public Optional<InstallerDto> getInstallerByPhone(String phone) {
+        return installerRepository.findByPhone(phone)
+                .map(InstallerMapper::toInstallerDtoWithoutOrders);
     }
 }
