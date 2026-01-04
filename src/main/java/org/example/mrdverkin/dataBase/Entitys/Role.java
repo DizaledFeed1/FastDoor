@@ -3,7 +3,8 @@ package org.example.mrdverkin.dataBase.Entitys;
 public enum Role {
     ROLE_SELLER("0"),
     ROLE_MAIN_INSTALLER("1"),
-    ROLE_ADMIN("2");
+    ROLE_ADMIN("2"),
+    ROLE_SERVICES("3");
 
     private final String code;
 

@@ -84,7 +84,7 @@ public class BotService {
         try {
 
             // Создаем JSON-сообщение
-            String json = "{ \"TgId\": \"" + id + "\", \"message\": \"" + message + "\" }";
+            String json = "{ \"tgId\": \"" + id + "\", \"message\": \"" + message + "\" }";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");

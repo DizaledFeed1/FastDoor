@@ -59,6 +59,9 @@ public class AuthController {
                 else if(role.equals("ROLE_MAIN_INSTALLER")) {
                     answer.add("main");
                 }
+                else if (role.equals("ROLE_SERVICES")) {
+                    answer.add("services");
+                }
             }
 
             // Устанавливаем аутентификацию в SecurityContext
