@@ -40,7 +40,7 @@ public class BotService {
 
 
     public void selectMessage(Order order) {
-        String phoneNumber = order.getInstaller().getPhone();
+        String id = order.getInstaller().getTgId();
         String message = "Вам назначен заказ по адресу: " + order.getAddress() +
                 "\\nДата: " + order.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
@@ -48,11 +48,11 @@ public class BotService {
                 "\\nКомментарий от установщика: " + (order.getMessageMainInstaller() != null ? order.getMessageMainInstaller() : "Нет") +
                 "\\nКомментарий от продавца: " + (order.getMessageSeller() != null ? order.getMessageSeller() : "Нет");
 
-        sendMessage(phoneNumber, message);
+        sendMessage(id, message);
     }
 
     public void modificationMessage(Order newOrder, Order oldOrder) {
-        String phoneNumber = oldOrder.getInstaller().getPhone();
+        String id = oldOrder.getInstaller().getTgId();
         String message = "Ваш  заказ по адресу: " + oldOrder.getAddress() +
                 "\\nДата: " + oldOrder.getDateOrder() +
 
@@ -64,27 +64,27 @@ public class BotService {
                 "\\nКомментарий от установщика: " + (newOrder.getMessageMainInstaller() != null ? newOrder.getMessageMainInstaller() : "Нет") +
                 "\\nКомментарий от продавца: " + (newOrder.getMessageSeller() != null ? newOrder.getMessageSeller() : "Нет");
 
-        sendMessage(phoneNumber, message);
+        sendMessage(id, message);
     }
 
     public void deleteMessage(Order order) {
         Installer installer = order.getInstaller();
         if (installer != null) {
-            String phoneNumber = installer.getPhone();
+            String id = installer.getTgId();
 
             String message = "Ваш заказ по адресу: " + order.getAddress() +
                     "\\nДата: " + order.getDateOrder().format(formatter) +
                     "\\nОтменён";
 
-            sendMessage(phoneNumber, message);
+            sendMessage(id, message);
         }
     }
 
-    public void sendMessage(String phoneNumber, String message) {
+    public void sendMessage(String id, String message) {
         try {
 
             // Создаем JSON-сообщение
-            String json = "{ \"phoneNumber\": \"" + phoneNumber + "\", \"message\": \"" + message + "\" }";
+            String json = "{ \"TgId\": \"" + id + "\", \"message\": \"" + message + "\" }";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
