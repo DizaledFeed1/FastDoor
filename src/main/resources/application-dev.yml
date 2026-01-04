@@ -38,8 +38,10 @@ logging:
     org.springframework.security.web.authentication.rememberme: DEBUG
     org.springframework.security.web.authentication: DEBUG
 
-
-
+sms:
+  url: "https://sms.notisend.ru/api/message/send"
+  project: "test"
+  api-key: "123asx"
 
 management:
   endpoints:

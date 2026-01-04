@@ -37,3 +37,8 @@ logging:
   level:
     root: INFO
     org.springframework.security: WARN
+
+sms:
+  url: ${SMS_URL}
+  project: ${SMS_PROJECT}
+  api-key: ${SMS_API_KEY}

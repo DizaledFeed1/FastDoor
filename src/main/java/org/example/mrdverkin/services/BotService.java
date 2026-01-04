@@ -1,28 +1,42 @@
 package org.example.mrdverkin.services;
 
+import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
+import org.example.mrdverkin.config.BotConfig;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
+import org.example.mrdverkin.dto.SmsRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BotService {
     @Autowired
     private RestTemplate restTemplate;
 
+    private final BotConfig botConfig;
+
     private static final Logger logger = LoggerFactory.getLogger(BotService.class);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static HttpHeaders tgHeaders;
+
+    @PostConstruct
+    public void init() {
+        tgHeaders = new HttpHeaders();
+        tgHeaders.setContentType(MediaType.APPLICATION_JSON);
+    }
 
 
     public void selectMessage(Order order) {
@@ -90,5 +104,29 @@ public class BotService {
         } catch (Exception e) {
             logger.error("Произошла ошибка при отправке сообщения: {}", e.getMessage());
         }
+    }
+
+    public void sendVerificationMessageIntegration(SmsRequest smsRequest) {
+
+        MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
+        formData.add("project", botConfig.getProject());
+        formData.add("recipients", smsRequest.getPhoneNumber());
+        formData.add("message", smsRequest.getCode());
+        formData.add("apikey", botConfig.getApiKey());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                botConfig.getUrl(),
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        logger.info("Результат отправки кода: {}", response.getBody());
     }
 }

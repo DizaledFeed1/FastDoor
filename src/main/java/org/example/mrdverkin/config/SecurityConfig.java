@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session", "/actuator/**").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session", "/actuator/**","/api/sms/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/orders/create", "/api/edit/**", "/api/delete").hasAnyRole(MAININSTALLER,"SELLER")
                         .requestMatchers("/api/orders/**", "/api/list/sellerList").hasAnyRole("SELLER")
                         .requestMatchers("/api/list/adminList", "/api/seller/**", "/api/doorLimits/allDays").hasAnyRole("ADMIN")
