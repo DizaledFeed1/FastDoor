@@ -50,7 +50,7 @@ public class InstallerController {
     }
 
     @Operation(description = "Получить установщика по номеру")
-    @GetMapping("/{phone}")
+    @GetMapping("/phone/{phone}")
     public ResponseEntity<InstallerDto> getInstallerByPhone(@PathVariable String phone) {
         return installerService.getInstallerByPhone(phone)
                 .map(ResponseEntity::ok)

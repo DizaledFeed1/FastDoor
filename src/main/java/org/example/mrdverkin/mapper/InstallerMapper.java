@@ -27,6 +27,7 @@ public class InstallerMapper {
 
     public static InstallerDto toInstallerDtoWithoutOrders(Installer installer) {
         return InstallerDto.builder()
+                .id(installer.getId())
                 .fullName(installer.getFullName())
                 .phone(installer.getPhone())
                 .TgId(installer.getTgId())

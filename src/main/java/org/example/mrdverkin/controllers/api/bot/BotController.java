@@ -18,7 +18,7 @@ public class BotController {
     private final BotService botService;
 
     @PostMapping("/sendVerificationMessage")
-    @Operation(description = "Метод отправки кода в ТГ")
+    @Operation(description = "Отправка кода подтверждения")
     public ResponseEntity<Void> sendVerificationMessage(@RequestBody SmsRequest smsRequest) {
         botService.sendVerificationMessageIntegration(smsRequest);
         return ResponseEntity.ok().build();

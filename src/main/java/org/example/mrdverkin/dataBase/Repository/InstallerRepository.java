@@ -29,5 +29,5 @@ public interface InstallerRepository extends JpaRepository<Installer, Long> {
     List<InstallerInfo> searchDoorbyDate(@Param("dateOrder") Date dateOrder,
                                          @Param("condition") Condition condition);
 
-    Optional<Installer>  findByPhone(String phone);
+    Optional<Installer> findByPhone(String phone);
 }
