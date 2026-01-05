@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dto.InstallerDto;
+import org.example.mrdverkin.dto.InstallerUpdateDto;
 import org.example.mrdverkin.services.InstallerService;
 import org.springframework.http.ResponseEntity;
 
@@ -43,8 +44,8 @@ public class InstallerController {
         return installerService.updateInstaller(id, fullName, phone);
     }
 
-    @PatchMapping()
-    public ResponseEntity<Void> updateInstaller(InstallerDto installerDto) {
+    @PutMapping()
+    public ResponseEntity<Void> updateInstaller(InstallerUpdateDto installerDto) {
         installerService.updateInstaller(installerDto);
         return ResponseEntity.noContent().build();
     }

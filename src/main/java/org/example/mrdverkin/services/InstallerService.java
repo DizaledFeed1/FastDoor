@@ -9,6 +9,7 @@ import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
+import org.example.mrdverkin.dto.InstallerUpdateDto;
 import org.example.mrdverkin.mapper.InstallerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class InstallerService {
         return ResponseEntity.ok().build();
     }
 
-    public void updateInstaller(InstallerDto installerDto) {
+    public void updateInstaller(InstallerUpdateDto installerDto) {
         Installer installer = installerRepository.findById(installerDto.getId())
                 .orElseThrow(() -> {
                     log.warn("Installer not found. id={}", installerDto.getId());
