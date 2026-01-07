@@ -47,7 +47,7 @@ public class InstallerController {
     @PutMapping()
     public ResponseEntity<Void> updateInstaller(InstallerUpdateDto installerDto) {
         installerService.updateInstaller(installerDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @Operation(description = "Получить установщика по номеру")
