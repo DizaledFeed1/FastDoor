@@ -38,9 +38,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Шаг тестов — выполняется только на Dev
       - name: Run Tests
-        if: github.ref == 'refs/heads/dev'
         run: mvn clean test
 
       - name: Deploy to Server

@@ -1,11 +1,13 @@
 package org.example.mrdverkin.dto.sms;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SmsResponse {
     private String status;
@@ -23,4 +25,3 @@ public class SmsResponse {
     private Integer error;
     private String message;
 }
-
