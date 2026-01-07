@@ -1,4 +1,4 @@
-package org.example.mrdverkin.dto;
+package org.example.mrdverkin.dto.sms;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

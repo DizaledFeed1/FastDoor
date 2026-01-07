@@ -1,30 +1,40 @@
 package org.example.mrdverkin.config;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
 
 @Configuration
 @ConfigurationProperties(prefix = "sms")
+@Validated
 @Getter
 @Setter
-public class BotConfig {
+public class SmsConfig {
+    /**
+     * Включатель
+     */
+    @NotNull
+    Boolean enabled;
+
     /**
      * Название проекта
      */
+    @NotBlank
     String project;
 
     /**
-     * API токен для Telegram Gateway
+     * API токен
      */
     @NotBlank
-    private String apiKey;
+    String apiKey;
 
     /**
-     * Базовый URL Telegram Gateway
+     * Базовый URL
      */
     @NotBlank
-    private String url;
+    String url;
 }

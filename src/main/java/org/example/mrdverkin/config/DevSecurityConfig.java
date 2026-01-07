@@ -26,8 +26,8 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
-public class SecurityConfig {
+@Profile("dev")
+public class DevSecurityConfig {
 
     @Value("${spring.security.remember-me.key}")
     private String rememberMeKey;
@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", MAININSTALLER)
                         .requestMatchers("/api/sms/**").hasAnyRole("SERVICES")
                         .requestMatchers("/api/hints").authenticated()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .rememberMe(remember -> remember
                         .rememberMeServices(rememberMeServices)
                 )
