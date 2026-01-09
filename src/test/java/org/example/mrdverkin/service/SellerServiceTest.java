@@ -38,7 +38,8 @@ class SellerServiceTest {
 
     @BeforeEach
     void init() {
-        doorLimitsRepository.deleteAll(); //
+        doorLimitsRepository.deleteAll();
+        orderRepository.deleteAll();
         userRepository.deleteAll();
 
         DoorLimits doorLimitsToSave = new DoorLimits();
