@@ -56,9 +56,10 @@ public class ReportController {
     }
 
     @Operation(summary = "Скачивание отчёта",
-            description = "Возвращает массив байт\n" +
-                    "ContentDisposition: .xls\n" +
-                    "ContentType: APPLICATION_OCTET_STREAM (бинарноесодержимое файла)"
+            description = """
+                    Возвращает массив байт
+                    ContentDisposition: .xls
+                    ContentType: APPLICATION_OCTET_STREAM (бинарное содержимое файла)"""
     )
     @GetMapping("/download")
     public ResponseEntity<byte []> downloadReport(@RequestParam Long reportId) {

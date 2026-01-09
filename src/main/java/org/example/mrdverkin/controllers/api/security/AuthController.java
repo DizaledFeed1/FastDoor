@@ -2,8 +2,8 @@ package org.example.mrdverkin.controllers.api.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dto.LoginRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,19 +19,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-
+@AllArgsConstructor
 public class AuthController {
-
-    @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private org.springframework.security.web.authentication.RememberMeServices rememberMeServices;
-
-
+    private RememberMeServices rememberMeServices;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest,
@@ -47,7 +42,7 @@ public class AuthController {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             List<String> roles = authorities.stream()
                     .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (String role : roles) {
                 if (role.equals("ROLE_ADMIN")) {

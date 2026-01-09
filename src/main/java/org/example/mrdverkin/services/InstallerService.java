@@ -1,7 +1,9 @@
 package org.example.mrdverkin.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.mrdverkin.controllers.api.exception.BadRequestException;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
@@ -11,26 +13,21 @@ import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.InstallerUpdateDto;
 import org.example.mrdverkin.mapper.InstallerMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class InstallerService {
-    @Autowired
-    private InstallerRepository installerRepository;
+    private final InstallerRepository installerRepository;
 
     public List<Installer> getAllInstallers() {return installerRepository.findAll();}
-
     public Installer findInstallerById(Long id) {return installerRepository.findInstallersById(id);}
 
     public void deleteInstallerById(Long id) {
@@ -40,12 +37,10 @@ public class InstallerService {
         installerRepository.deleteById(id);}
 
     public void createInstaller(String fullName, String phone) {
-        try {
             Installer installer = new Installer();
             installer.setFullName(fullName);
             installer.setPhone(phone);
             installerRepository.save(installer);
-        } catch (Exception e) {}
     }
 
     public ResponseEntity<Void> updateInstaller(Long id, String fullName, String phone) {
@@ -108,7 +103,7 @@ public class InstallerService {
                 botService.deleteMessage(oldOrder);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка выбора");
+            throw new BadRequestException("Ошибка выбора установщика", e);
         }
     }
 

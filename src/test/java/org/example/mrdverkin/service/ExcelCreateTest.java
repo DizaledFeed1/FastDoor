@@ -17,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = MrDverkinApplication.class)
 @ActiveProfiles("dev")
-public class ExcelCreateTest {
+class ExcelCreateTest {
 
     @Autowired
     private ExcelCreater excelCreater;
 
     @Test
-    public void convertExcel() {
+    void convertExcel() {
         ReportDTO report = ReportDTO.builder()
                 .id(Long.MAX_VALUE)
                 .title("Report Title")

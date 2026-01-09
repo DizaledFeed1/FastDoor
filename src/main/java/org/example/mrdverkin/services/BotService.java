@@ -5,7 +5,6 @@ import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,17 +16,18 @@ import java.time.format.DateTimeFormatter;
 @Service
 @AllArgsConstructor
 public class BotService {
-    @Autowired
     private RestTemplate restTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(BotService.class);
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static final String DATE_STRING = "\\nДата: ";
 
 
     public void selectMessage(Order order) {
         String id = order.getInstaller().getTgId();
         String message = "Вам назначен заказ по адресу: " + order.getAddress() +
-                "\\nДата: " + order.getDateOrder().format(formatter) +
+                DATE_STRING + order.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + order.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (order.getMessageMainInstaller() != null ? order.getMessageMainInstaller() : "Нет") +
@@ -39,11 +39,11 @@ public class BotService {
     public void modificationMessage(Order newOrder, Order oldOrder) {
         String id = oldOrder.getInstaller().getTgId();
         String message = "Ваш  заказ по адресу: " + oldOrder.getAddress() +
-                "\\nДата: " + oldOrder.getDateOrder() +
+                DATE_STRING + oldOrder.getDateOrder() +
 
                 "\\nИзменён\\nНовые данные:" +
                 "\\nАдрес:" + newOrder.getAddress() +
-                "\\nДата: " + newOrder.getDateOrder().format(formatter) +
+                DATE_STRING + newOrder.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + newOrder.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + newOrder.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (newOrder.getMessageMainInstaller() != null ? newOrder.getMessageMainInstaller() : "Нет") +
@@ -58,7 +58,7 @@ public class BotService {
             String id = installer.getTgId();
 
             String message = "Ваш заказ по адресу: " + order.getAddress() +
-                    "\\nДата: " + order.getDateOrder().format(formatter) +
+                    DATE_STRING + order.getDateOrder().format(formatter) +
                     "\\nОтменён";
 
             sendMessage(id, message);
