@@ -1,6 +1,5 @@
 package org.example.mrdverkin.services;
 
-import io.swagger.v3.oas.annotations.Operation;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.Report;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -41,7 +40,7 @@ public class ReportService {
      */
     public ResponceDTO createReport(ReportDTO reportRequest, User owner) {
         ResponceDTO responceDTO = new ResponceDTO();
-        User apdateowner = userRepository.findByNickname(owner.getNickname()).get();
+        User updateOwner = userRepository.findByNickname(owner.getNickname()).get();
 
         Report report = new Report();
         StringBuilder stringBuilder = new StringBuilder();
@@ -73,8 +72,8 @@ public class ReportService {
         reportRepository.save(report);
 
         //затем сейвим юзера
-        apdateowner.getReports().add(report);
-        userRepository.save(apdateowner);
+        updateOwner.getReports().add(report);
+        userRepository.save(updateOwner);
 
         responceDTO.setStatus(HttpStatus.CREATED);
         responceDTO.setMessage("Report created");
@@ -106,7 +105,7 @@ public class ReportService {
         return reportDTOS;
     }
 
-    public byte[] dowloadReport(ReportDTO reportDTO) {
+    public byte[] downloadReport(ReportDTO reportDTO) {
         return excelCreater.convertReport(reportDTO);
     }
 

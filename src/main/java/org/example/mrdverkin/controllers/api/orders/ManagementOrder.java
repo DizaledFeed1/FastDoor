@@ -55,7 +55,7 @@ public class ManagementOrder {
                                                     @AuthenticationPrincipal UserDetails userDetails) {
 
         Order order = orderService.findOrderById(id);
-        OrderAttribute orderAttribute = new OrderAttribute().fromOrder(order);
+        OrderAttribute orderAttribute = OrderAttribute.fromOrder(order);
 
         Map<String, Object> response = new HashMap<>();
         response.put("orderAttribute", orderAttribute);
@@ -75,8 +75,9 @@ public class ManagementOrder {
     )
     @PatchMapping("/edit/{id}")
     public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable Long id,
-                                                           @RequestBody OrderAttribute orderAttribute) {
-        return orderService.updateOrder(id, orderAttribute);
+                                                           @RequestBody OrderAttribute orderAttribute,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+        return orderService.updateOrder(id, orderAttribute,userDetails);
     }
 
     @ExceptionHandler(RuntimeException.class)

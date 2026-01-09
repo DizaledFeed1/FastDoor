@@ -2,7 +2,7 @@ package org.example.mrdverkin.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.mrdverkin.config.SmsConfig;
+import org.example.mrdverkin.property.SmsProperty;
 import org.example.mrdverkin.dto.sms.SmsRequest;
 import org.example.mrdverkin.dto.sms.SmsResponse;
 import org.springframework.http.*;
@@ -21,7 +21,7 @@ import java.util.Objects;
 public class SmsService {
 
     private RestTemplate restTemplate;
-    private final SmsConfig smsConfig;
+    private final SmsProperty smsProperty;
 
     public SmsResponse sendVerificationMessageIntegration(SmsRequest smsRequest) {
 
@@ -43,10 +43,10 @@ public class SmsService {
 
     private SmsResponse sendIntegration(SmsRequest smsRequest) {
         MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
-        formData.add("project", smsConfig.getProject());
+        formData.add("project", smsProperty.getProject());
         formData.add("recipients", smsRequest.getPhoneNumber());
         formData.add("message", smsRequest.getCode());
-        formData.add("apikey", smsConfig.getApiKey());
+        formData.add("apikey", smsProperty.getApiKey());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -55,7 +55,7 @@ public class SmsService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
 
         ResponseEntity<SmsResponse> response = restTemplate.exchange(
-                smsConfig.getUrl(),
+                smsProperty.getUrl(),
                 HttpMethod.POST,
                 requestEntity,
                 SmsResponse.class

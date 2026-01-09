@@ -1,5 +1,6 @@
 package org.example.mrdverkin.services;
 
+import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Order;
@@ -27,19 +28,14 @@ import java.util.Optional;
  * Сервис для управления заказами.
  */
 @Service
+@AllArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final DoorLimitsRepository doorLimitsRepository;
     private final UserRepository userRepository;
     private final BotService botService;
-
-    public OrderService (OrderRepository orderRepository, DoorLimitsRepository doorLimitsRepository, UserRepository userRepository, BotService botService) {
-        this.orderRepository = orderRepository;
-        this.doorLimitsRepository = doorLimitsRepository;
-        this.userRepository = userRepository;
-        this.botService = botService;
-    }
+    private final UserService userService;
 
     /**
      * Находит заказ по его ID.
@@ -139,10 +135,12 @@ public class OrderService {
      * @param orderAttribute новые параметры заказа
      * @return HTTP-ответ: OK — успешное обновление, BadRequest — превышение лимитов, NotFound — заказ не найден
      */
-    public ResponseEntity<Map<String, Object>> updateOrder(Long id, OrderAttribute orderAttribute) {
+    public ResponseEntity<Map<String, Object>> updateOrder(Long id, OrderAttribute orderAttribute, UserDetails userDetails) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
+
+            userService.checkDeletedUser(userDetails, existingOrder);
 
             Order copy = new Order();
             copy.setInstaller(existingOrder.getInstaller());

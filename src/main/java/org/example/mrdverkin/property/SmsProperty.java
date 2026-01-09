@@ -1,4 +1,4 @@
-package org.example.mrdverkin.config;
+package org.example.mrdverkin.property;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @Getter
 @Setter
-public class SmsConfig {
+public class SmsProperty {
     /**
      * Включатель
      */

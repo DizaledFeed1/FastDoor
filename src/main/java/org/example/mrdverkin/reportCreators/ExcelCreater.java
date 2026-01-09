@@ -43,7 +43,7 @@ public class ExcelCreater implements Creater{
     }
 
     // заполнение строки (rowNum) определенного листа (sheet)
-    // данными  из dataModel созданного в памяти Excel файла
+    // данными из dataModel созданного в памяти Excel файла
     private static void createSheetHeader(HSSFSheet sheet, int rowNum, Order order) {
         Row row = sheet.createRow(rowNum);
             row.createCell(0).setCellValue(order.getFullName());

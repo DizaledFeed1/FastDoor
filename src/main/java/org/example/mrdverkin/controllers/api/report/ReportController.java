@@ -63,7 +63,7 @@ public class ReportController {
     @GetMapping("/download")
     public ResponseEntity<byte []> downloadReport(@RequestParam Long reportId) {
         ReportDTO reportDTO = reportService.getReportById(reportId);
-        byte[] bytes  = reportService.dowloadReport(reportDTO);
+        byte[] bytes  = reportService.downloadReport(reportDTO);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(ContentDisposition.attachment().filename(reportDTO.getTitle() + ".xls").build());
