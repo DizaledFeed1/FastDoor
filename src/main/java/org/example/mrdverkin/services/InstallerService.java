@@ -77,6 +77,7 @@ public class InstallerService {
         try {
             Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
+            //todo Нужно сделать поиск по id а не по fullName
             Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
             orderRepository.updateInstaller(installer, installerInfo.getOrderId());
 
@@ -92,7 +93,6 @@ public class InstallerService {
             newOrder.setInDoorQuantity(oldOrder.getInDoorQuantity());
             newOrder.setInstaller(installer);
             newOrder.setUser(oldOrder.getUser());
-
 
             if (oldOrder.getInstaller() == null) {
                 botService.selectMessage(newOrder);

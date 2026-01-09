@@ -1,17 +1,14 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.mrdverkin.dataBase.AesGcmEncryptor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -24,7 +21,8 @@ public class Installer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = AesGcmEncryptor.class)
+    //todo Нужно сделать поиск по id а не по fullName
+//    @Convert(converter = AesGcmEncryptor.class)
     private String fullName;
     @Column(unique = true, nullable = false)
     private String phone;
