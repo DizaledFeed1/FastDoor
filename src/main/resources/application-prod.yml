@@ -36,6 +36,7 @@ logging:
     name: logs/app.log
   level:
     root: INFO
+    org.apache.coyote.http11.Http11Processor: ERROR
     org.springframework.security: WARN
 
 sms:
