@@ -39,6 +39,8 @@ class InstallerServiceTest {
 
     @BeforeEach
     void init() {
+        installerRepository.deleteAll();
+        doorLimitsRepository.deleteAll();
         DoorLimits doorLimitsToSave = new DoorLimits();
         java.util.Date utilDate = new java.util.Date();
         doorLimitsToSave.setLimitDate(new java.sql.Date(utilDate.getTime()));
@@ -61,7 +63,7 @@ class InstallerServiceTest {
         Installer installerToSave = new Installer();
         installerToSave.setFullName("Test");
         installerToSave.setPhone("+79137488501");
-        installerToSave.setTgId("623201152");
+        installerToSave.setTgId("623201155");
         installer = installerRepository.save(installerToSave);
     }
 
