@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Min;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dto.DateAvailability;
+import org.example.mrdverkin.dto.DoorLimitResponseDto;
 import org.example.mrdverkin.services.DoorLimitsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -82,7 +83,6 @@ public class DoorLimitsController {
         }
         doorLimits.setInDoorQuantity(Math.toIntExact(dateAvailability.getInDoorQuantity()));
         doorLimits.setFrontDoorQuantity(Math.toIntExact(dateAvailability.getFrontDoorQuantity()));
-        System.out.println(dateAvailability.isAvailable());
         doorLimits.setAvailability(dateAvailability.isAvailable());
         doorLimitsRepository.save(doorLimits);
 
@@ -96,9 +96,9 @@ public class DoorLimitsController {
             }
     )
     @GetMapping("/allDays")
-    public ResponseEntity<Page<DoorLimits>> allDays(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                    @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
-                                                    @RequestParam(defaultValue = "id") String sortBy) {
+    public ResponseEntity<Page<DoorLimitResponseDto>> allDays(@RequestParam(defaultValue = "0") @Min(0) int page,
+                                                              @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
+                                                              @RequestParam(defaultValue = "id") String sortBy) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return ResponseEntity.ok(doorLimitsService.allDays(pageable));
