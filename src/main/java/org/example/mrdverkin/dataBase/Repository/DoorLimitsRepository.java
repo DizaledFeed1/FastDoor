@@ -1,6 +1,8 @@
 package org.example.mrdverkin.dataBase.Repository;
 
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +19,8 @@ public interface DoorLimitsRepository extends JpaRepository<DoorLimits, Long> {
 
     @Query("SELECT d FROM DoorLimits d WHERE d.limitDate > CURRENT_TIMESTAMP ORDER BY d.limitDate ASC")
     List<DoorLimits> findAll();
+
+    Page<DoorLimits> findAll(Pageable pageable);
 
     @Modifying
     @Transactional
