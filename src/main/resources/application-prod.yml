@@ -36,4 +36,11 @@ logging:
     name: logs/app.log
   level:
     root: INFO
+    org.apache.coyote.http11.Http11Processor: ERROR
     org.springframework.security: WARN
+
+sms:
+  enabled: ${SMS_ENABLED}
+  url: ${SMS_URL}
+  project: ${SMS_PROJECT}
+  api-key: ${SMS_API_KEY}

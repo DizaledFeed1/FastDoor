@@ -1,14 +1,11 @@
 package org.example.mrdverkin.services;
 
+import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -17,60 +14,62 @@ import org.springframework.web.client.RestTemplate;
 import java.time.format.DateTimeFormatter;
 
 @Service
+@AllArgsConstructor
 public class BotService {
-    @Autowired
     private RestTemplate restTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(BotService.class);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static final String DATE_STRING = "\\nДата: ";
 
 
     public void selectMessage(Order order) {
-        String phoneNumber = order.getInstaller().getPhone();
+        String id = order.getInstaller().getTgId();
         String message = "Вам назначен заказ по адресу: " + order.getAddress() +
-                "\\nДата: " + order.getDateOrder().format(formatter) +
+                DATE_STRING + order.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + order.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + order.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (order.getMessageMainInstaller() != null ? order.getMessageMainInstaller() : "Нет") +
                 "\\nКомментарий от продавца: " + (order.getMessageSeller() != null ? order.getMessageSeller() : "Нет");
 
-        sendMessage(phoneNumber, message);
+        sendMessage(id, message);
     }
 
     public void modificationMessage(Order newOrder, Order oldOrder) {
-        String phoneNumber = oldOrder.getInstaller().getPhone();
+        String id = oldOrder.getInstaller().getTgId();
         String message = "Ваш  заказ по адресу: " + oldOrder.getAddress() +
-                "\\nДата: " + oldOrder.getDateOrder() +
+                DATE_STRING + oldOrder.getDateOrder() +
 
                 "\\nИзменён\\nНовые данные:" +
                 "\\nАдрес:" + newOrder.getAddress() +
-                "\\nДата: " + newOrder.getDateOrder().format(formatter) +
+                DATE_STRING + newOrder.getDateOrder().format(formatter) +
                 "\\nКоличество входных дверей: " + newOrder.getFrontDoorQuantity() +
                 "\\nКоличество межкомнатных дверей: " + newOrder.getInDoorQuantity() +
                 "\\nКомментарий от установщика: " + (newOrder.getMessageMainInstaller() != null ? newOrder.getMessageMainInstaller() : "Нет") +
                 "\\nКомментарий от продавца: " + (newOrder.getMessageSeller() != null ? newOrder.getMessageSeller() : "Нет");
 
-        sendMessage(phoneNumber, message);
+        sendMessage(id, message);
     }
 
     public void deleteMessage(Order order) {
         Installer installer = order.getInstaller();
         if (installer != null) {
-            String phoneNumber = installer.getPhone();
+            String id = installer.getTgId();
 
             String message = "Ваш заказ по адресу: " + order.getAddress() +
-                    "\\nДата: " + order.getDateOrder().format(formatter) +
+                    DATE_STRING + order.getDateOrder().format(formatter) +
                     "\\nОтменён";
 
-            sendMessage(phoneNumber, message);
+            sendMessage(id, message);
         }
     }
 
-    public void sendMessage(String phoneNumber, String message) {
+    private void sendMessage(String id, String message) {
         try {
 
             // Создаем JSON-сообщение
-            String json = "{ \"phoneNumber\": \"" + phoneNumber + "\", \"message\": \"" + message + "\" }";
+            String json = "{ \"tgId\": \"" + id + "\", \"message\": \"" + message + "\" }";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");

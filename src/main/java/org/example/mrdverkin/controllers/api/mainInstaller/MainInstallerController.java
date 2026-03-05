@@ -47,7 +47,7 @@ public class MainInstallerController {
 
     @Operation(
             summary = "Получить список заказов без установщика с дополнительной информацией",
-            description = "Возвращает страницы заказов без установщика, список установщиков и доступные даты",
+            description = "Возвращает страницы заказов без установщика, список установщиков",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Данные успешно получены"),
                     @ApiResponse(responseCode = "400", description = "Неверные параметры страницы или размера", content = @Content),
@@ -64,13 +64,11 @@ public class MainInstallerController {
 
             Pageable pageable = PageRequest.of(page, size);
             Page<Order> ordersPage = orderRepository.findByInstallerNull(pageable, Condition.DELETED);
-            List<DateAvailability> availabilityList = DateAvailability.fromDates(doorLimitsRepository, orderRepository);
             List<OrderAttribute> orderAttributes = OrderAttribute.fromOrderList(ordersPage);
 
             Map<String, Object> response = new HashMap<>();
             response.put("orders", orderAttributes);
             response.put("installers", installerRepository.findAll());
-            response.put("availabilityList", availabilityList);
             response.put("currentPage", page);
             response.put("totalPages", ordersPage.getTotalPages());
 

@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
+import org.example.mrdverkin.dto.InstallerDto;
+import org.example.mrdverkin.dto.InstallerUpdateDto;
 import org.example.mrdverkin.services.InstallerService;
 import org.springframework.http.ResponseEntity;
 
@@ -40,5 +42,19 @@ public class InstallerController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateInstaller(@PathVariable Long id, @RequestParam String fullName, @RequestParam String phone) {
         return installerService.updateInstaller(id, fullName, phone);
+    }
+
+    @PutMapping()
+    public ResponseEntity<Void> updateInstaller(InstallerUpdateDto installerDto) {
+        installerService.updateInstaller(installerDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(description = "Получить установщика по номеру")
+    @GetMapping("/phone/{phone}")
+    public ResponseEntity<InstallerDto> getInstallerByPhone(@PathVariable String phone) {
+        return installerService.getInstallerByPhone(phone)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 }

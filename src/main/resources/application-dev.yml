@@ -12,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
 
@@ -25,6 +25,11 @@ spring:
     admin:
       client:
         enabled: false
+#        url: http://localhost:9090/admin
+#        instance:
+#          service-url: http://localhost:8080
+#        username: app
+#        password: app
 
 
   jmx:
@@ -38,8 +43,11 @@ logging:
     org.springframework.security.web.authentication.rememberme: DEBUG
     org.springframework.security.web.authentication: DEBUG
 
-
-
+sms:
+  enabled: true
+  url: "http://localhost:8080/stub/sms/send"
+  project: "test"
+  api-key: "123asx"
 
 management:
   endpoints:

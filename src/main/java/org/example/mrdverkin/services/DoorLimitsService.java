@@ -1,12 +1,11 @@
 package org.example.mrdverkin.services;
 
-import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
-import org.springframework.http.ResponseEntity;
+import org.example.mrdverkin.dto.DoorLimitResponseDto;
+import org.example.mrdverkin.mapper.DoorLimitMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class DoorLimitsService {
@@ -17,13 +16,7 @@ public class DoorLimitsService {
         this.doorLimitsRepository = doorLimitsRepository;
     }
 
-    public ResponseEntity<List<String>> allDays() {
-        List<DoorLimits> doorLimits = doorLimitsRepository.findAllByNoLimit();
-
-        List<String> response = new ArrayList<>();
-        for (DoorLimits doorLimit: doorLimits) {
-            response.add(doorLimit.getLimitDate().toString());
-        }
-        return ResponseEntity.ok().body(response);
+    public Page<DoorLimitResponseDto> allDays(Pageable pageable) {
+        return doorLimitsRepository.findAll(pageable).map(DoorLimitMapper::entityToResponseDto);
     }
 }

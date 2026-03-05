@@ -1,7 +1,10 @@
 package org.example.mrdverkin.dataBase.Entitys;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -10,6 +13,9 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "door_limits")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DoorLimits {
 
     @Id
@@ -26,6 +32,7 @@ public class DoorLimits {
     private int inDoorQuantity;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Builder.Default
     private boolean availability = true;
 
     @OneToMany(mappedBy = "doorLimits", cascade = CascadeType.ALL, orphanRemoval = true)

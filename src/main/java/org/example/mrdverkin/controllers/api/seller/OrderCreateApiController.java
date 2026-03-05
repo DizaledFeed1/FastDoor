@@ -10,20 +10,15 @@ import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
-import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.services.SellerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -49,17 +44,10 @@ public class OrderCreateApiController {
                     @ApiResponse(responseCode = "401", description = "Ошибка авторизации", content = @Content)
             }
     )
-    @GetMapping("/create")
-    public ResponseEntity<Map<String, Object>> getAvailabilityList() {
-        try {
-            Map<String, Object> response = new HashMap<>();
-            List<DateAvailability> availabilityList = DateAvailability.fromDates(doorLimitsRepository,orderRepository);
-            response.put("availabilityList", availabilityList);
-            return ResponseEntity.ok(response);
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Error while fetching availabilityList"));
-        }
+    @GetMapping("/allDays")
+    public ResponseEntity<Page<DateAvailability>> getAvailabilityList(Pageable pageable) {
+        Page<DateAvailability> availabilityPage = DateAvailability.fromDates(doorLimitsRepository,orderRepository, pageable);
+        return ResponseEntity.ok(availabilityPage);
     }
 
     @Operation(

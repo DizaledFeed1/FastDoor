@@ -1,29 +1,33 @@
 package org.example.mrdverkin.services;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.mrdverkin.controllers.api.exception.BadRequestException;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
+import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.example.mrdverkin.dto.InstallerUpdateDto;
+import org.example.mrdverkin.mapper.InstallerMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
+@Slf4j
 @Service
+@AllArgsConstructor
 public class InstallerService {
-    @Autowired
-    private InstallerRepository installerRepository;
+    private final InstallerRepository installerRepository;
 
     public List<Installer> getAllInstallers() {return installerRepository.findAll();}
-
     public Installer findInstallerById(Long id) {return installerRepository.findInstallersById(id);}
 
     public void deleteInstallerById(Long id) {
@@ -33,12 +37,10 @@ public class InstallerService {
         installerRepository.deleteById(id);}
 
     public void createInstaller(String fullName, String phone) {
-        try {
             Installer installer = new Installer();
             installer.setFullName(fullName);
             installer.setPhone(phone);
             installerRepository.save(installer);
-        } catch (Exception e) {}
     }
 
     public ResponseEntity<Void> updateInstaller(Long id, String fullName, String phone) {
@@ -52,6 +54,21 @@ public class InstallerService {
         return ResponseEntity.ok().build();
     }
 
+    public void updateInstaller(InstallerUpdateDto installerDto) {
+        Installer installer = installerRepository.findById(installerDto.getId())
+                .orElseThrow(() -> {
+                    log.warn("Installer not found. id={}", installerDto.getId());
+                    return new EntityNotFoundException();
+                });
+
+        installer.setFullName(installerDto.getFullName());
+        installer.setPhone(installerDto.getPhone());
+        installer.setTgId(installerDto.getTgId());
+        installer.setMaxId(installerDto.getMaxId());
+
+        installerRepository.save(installer);
+    }
+
     public ResponseEntity<List<InstallerInfo>> getWorkloadDate(Date date) {
         return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
@@ -60,6 +77,7 @@ public class InstallerService {
         try {
             Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
             orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
+            //todo Нужно сделать поиск по id а не по fullName
             Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
             orderRepository.updateInstaller(installer, installerInfo.getOrderId());
 
@@ -76,7 +94,6 @@ public class InstallerService {
             newOrder.setInstaller(installer);
             newOrder.setUser(oldOrder.getUser());
 
-
             if (oldOrder.getInstaller() == null) {
                 botService.selectMessage(newOrder);
             }else if (oldOrder.getInstaller().getFullName().equalsIgnoreCase(installerInfo.getInstallerFullName())){
@@ -86,7 +103,12 @@ public class InstallerService {
                 botService.deleteMessage(oldOrder);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка выбора");
+            throw new BadRequestException("Ошибка выбора установщика", e);
         }
+    }
+
+    public Optional<InstallerDto> getInstallerByPhone(String phone) {
+        return installerRepository.findByPhone(phone)
+                .map(InstallerMapper::toInstallerDtoWithoutOrders);
     }
 }

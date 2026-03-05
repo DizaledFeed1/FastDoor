@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@Profile("prod")
 public class SecurityConfig {
 
     @Value("${spring.security.remember-me.key}")
@@ -41,14 +43,17 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session", "/actuator/**").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session",
+                                "/actuator/**").permitAll()
+                        .requestMatchers("/api/installer/phone/**", "/api/installer/**").hasAnyRole("SERVICES", MAININSTALLER)
                         .requestMatchers(HttpMethod.GET, "/api/orders/create", "/api/edit/**", "/api/delete").hasAnyRole(MAININSTALLER,"SELLER")
+                        .requestMatchers("/api/orders/allDays").hasAnyRole("SELLER", MAININSTALLER)
                         .requestMatchers("/api/orders/**", "/api/list/sellerList").hasAnyRole("SELLER")
-                        .requestMatchers("/api/list/adminList", "/api/seller/**", "/api/doorLimits/allDays").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/list/adminList", "/api/seller/**").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/doorLimits/closeDate", "/api/doorLimits/openDate", "/api/doorLimits/editDate" ,"/api/listInstallers/**", "/api/listInstallers"
-                                ,"/api/mainInstaller/**", "/api/installer/**").hasAnyRole(MAININSTALLER)
-//                        .requestMatchers("/api/edit/**", "/api/delete").hasAnyRole("SELLER", "MainInstaller")
+                                ,"/api/mainInstaller/**").hasAnyRole(MAININSTALLER)
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", MAININSTALLER)
+                        .requestMatchers("/api/sms/**").hasAnyRole("SERVICES")
                         .requestMatchers("/api/hints").authenticated()
                         .anyRequest().authenticated())
                 .rememberMe(remember -> remember

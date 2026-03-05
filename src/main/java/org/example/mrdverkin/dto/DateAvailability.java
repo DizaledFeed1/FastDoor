@@ -5,6 +5,8 @@ import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,9 +32,8 @@ public class DateAvailability {
     //Проблема: при большом количестве записей возвращаемый список будет очень большим
     //например если в сущности будет записей на год то все записи будут возвращаться даже если даты уже не ликвидны
     //как вариант удалять прошедшие даты
-    public static List<DateAvailability> fromDates(DoorLimitsRepository doorLimitsRepository, OrderRepository orderRepository) {
-        List<DateAvailability> availabilityList = new ArrayList<>();
-        List<DoorLimits> doorLimits = doorLimitsRepository.findAll();
+    public static Page<DateAvailability> fromDates(DoorLimitsRepository doorLimitsRepository, OrderRepository orderRepository, Pageable pageable) {
+        Page<DoorLimits> doorLimitsPage = doorLimitsRepository.findAll(pageable);
 
         // Получаем все суммы заказов по датам одним запросом
         List<DateAvailability> ordersByDate = orderRepository.getDoorCountsGroupedByDate(Condition.DELETED);
@@ -41,7 +42,7 @@ public class DateAvailability {
         Map<LocalDate, DateAvailability> ordersByDateMap = ordersByDate.stream()
                 .collect(Collectors.toMap(DateAvailability::getDate, o -> o));
 
-        for (DoorLimits doorLimit : doorLimits) {
+        return doorLimitsPage.map(doorLimit -> {
             DateAvailability availability = new DateAvailability(
                     doorLimit.getLimitDate().toLocalDate(),
                     (long) doorLimit.getFrontDoorQuantity(),
@@ -49,15 +50,15 @@ public class DateAvailability {
                     doorLimit.getAvailability()
             );
 
+            // Вычитаем занятые двери, если есть заказы на эту дату
             DateAvailability ordered = ordersByDateMap.get(availability.getDate());
             if (ordered != null) {
                 availability.setFrontDoorQuantity(availability.getFrontDoorQuantity() - ordered.getFrontDoorQuantity());
                 availability.setInDoorQuantity(availability.getInDoorQuantity() - ordered.getInDoorQuantity());
             }
 
-            availabilityList.add(availability);
-        }
-        return availabilityList;
+            return availability; // Возвращаем преобразованный объект
+        });
     }
 
 }

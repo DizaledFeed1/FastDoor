@@ -5,11 +5,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.OrderService;
 import org.example.mrdverkin.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,11 +21,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @Tag(name = "Order Management API", description = "Удаление, редактирование и получение заказов")
+@AllArgsConstructor
 public class ManagementOrder {
-    @Autowired
-    private OrderService orderService;
-    @Autowired
-    private UserService userService;
+    private final OrderService orderService;
+    private final UserService userService;
 
     @Operation(
             summary = "Удалить заказ",
@@ -55,7 +54,7 @@ public class ManagementOrder {
                                                     @AuthenticationPrincipal UserDetails userDetails) {
 
         Order order = orderService.findOrderById(id);
-        OrderAttribute orderAttribute = new OrderAttribute().fromOrder(order);
+        OrderAttribute orderAttribute = OrderAttribute.fromOrder(order);
 
         Map<String, Object> response = new HashMap<>();
         response.put("orderAttribute", orderAttribute);
@@ -75,12 +74,13 @@ public class ManagementOrder {
     )
     @PatchMapping("/edit/{id}")
     public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable Long id,
-                                                           @RequestBody OrderAttribute orderAttribute) {
-        return orderService.updateOrder(id, orderAttribute);
+                                                           @RequestBody OrderAttribute orderAttribute,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+        return orderService.updateOrder(id, orderAttribute,userDetails);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleInvalidEnum(RuntimeException ex) {
+    public ResponseEntity<String> handleInvalidEnum(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 }

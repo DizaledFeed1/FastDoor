@@ -29,7 +29,7 @@ public class SessionCheckController {
         switch (role) {
             case "ROLE_SELLER": role = "salespeople"; break;
             case "ROLE_ADMIN": role = "administrator"; break;
-            case "ROLE_MainInstaller": role = "main"; break;
+            case "ROLE_MAIN_INSTALLER": role = "main"; break;
             default: role = "ROLE_UNKNOWN"; break;
         }
 
