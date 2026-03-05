@@ -31,6 +31,12 @@ public class Installer {
 
     private String MaxId;
 
+    /**
+     * Для реализации установщиков как пользователей
+     */
+    @OneToOne()
+    private User user;
+
     @OneToMany(mappedBy = "installer", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();
