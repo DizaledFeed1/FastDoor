@@ -42,7 +42,6 @@ public class User implements UserDetails {
 
     private boolean hints = true;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()

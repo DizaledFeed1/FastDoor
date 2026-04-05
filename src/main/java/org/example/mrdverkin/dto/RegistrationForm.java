@@ -1,5 +1,6 @@
 package org.example.mrdverkin.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.example.mrdverkin.dataBase.Entitys.Role;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -11,10 +12,14 @@ import java.util.Set;
 @Data
 public class RegistrationForm {
     private String username;
+    @NotBlank
     private String password;
     private String confirm;
     private String fullname;
-    private String role;
+    @NotBlank
+    private String role; // todo поменять со Стринги на Role, нужно написать тест регистрации
+
+    private String phoneNumber;
 
     public User toUser(PasswordEncoder passwordEncoder) {
         return new User(
