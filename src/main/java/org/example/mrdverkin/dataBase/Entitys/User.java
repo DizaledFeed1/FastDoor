@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Data
-@Table(name = "\"User\"")
+@Table(name = "users")
 @NoArgsConstructor(access= AccessLevel.PROTECTED, force=true)
 @RequiredArgsConstructor
 public class User implements UserDetails {
@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private final String nickname;// либо название магазина либо ФИО владельца магазина
 
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<Report> reports;
 
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей

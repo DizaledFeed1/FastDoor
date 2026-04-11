@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "\"order\"")
+@Table(name = "orders")
 /**
  * Класс сущность заказов
  * @author Селявский Кирилл

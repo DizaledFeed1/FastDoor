@@ -21,17 +21,6 @@ spring:
       key: dev-remember-me-key
       PERSONAL_DATA_KEY: "12345678901234567890123456789012"
 
-  boot:
-    admin:
-      client:
-        enabled: false
-#        url: http://localhost:9090/admin
-#        instance:
-#          service-url: http://localhost:8080
-#        username: app
-#        password: app
-
-
   jmx:
     enabled: false
 
