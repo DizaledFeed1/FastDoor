@@ -12,7 +12,7 @@
         </preConditions>
 
         <createTable tableName="door_limits">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="pk_door_limits"/>
             </column>
 
@@ -31,6 +31,13 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <sql dbms="postgresql">
+            ALTER TABLE door_limits ALTER COLUMN id SET DEFAULT gen_random_uuid();
+        </sql>
+        <sql dbms="h2">
+            ALTER TABLE door_limits ALTER COLUMN id SET DEFAULT RANDOM_UUID();
+        </sql>
 
     </changeSet>
 

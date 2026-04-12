@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/report")
@@ -62,7 +63,7 @@ public class ReportController {
                     ContentType: APPLICATION_OCTET_STREAM (бинарное содержимое файла)"""
     )
     @GetMapping("/download")
-    public ResponseEntity<byte []> downloadReport(@RequestParam Long reportId) {
+    public ResponseEntity<byte []> downloadReport(@RequestParam UUID reportId) {
         ReportDTO reportDTO = reportService.getReportById(reportId);
         byte[] bytes  = reportService.downloadReport(reportDTO);
 

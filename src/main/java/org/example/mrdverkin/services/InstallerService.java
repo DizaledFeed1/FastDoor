@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -28,9 +29,9 @@ public class InstallerService {
     private final InstallerRepository installerRepository;
 
     public List<Installer> getAllInstallers() {return installerRepository.findAll();}
-    public Installer findInstallerById(Long id) {return installerRepository.findInstallersById(id);}
+    public Installer findInstallerById(UUID id) {return installerRepository.findInstallersById(id);}
 
-    public void deleteInstallerById(Long id) {
+    public void deleteInstallerById(UUID id) {
         if (!installerRepository.existsById(id)) {
             throw new IllegalArgumentException("Установщик не найден");
         }
@@ -43,7 +44,7 @@ public class InstallerService {
             installerRepository.save(installer);
     }
 
-    public ResponseEntity<Void> updateInstaller(Long id, String fullName, String phone) {
+    public ResponseEntity<Void> updateInstaller(UUID id, String fullName, String phone) {
         Installer installer = findInstallerById(id);
         if (installer == null) {
             return ResponseEntity.notFound().build();

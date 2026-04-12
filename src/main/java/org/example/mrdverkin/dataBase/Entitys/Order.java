@@ -6,6 +6,7 @@ import lombok.Data;
 import org.example.mrdverkin.dataBase.AesGcmEncryptor;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -17,8 +18,8 @@ import java.util.Date;
  */
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Convert(converter = AesGcmEncryptor.class)
     private String fullName;

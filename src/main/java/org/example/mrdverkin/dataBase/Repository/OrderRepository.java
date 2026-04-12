@@ -16,8 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, UUID> {
     @Query("SELECT o FROM Order o where o.condition != :condition ORDER BY o.placeAt DESC")
     Page<Order> findAll(Pageable pageable, @Param("condition") Condition condition);
 
@@ -27,7 +28,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Modifying
     @Transactional
     @Query(value = "UPDATE Order o set o.installer = :newInstaller where o.id = :orderId")
-    void updateInstaller(@Param("newInstaller") Installer installer, @Param("orderId") Long orderId);
+    void updateInstaller(@Param("newInstaller") Installer installer, @Param("orderId") UUID orderId);
 
     @Query(value = "SELECT o FROM Order o WHERE o.installer IS null AND o.condition != :condition")
     Page<Order> findByInstallerNull(Pageable pageable, @Param("condition") Condition condition);
@@ -42,12 +43,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findOrdersByUser(@Param("actualUser") User user, @Param("condition") Condition condition, Pageable pageable);
 
     @Query(value = "select O from Order O where O.id = :orderid")
-    Order findByOrderId(@Param("orderid")Long orderId);
+    Order findByOrderId(@Param("orderid")UUID orderId);
 
     @Modifying
     @Transactional
     @Query(value = "UPDATE Order o set o.messageMainInstaller = :commenet where o.id = :orderId")
-    void updateComment(@Param("orderId") Long id, @Param("commenet")String comment);
+    void updateComment(@Param("orderId") UUID id, @Param("commenet")String comment);
 
     @Query("SELECT new org.example.mrdverkin.dto.DateAvailability(" +
             "o.dateOrder, " +

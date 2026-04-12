@@ -10,6 +10,7 @@ import org.example.mrdverkin.dataBase.AesGcmEncryptor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -19,8 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Installer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     //todo Нужно сделать поиск по id а не по fullName
 //    @Convert(converter = AesGcmEncryptor.class)

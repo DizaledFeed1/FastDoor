@@ -12,7 +12,7 @@
             </not>
         </preConditions>
         <createTable tableName="installer">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="pk_installer"/>
             </column>
             <column name="full_name" type="VARCHAR(255)"/>
@@ -23,7 +23,7 @@
             </column>
             <column name="tg_id" type="VARCHAR(100)"/>
             <column name="max_id" type="VARCHAR(100)"/>
-            <column name="user_id" type="BIGINT">
+            <column name="user_id" type="UUID">
                 <constraints nullable="true"
                              unique="true"
                              uniqueConstraintName="uk_installer_user"
@@ -33,6 +33,13 @@
                              deleteCascade="true"/>
             </column>
         </createTable>
+
+        <sql dbms="postgresql">
+            ALTER TABLE installer ALTER COLUMN id SET DEFAULT gen_random_uuid();
+        </sql>
+        <sql dbms="h2">
+            ALTER TABLE installer ALTER COLUMN id SET DEFAULT RANDOM_UUID();
+        </sql>
     </changeSet>
 
 </databaseChangeLog>

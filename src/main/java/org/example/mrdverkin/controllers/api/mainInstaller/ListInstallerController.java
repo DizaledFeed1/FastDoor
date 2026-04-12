@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/listInstallers")
@@ -46,7 +47,7 @@ public class ListInstallerController {
     @ApiResponse(responseCode = "404", description = "Установщик с таким ID не найден", content = @Content)
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteInstaller(@PathVariable Long id) {
+    public ResponseEntity<String> deleteInstaller(@PathVariable UUID id) {
         try {
             installerService.deleteInstallerById(id);
             return ResponseEntity.ok().build();
