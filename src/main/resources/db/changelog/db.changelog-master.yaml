@@ -9,3 +9,8 @@ databaseChangeLog:
       file: db/changelog/changeset/2026.04/order_init.xml
   - include:
       file: db/changelog/changeset/2026.04/report_init.xml
+  - include:
+      file: db/changelog/changeset/2026.04/create_order_installer_annotation.xml
+  - include:
+      file: db/changelog/changeset/2026.04/add_fk_orders.xml
+

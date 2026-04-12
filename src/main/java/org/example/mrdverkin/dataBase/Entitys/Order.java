@@ -6,6 +6,7 @@ import lombok.Data;
 import org.example.mrdverkin.dataBase.AesGcmEncryptor;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -51,6 +52,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
+    private List<OrderAnnotation> annotation;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "varchar(255) default 'ACTIVE'")
