@@ -33,6 +33,7 @@ public class SecurityConfig {
     private String rememberMeKey;
 
     private final String MAININSTALLER = "MAIN_INSTALLER";
+    private final String INSTALLER = "INSTALLER";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
@@ -55,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", MAININSTALLER)
                         .requestMatchers("/api/sms/**").hasAnyRole("SERVICES")
                         .requestMatchers("/api/hints").authenticated()
+                        .requestMatchers("/api/list/installer/**").hasAnyRole(INSTALLER)
                         .anyRequest().authenticated())
                 .rememberMe(remember -> remember
                         .rememberMeServices(rememberMeServices)

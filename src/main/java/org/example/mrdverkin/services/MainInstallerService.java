@@ -12,7 +12,7 @@ import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.InstallerUpdateDto;
-import org.example.mrdverkin.mapper.InstallerMapper;
+import org.example.mrdverkin.mapper.MainInstallerMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class InstallerService {
+public class MainInstallerService {
     private final InstallerRepository installerRepository;
 
     public List<Installer> getAllInstallers() {return installerRepository.findAll();}
@@ -110,6 +110,6 @@ public class InstallerService {
 
     public Optional<InstallerDto> getInstallerByPhone(String phone) {
         return installerRepository.findByPhone(phone)
-                .map(InstallerMapper::toInstallerDtoWithoutOrders);
+                .map(MainInstallerMapper::toInstallerDtoWithoutOrders);
     }
 }

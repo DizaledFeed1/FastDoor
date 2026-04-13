@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,4 +80,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     List<Order> findOrdersByNicknamesAndDateRange(@Param("dateFrom") LocalDateTime dateFrom,
                                              @Param("dateTo") LocalDateTime dateTo,
                                              @Param("nicknames") List<String> nickname);
+
+    Page<Order> findByConditionInAndInstaller(List<Condition> statuses, Installer installer, Pageable pageable);
+    Page<Order> findByInstaller(Installer installer, Pageable pageable);
 }

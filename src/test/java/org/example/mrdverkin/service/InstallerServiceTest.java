@@ -9,7 +9,7 @@ import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.services.BotService;
-import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.services.MainInstallerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.time.LocalDate;
 class InstallerServiceTest {
 
     @Autowired
-    private InstallerService service;
+    private MainInstallerService service;
     @Autowired
     private OrderRepository orderRepository;
     @Autowired

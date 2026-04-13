@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dto.InstallerInfo;
-import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.services.MainInstallerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +23,9 @@ import java.util.UUID;
 @Tag(name = "Installers", description = "Управление установщиками")
 public class ListInstallerController {
 
-    private final InstallerService installerService;
+    private final MainInstallerService installerService;
 
-    public ListInstallerController(InstallerService installerService) {
+    public ListInstallerController(MainInstallerService installerService) {
         this.installerService = installerService;
     }
 

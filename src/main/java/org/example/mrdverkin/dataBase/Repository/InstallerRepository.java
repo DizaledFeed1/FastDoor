@@ -2,6 +2,7 @@ package org.example.mrdverkin.dataBase.Repository;
 
 import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
+import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,4 +32,6 @@ public interface InstallerRepository extends JpaRepository<Installer, UUID> {
                                          @Param("condition") Condition condition);
 
     Optional<Installer> findByPhone(String phone);
+
+    Installer findByUser(User user);
 }
