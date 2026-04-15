@@ -71,7 +71,7 @@ public class MainInstallerService {
     }
 
     public ResponseEntity<List<InstallerInfo>> getWorkloadDate(Date date) {
-        return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
+        return ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
 
     public void selectInstaller(InstallerInfo installerInfo, OrderRepository orderRepository, BotService botService) {

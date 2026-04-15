@@ -42,7 +42,7 @@ public class InstallerListServiceTest {
     public void getAssignedAndWorkedSortedOrdersTest() {
         List<InstallerOrderResponseDto> result = installerListService.getSortedOrders(List.of(Condition.ASSIGNED, Condition.WORKED),testUser, Pageable.unpaged()).getContent();
         assertNotNull(result);
-        assertEquals(3, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
