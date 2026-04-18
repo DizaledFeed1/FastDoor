@@ -26,11 +26,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     @Query("SELECT o FROM Order o ORDER BY o.placeAt DESC")
     Page<Order> findAllForAdmin(Pageable pageable);
 
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE Order o set o.installer = :newInstaller where o.id = :orderId")
-    void updateInstaller(@Param("newInstaller") Installer installer, @Param("orderId") UUID orderId);
-
     @Query(value = "SELECT o FROM Order o WHERE o.installer IS null AND o.condition != :condition")
     Page<Order> findByInstallerNull(Pageable pageable, @Param("condition") Condition condition);
 
@@ -45,11 +40,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query(value = "select O from Order O where O.id = :orderid")
     Order findByOrderId(@Param("orderid")UUID orderId);
-
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE Order o set o.messageMainInstaller = :commenet where o.id = :orderId")
-    void updateComment(@Param("orderId") UUID id, @Param("commenet")String comment);
 
     @Query("SELECT new org.example.mrdverkin.dto.DateAvailability(" +
             "o.dateOrder, " +

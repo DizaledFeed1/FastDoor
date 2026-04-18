@@ -15,6 +15,7 @@ import org.example.mrdverkin.dto.InstallerUpdateDto;
 import org.example.mrdverkin.mapper.MainInstallerMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Date;
@@ -74,13 +75,16 @@ public class MainInstallerService {
         return ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
 
+    @Transactional
     public void selectInstaller(InstallerInfo installerInfo, OrderRepository orderRepository, BotService botService) {
         try {
             Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
-            orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
             //todo Нужно сделать поиск по id а не по fullName
             Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
-            orderRepository.updateInstaller(installer, installerInfo.getOrderId());
+
+            oldOrder.setInstaller(installer);
+            oldOrder.setMessageMainInstaller(installerInfo.getInstallerComment());
+            oldOrder.setCondition(Condition.ASSIGNED);
 
             Order newOrder = new Order();
             newOrder.setFullName(oldOrder.getFullName());

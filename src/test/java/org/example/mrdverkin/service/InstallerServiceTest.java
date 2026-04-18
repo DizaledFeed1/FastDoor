@@ -1,6 +1,7 @@
 package org.example.mrdverkin.service;
 
 import org.example.mrdverkin.MrDverkinApplication;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
@@ -17,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = MrDverkinApplication.class)
 @ActiveProfiles("dev")
@@ -73,5 +76,11 @@ class InstallerServiceTest {
         installerInfo.setInstallerComment("Test");
 
         service.selectInstaller(installerInfo, orderRepository, botService);
+
+        Order newOrder = orderRepository.findByOrderId(order.getId());
+
+        assertEquals(Condition.ASSIGNED, newOrder.getCondition());
+        assertEquals(installer.getFullName(), newOrder.getInstaller().getFullName());
+        assertEquals("Test", newOrder.getMessageMainInstaller());
     }
 }
