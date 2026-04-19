@@ -15,6 +15,7 @@ import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.InstallerUpdateDto;
+import org.example.mrdverkin.dto.mainInstaller.InstallerResponseDto;
 import org.example.mrdverkin.mapper.MainInstallerMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,16 @@ public class MainInstallerService {
     private final InstallerRepository installerRepository;
     private final UserRepository userRepository;
 
-    public List<Installer> getAllInstallers() {return installerRepository.findAll();}
-    public Installer findInstallerById(UUID id) {return installerRepository.findInstallersById(id);}
+    @Transactional(readOnly = true)
+    public List<InstallerResponseDto> getAllInstallers() {
+        return installerRepository.findAll().stream()
+                .map(MainInstallerMapper::toInstallerResponseDto)
+                .toList();
+    }
+
+    public Installer findInstallerById(UUID id) {
+        return installerRepository.findInstallersById(id);
+    }
 
     public void deleteInstallerById(UUID id) {
         if (!installerRepository.existsById(id)) {

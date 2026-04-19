@@ -1,5 +1,6 @@
 package org.example.mrdverkin.controllers.api.installer;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.User;
@@ -23,10 +24,10 @@ public class InstallerListController {
     private final InstallerListService service;
 
     @GetMapping("/installer/orders")
+    @Operation(summary = "Получение списка заказов для установщика")
     public Page<InstallerOrderResponseDto> getOrders(@RequestParam List<Condition> statuses,
                                                            @AuthenticationPrincipal User user,
                                                            Pageable pageable) {
-
         return service.getSortedOrders(statuses,user, pageable);
     }
 }

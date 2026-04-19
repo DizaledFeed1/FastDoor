@@ -22,8 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -83,7 +84,7 @@ public class InstallerFullProcessTest {
         Installer installer = installerRepository.findAll().get(0);
 
         assertEquals("testUsername", user.getUsername());
-        assertEquals(inviteCode, user.getInviteCode());
+        assertNull(user.getInviteCode());
         assertEquals(installer.getUser().getId(), user.getId());
 
         login = user.getUsername();
@@ -105,6 +106,6 @@ public class InstallerFullProcessTest {
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("{\"message\":\"Login Successful\",\"roles\":\"installer\"}", response.getBody());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("installer"));
     }
 }

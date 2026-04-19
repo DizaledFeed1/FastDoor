@@ -36,6 +36,7 @@ public class RegistrationService {
 
         user.setUsername(form.getUsername());
         user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.setInviteCode(null);
 
         userRepository.save(user);
     }

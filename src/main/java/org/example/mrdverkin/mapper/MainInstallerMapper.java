@@ -2,6 +2,7 @@ package org.example.mrdverkin.mapper;
 
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dto.InstallerDto;
+import org.example.mrdverkin.dto.mainInstaller.InstallerResponseDto;
 
 public class MainInstallerMapper {
 
@@ -22,6 +23,15 @@ public class MainInstallerMapper {
                 .TgId(installer.getTgId())
                 .MaxId(installer.getMaxId())
                 .orders(installer.getOrders())
+                .build();
+    }
+
+    public static InstallerResponseDto toInstallerResponseDto(Installer installer) {
+        return InstallerResponseDto.builder()
+                .id(installer.getId())
+                .fullName(installer.getFullName())
+                .phone(installer.getPhone())
+                .inviteCode(installer.getUser().getInviteCode())
                 .build();
     }
 

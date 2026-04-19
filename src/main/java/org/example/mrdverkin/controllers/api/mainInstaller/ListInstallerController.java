@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dto.InstallerInfo;
+import org.example.mrdverkin.dto.mainInstaller.InstallerResponseDto;
 import org.example.mrdverkin.services.MainInstallerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +34,8 @@ public class ListInstallerController {
             description = "Возвращает список всех установщиков в системе")
     @ApiResponse(responseCode = "200", description = "Список установщиков успешно получен")
     @GetMapping
-    public ResponseEntity<Map<String, Object>> listInstallers() {
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("installers",installerService.getAllInstallers());
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<InstallerResponseDto>> listInstallers() {
+        return ResponseEntity.ok(installerService.getAllInstallers());
     }
 
     @Operation(summary = "Удалить установщика по ID",
