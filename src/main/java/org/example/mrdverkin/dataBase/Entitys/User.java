@@ -31,14 +31,14 @@ public class User implements UserDetails {
      * Логин
      */
     @JsonIgnore
-    private final String username;
+    private String username;
     @JsonIgnore
-    private final String password;
+    private String password;
 
     /**
      * Либо название магазина, либо ФИО владельца магазина
      */
-    private final String nickname;
+    private String nickname;
 
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
@@ -54,9 +54,10 @@ public class User implements UserDetails {
     private boolean hints = true;
 
     /**
-     * Хэш юзера, используется как код приглашение
+     * Код приглашение
      */
-    private String hashUser;
+    @Column(name = "invite_code")
+    private String inviteCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

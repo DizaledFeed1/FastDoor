@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Collections;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +50,12 @@ class SellerServiceTest {
         doorLimitsToSave.setInDoorQuantity(10);
 
 
-        user = userRepository.save(new User("test", "test", "shop", Collections.singleton(Role.ROLE_SELLER)));
+        user = userRepository.save(User.builder()
+                .username("test")
+                .password("test")
+                .nickname("shop")
+                .roles(Set.of(Role.ROLE_SELLER))
+                .build());
         doorLimits = doorLimitsRepository.save(doorLimitsToSave);
     }
 

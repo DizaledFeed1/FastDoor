@@ -3,7 +3,6 @@ package org.example.mrdverkin.service;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.services.MainInstallerService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class MainInstallerServiceTest {
         mainInstallerService.createInstaller("test", "12346427852");
 
         assertEquals(1,userRepository.findAll().size());
-        assertNotNull(userRepository.findAll().get(0).getHashUser());
+        assertNotNull(userRepository.findAll().get(0).getInviteCode());
         assertEquals(1,installerRepository.findAll().size());
         assertNotNull(installerRepository.findAll().get(0).getUser());
     }

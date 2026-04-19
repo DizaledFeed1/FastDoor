@@ -11,7 +11,7 @@
             </not>
         </preConditions>
         <addColumn tableName="users">
-            <column name="hash_user" type="varchar(64)" remarks="Хэш юзера, используется как код приглашение">
+            <column name="invite_code" type="varchar(64)" remarks="Код приглашение">
                 <constraints nullable="true"
                              unique="true"/>
             </column>

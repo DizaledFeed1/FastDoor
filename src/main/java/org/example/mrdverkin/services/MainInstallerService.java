@@ -47,7 +47,7 @@ public class MainInstallerService {
         User installerUser = User.builder()
                 .nickname(fullName)
                 .roles(Set.of(Role.ROLE_INSTALLER))
-                .hashUser(HashService.hashSha256(fullName + phone + Role.ROLE_INSTALLER))
+                .inviteCode(HashService.hashSha256(fullName + phone + Role.ROLE_INSTALLER))
                 .build();
 
         Installer installer = new Installer();
