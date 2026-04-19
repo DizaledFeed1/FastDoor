@@ -13,4 +13,6 @@ databaseChangeLog:
       file: db/changelog/changeset/2026.04/create_order_installer_annotation.xml
   - include:
       file: db/changelog/changeset/2026.04/add_fk_orders.xml
+  - include:
+      file: db/changelog/changeset/2026.04/add_hash_user.xml
 

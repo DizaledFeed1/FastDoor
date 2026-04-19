@@ -29,7 +29,6 @@ import java.util.Map;
 public class MainInstallerController {
 
     private final OrderRepository orderRepository;
-    private final DoorLimitsRepository doorLimitsRepository;
     private final InstallerRepository installerRepository;
     private final BotService botService;
     private final MainInstallerService installerService;
@@ -38,7 +37,6 @@ public class MainInstallerController {
     public MainInstallerController(OrderRepository orderRepository, DoorLimitsRepository doorLimitsRepository,
                                    InstallerRepository installerRepository, BotService botService, MainInstallerService installerService) {
         this.orderRepository = orderRepository;
-        this.doorLimitsRepository = doorLimitsRepository;
         this.installerRepository = installerRepository;
         this.botService = botService;
         this.installerService = installerService;

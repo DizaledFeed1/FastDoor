@@ -4,11 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.mrdverkin.controllers.api.exception.BadRequestException;
-import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
+import org.example.mrdverkin.dataBase.Entitys.Role;
+import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
+import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.InstallerUpdateDto;
@@ -17,10 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -28,6 +31,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MainInstallerService {
     private final InstallerRepository installerRepository;
+    private final UserRepository userRepository;
 
     public List<Installer> getAllInstallers() {return installerRepository.findAll();}
     public Installer findInstallerById(UUID id) {return installerRepository.findInstallersById(id);}
@@ -38,11 +42,21 @@ public class MainInstallerService {
         }
         installerRepository.deleteById(id);}
 
+    @Transactional
     public void createInstaller(String fullName, String phone) {
-            Installer installer = new Installer();
-            installer.setFullName(fullName);
-            installer.setPhone(phone);
-            installerRepository.save(installer);
+        User installerUser = User.builder()
+                .nickname(fullName)
+                .roles(Set.of(Role.ROLE_INSTALLER))
+                .hashUser(HashService.hashSha256(fullName + phone + Role.ROLE_INSTALLER))
+                .build();
+
+        Installer installer = new Installer();
+        installer.setFullName(fullName);
+        installer.setPhone(phone);
+        installer.setUser(installerUser);
+
+        userRepository.save(installerUser);
+        installerRepository.save(installer);
     }
 
     public ResponseEntity<Void> updateInstaller(UUID id, String fullName, String phone) {

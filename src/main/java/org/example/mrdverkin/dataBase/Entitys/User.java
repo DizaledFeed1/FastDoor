@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 @Table(name = "users")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access= AccessLevel.PROTECTED, force=true)
 @RequiredArgsConstructor
 public class User implements UserDetails {
@@ -24,11 +26,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     @JsonIgnore
     private UUID id;
+
+    /**
+     * Логин
+     */
     @JsonIgnore
-    private final String username; //логин
+    private final String username;
     @JsonIgnore
     private final String password;
-    private final String nickname;// либо название магазина либо ФИО владельца магазина
+
+    /**
+     * Либо название магазина, либо ФИО владельца магазина
+     */
+    private final String nickname;
 
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
@@ -42,6 +52,11 @@ public class User implements UserDetails {
     private final Set<Role> roles;
 
     private boolean hints = true;
+
+    /**
+     * Хэш юзера, используется как код приглашение
+     */
+    private String hashUser;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
