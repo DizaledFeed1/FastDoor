@@ -26,7 +26,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
+@Profile({"prod", "test"})
 public class SecurityConfig {
 
     @Value("${spring.security.remember-me.key}")
@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 ,"/api/mainInstaller/**").hasAnyRole(MAININSTALLER)
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", MAININSTALLER)
                         .requestMatchers("/api/sms/**").hasAnyRole("SERVICES")
+                        .requestMatchers("/api/v1/installer/order/**").hasAnyRole(INSTALLER)
                         .requestMatchers("/api/hints").authenticated()
                         .requestMatchers("/api/list/installer/**").hasAnyRole(INSTALLER)
                         .anyRequest().authenticated())
