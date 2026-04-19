@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dataBase.Entitys.User;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.RegistrationForm;
+import org.example.mrdverkin.dto.auth.InviteRegistrationRequestDto;
+import org.example.mrdverkin.dto.auth.InviteRegistrationResponseDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegistrationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Transactional(readOnly = true)
+    public InviteRegistrationResponseDto inviteRegistration(InviteRegistrationRequestDto request) {
+        User user = userRepository.findByInviteCode(request.getInviteCode())
+                .orElseThrow( () -> new EntityNotFoundException("Пользователь с кодом приглашения: " +  request.getInviteCode() + " не найден"));
+
+        return InviteRegistrationResponseDto.builder()
+                .nickname(user.getNickname())
+                .role(user.getRoles().stream().findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Ошибка хранимых данных")))
+                .build();
+    }
 
     @Transactional
     public void registration(RegistrationForm form) {

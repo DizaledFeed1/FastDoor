@@ -3,9 +3,12 @@ package org.example.mrdverkin.controllers.api.security;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dto.RegistrationForm;
+import org.example.mrdverkin.dto.auth.InviteRegistrationRequestDto;
+import org.example.mrdverkin.dto.auth.InviteRegistrationResponseDto;
 import org.example.mrdverkin.services.RegistrationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +22,11 @@ import java.util.Map;
 public class RegistrationController {
 
     private final RegistrationService registrationService;
+
+    @GetMapping("/user")
+    public InviteRegistrationResponseDto validateInviteCode(@Valid @RequestBody InviteRegistrationRequestDto request) {
+        return registrationService.inviteRegistration(request);
+    }
 
 
     @PostMapping
