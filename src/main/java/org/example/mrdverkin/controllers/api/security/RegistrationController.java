@@ -1,5 +1,6 @@
 package org.example.mrdverkin.controllers.api.security;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.example.mrdverkin.dto.RegistrationForm;
@@ -7,16 +8,12 @@ import org.example.mrdverkin.dto.auth.InviteRegistrationRequestDto;
 import org.example.mrdverkin.dto.auth.InviteRegistrationResponseDto;
 import org.example.mrdverkin.services.RegistrationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/register")
 public class RegistrationController {
@@ -24,8 +21,8 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @GetMapping("/user")
-    public InviteRegistrationResponseDto validateInviteCode(@Valid @RequestBody InviteRegistrationRequestDto request) {
-        return registrationService.inviteRegistration(request);
+    public InviteRegistrationResponseDto validateInviteCode(@RequestParam @JsonProperty("invite_code") String inviteCode) {
+        return registrationService.inviteRegistration(inviteCode);
     }
 
 

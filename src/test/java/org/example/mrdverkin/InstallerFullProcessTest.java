@@ -62,9 +62,7 @@ public class InstallerFullProcessTest {
     @Test
     @Order(2)
     public void inviteRegistration() {
-        InviteRegistrationResponseDto responseDto = registrationService.inviteRegistration(InviteRegistrationRequestDto.builder()
-                        .inviteCode(inviteCode)
-                .build());
+                InviteRegistrationResponseDto responseDto = registrationService.inviteRegistration(inviteCode);
 
         assertEquals("testFullName", responseDto.getNickname());
         assertEquals(Role.ROLE_INSTALLER, responseDto.getRole());

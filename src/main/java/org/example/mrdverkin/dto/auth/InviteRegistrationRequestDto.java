@@ -15,6 +15,6 @@ public class InviteRegistrationRequestDto {
     @NotBlank
     @Size(min = 64, max = 64)
     @JsonProperty("invite_code")
-    @Schema(description = "Пригласительный код  юзера")
+    @Schema(description = "Пригласительный код юзера")
     private String inviteCode;
 }

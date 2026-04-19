@@ -27,9 +27,7 @@ public class RegistrationServiceTest {
 
     @Test
     public void inviteRegistrationTest() {
-        InviteRegistrationResponseDto responseDto = registrationService.inviteRegistration(InviteRegistrationRequestDto.builder()
-                        .inviteCode("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2")
-                .build());
+        InviteRegistrationResponseDto responseDto = registrationService.inviteRegistration("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2");
 
         assertNotNull(responseDto);
         assertEquals("Алексей Смирнов", responseDto.getNickname());
@@ -38,10 +36,7 @@ public class RegistrationServiceTest {
 
     @Test
     public void inviteRegistrationNotFoundTest() {
-        assertThrows(EntityNotFoundException.class, () -> registrationService.inviteRegistration(InviteRegistrationRequestDto.builder()
-                .inviteCode("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f3")
-                .build())
-        );
+        assertThrows(EntityNotFoundException.class, () -> registrationService.inviteRegistration("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f3"));
     }
 
     @Test
