@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class ListInstallerController {
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = InstallerInfo.class))))
     @GetMapping("/workload")
-    public ResponseEntity<List<InstallerInfo>> getWorkload(@RequestParam Date date) {
+    public ResponseEntity<List<InstallerInfo>> getWorkload(@RequestParam LocalDate date) {
         return installerService.getWorkloadDate(date);
     }
 }

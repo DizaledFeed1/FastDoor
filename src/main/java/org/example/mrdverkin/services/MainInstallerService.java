@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -94,7 +94,7 @@ public class MainInstallerService {
         installerRepository.save(installer);
     }
 
-    public ResponseEntity<List<InstallerInfo>> getWorkloadDate(Date date) {
+    public ResponseEntity<List<InstallerInfo>> getWorkloadDate(LocalDate date) {
         return ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
 
