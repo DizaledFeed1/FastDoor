@@ -39,6 +39,10 @@ logging:
     org.apache.coyote.http11.Http11Processor: ERROR
     org.springframework.security: WARN
 
+springdoc:
+  swagger-ui:
+    enabled: false
+
 sms:
   enabled: ${SMS_ENABLED}
   url: ${SMS_URL}

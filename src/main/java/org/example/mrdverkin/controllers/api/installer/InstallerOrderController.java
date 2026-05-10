@@ -22,7 +22,7 @@ public class InstallerOrderController {
 
     private final InstallerOrderService orderService;
 
-    @PostMapping("/order/approde/{orderId}")
+    @PostMapping("/order/approve/{orderId}")
     @Operation(summary = "Подтверждение заказа")
     public OrderApproveResponseDto approveOrder(@PathVariable("orderId") UUID orderId,
                                                 @AuthenticationPrincipal User user) {
