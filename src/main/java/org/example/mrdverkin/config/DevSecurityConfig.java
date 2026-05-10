@@ -44,7 +44,7 @@ public class DevSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session",
+                        .requestMatchers("/api/login", "/api/register/**", "/api/csrf","/h2-console/**","/swagger-ui/**", "/v3/api-docs/**", "/api/check-session",
                                 "/actuator/**").permitAll()
                         .requestMatchers("/api/installer/phone/**", "/api/installer/**").hasAnyRole("SERVICES", MAININSTALLER)
                         .requestMatchers(HttpMethod.GET, "/api/orders/create", "/api/edit/**", "/api/delete").hasAnyRole(MAININSTALLER,"SELLER")
