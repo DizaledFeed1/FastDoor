@@ -228,7 +228,7 @@ public class OrderService {
      */
     //todo @Scheduled(cron = "0 0 0 1 * *") раз в месяц
     //todo добавить проперти чтобы можно было настраивать щедулер и кол-во входных и межкомнатных дверей
-    @Scheduled(cron = "0 30 16 * * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void generateMonthlyLimits(){
 
         LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(1);
