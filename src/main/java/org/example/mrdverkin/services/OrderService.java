@@ -10,7 +10,6 @@ import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.OrderAttribute;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -229,7 +228,6 @@ public class OrderService {
      */
     //todo @Scheduled(cron = "0 0 0 1 * *") раз в месяц
     //todo добавить проперти чтобы можно было настраивать щедулер и кол-во входных и межкомнатных дверей
-    @Profile("prod")
     @Scheduled(cron = "0 30 16 * * *")
     public void generateMonthlyLimits(){
 
