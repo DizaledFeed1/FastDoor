@@ -227,7 +227,8 @@ public class OrderService {
      * Значения по умолчанию: 2 входных двери и 50 межкомнатных дверей на день.
      */
     //todo @Scheduled(cron = "0 0 0 1 * *") раз в месяц
-    @Scheduled(cron = "0 0 0 1 * *")
+    //todo добавить проперти чтобы можно было настраивать щедулер и кол-во входных и межкомнатных дверей
+    @Scheduled(fixedDelay = 2000)
     public void generateMonthlyLimits(){
 
         LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(1);
