@@ -1,4 +1,6 @@
 spring:
+  liquibase:
+    enabled: true
   profiles:
     active: prod
 

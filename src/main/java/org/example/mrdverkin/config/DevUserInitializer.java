@@ -39,26 +39,38 @@ public class DevUserInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Set<Role> roles = new HashSet<>();
         String password = passwordEncoder.encode("test");
 
-        roles.add(Role.ROLE_SELLER);
-        userRepository.save(new User("test", password, "shop", roles));
+        userRepository.save(User.builder()
+                .username("test")
+                .password(password)
+                .nickname("shop")
+                .roles(Set.of(Role.ROLE_SELLER))
+                .build());
 
-        roles.remove(Role.ROLE_SELLER);
         password = passwordEncoder.encode("main");
-        roles.add(Role.ROLE_MAIN_INSTALLER);
-        userRepository.save(new User("main", password, "main", roles));
+        userRepository.save(User.builder()
+                .username("main")
+                .password(password)
+                .nickname("main")
+                .roles(Set.of(Role.ROLE_MAIN_INSTALLER))
+                .build());
 
-        roles.remove(Role.ROLE_MAIN_INSTALLER);
         password = passwordEncoder.encode("admin");
-        roles.add(Role.ROLE_ADMIN);
-        userRepository.save(new User("admin", password, "admin", roles));
+        userRepository.save(User.builder()
+                .username("admin")
+                .password(password)
+                .nickname("admin")
+                .roles(Set.of(Role.ROLE_ADMIN))
+                .build());
 
-        roles.remove(Role.ROLE_ADMIN);
         password = passwordEncoder.encode("services");
-        roles.add(Role.ROLE_SERVICES);
-        userRepository.save(new User("services", password, "services", roles));
+        userRepository.save(User.builder()
+                .username("services")
+                .password(password)
+                .nickname("services")
+                .roles(Set.of(Role.ROLE_SERVICES))
+                .build());
 
         generateDataLimit();
         setUserForOrder();

@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -36,7 +37,7 @@ public class ManagementOrder {
             }
     )
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, Object>> deleteOrder(@RequestParam Long id,
+    public ResponseEntity<Map<String, Object>> deleteOrder(@RequestParam UUID id,
                                                            @AuthenticationPrincipal UserDetails userDetails) {
         return orderService.deleteOrderById(id, userDetails, userService);
     }
@@ -50,7 +51,7 @@ public class ManagementOrder {
             }
     )
     @GetMapping("/edit/{id}")
-    public ResponseEntity<Map<String, Object>> edit(@PathVariable Long id,
+    public ResponseEntity<Map<String, Object>> edit(@PathVariable UUID id,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
 
         Order order = orderService.findOrderById(id);
@@ -73,7 +74,7 @@ public class ManagementOrder {
             }
     )
     @PatchMapping("/edit/{id}")
-    public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable Long id,
+    public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable UUID id,
                                                            @RequestBody OrderAttribute orderAttribute,
                                                            @AuthenticationPrincipal UserDetails userDetails) {
         return orderService.updateOrder(id, orderAttribute,userDetails);

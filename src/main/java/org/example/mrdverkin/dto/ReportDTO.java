@@ -9,12 +9,13 @@ import org.example.mrdverkin.dataBase.Entitys.Order;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class ReportDTO {
-    private Long id;
+    private UUID id;
 
     @NotNull
     private String title;

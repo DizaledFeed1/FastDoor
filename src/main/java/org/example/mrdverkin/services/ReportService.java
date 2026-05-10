@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -101,7 +102,7 @@ public class ReportService {
         return excelCreater.convertReport(reportDTO);
     }
 
-    public ReportDTO getReportById(Long id) {
+    public ReportDTO getReportById(UUID id) {
         return reportRepository.findByIdWithOrders(id)
                 .map(r -> new ReportDTO(
                         r.getId(),

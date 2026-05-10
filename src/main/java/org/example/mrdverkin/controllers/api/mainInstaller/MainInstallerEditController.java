@@ -1,4 +1,4 @@
-package org.example.mrdverkin.controllers.api.installer;
+package org.example.mrdverkin.controllers.api.mainInstaller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -6,19 +6,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerUpdateDto;
-import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.services.MainInstallerService;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/installer")
 @Tag(name = "InstallersEdit", description = "Изменение установщиков")
-public class InstallerController {
+public class MainInstallerEditController {
 
-    private final InstallerService installerService;
+    private final MainInstallerService installerService;
 
-    public InstallerController(InstallerService installerService) {
+    public MainInstallerEditController(MainInstallerService installerService) {
         this.installerService = installerService;
     }
 
@@ -27,7 +29,7 @@ public class InstallerController {
     @ApiResponse(responseCode = "200", description = "Данные установщика")
     @ApiResponse(responseCode = "404", description = "Установщик не найден")
     @GetMapping("/{id}")
-    public ResponseEntity<Installer> installer(@PathVariable Long id) {
+    public ResponseEntity<Installer> installer(@PathVariable UUID id) {
         Installer installer = installerService.findInstallerById(id);
         if (installer == null) {
             return ResponseEntity.notFound().build();
@@ -40,7 +42,7 @@ public class InstallerController {
     @ApiResponse(responseCode = "200", description = "Данные обновлены")
     @ApiResponse(responseCode = "404", description = "Установщик не найден")
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateInstaller(@PathVariable Long id, @RequestParam String fullName, @RequestParam String phone) {
+    public ResponseEntity<Void> updateInstaller(@PathVariable UUID id, @RequestParam String fullName, @RequestParam String phone) {
         return installerService.updateInstaller(id, fullName, phone);
     }
 

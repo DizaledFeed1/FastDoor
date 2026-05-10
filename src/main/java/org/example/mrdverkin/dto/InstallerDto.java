@@ -10,6 +10,7 @@ import org.example.mrdverkin.dataBase.Entitys.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class InstallerDto {
 
-    private Long id;
+    private UUID id;
     private String fullName;
     private String phone;
 

@@ -9,11 +9,10 @@ import org.example.mrdverkin.dataBase.Entitys.Order;
 import org.example.mrdverkin.dataBase.Repository.DoorLimitsRepository;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
-import org.example.mrdverkin.dto.DateAvailability;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.OrderAttribute;
 import org.example.mrdverkin.services.BotService;
-import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.services.MainInstallerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,16 +29,14 @@ import java.util.Map;
 public class MainInstallerController {
 
     private final OrderRepository orderRepository;
-    private final DoorLimitsRepository doorLimitsRepository;
     private final InstallerRepository installerRepository;
     private final BotService botService;
-    private final InstallerService installerService;
+    private final MainInstallerService installerService;
     private final String ERROR = "error";
 
     public MainInstallerController(OrderRepository orderRepository, DoorLimitsRepository doorLimitsRepository,
-                                   InstallerRepository installerRepository, BotService botService, InstallerService installerService) {
+                                   InstallerRepository installerRepository, BotService botService, MainInstallerService installerService) {
         this.orderRepository = orderRepository;
-        this.doorLimitsRepository = doorLimitsRepository;
         this.installerRepository = installerRepository;
         this.botService = botService;
         this.installerService = installerService;

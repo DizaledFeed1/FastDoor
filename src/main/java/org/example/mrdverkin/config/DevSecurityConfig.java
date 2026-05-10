@@ -33,6 +33,7 @@ public class DevSecurityConfig {
     private String rememberMeKey;
 
     private final String MAININSTALLER = "MAIN_INSTALLER";
+    private final String INSTALLER = "INSTALLER";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
@@ -54,7 +55,9 @@ public class DevSecurityConfig {
                                 ,"/api/mainInstaller/**").hasAnyRole(MAININSTALLER)
                         .requestMatchers("/api/list/sort").hasAnyRole("ADMIN", MAININSTALLER)
                         .requestMatchers("/api/sms/**").hasAnyRole("SERVICES")
+                        .requestMatchers("/api/v1/installer/order/**").hasAnyRole(INSTALLER)
                         .requestMatchers("/api/hints").authenticated()
+                        .requestMatchers("/api/list/installer/**").hasAnyRole(INSTALLER)
                         .anyRequest().permitAll())
                 .rememberMe(remember -> remember
                         .rememberMeServices(rememberMeServices)
