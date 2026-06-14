@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -25,7 +26,7 @@ class ExcelCreateTest {
     @Test
     void convertExcel() {
         ReportDTO report = ReportDTO.builder()
-                .id(Long.MAX_VALUE)
+                .id(UUID.randomUUID())
                 .title("Report Title")
                 .dateFrom(LocalDate.MIN)
                 .dateTo(LocalDate.MAX)

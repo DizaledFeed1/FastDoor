@@ -7,24 +7,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.mrdverkin.dto.InstallerInfo;
-import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.dto.mainInstaller.InstallerResponseDto;
+import org.example.mrdverkin.services.MainInstallerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/listInstallers")
 @Tag(name = "Installers", description = "Управление установщиками")
 public class ListInstallerController {
 
-    private final InstallerService installerService;
+    private final MainInstallerService installerService;
 
-    public ListInstallerController(InstallerService installerService) {
+    public ListInstallerController(MainInstallerService installerService) {
         this.installerService = installerService;
     }
 
@@ -32,12 +35,8 @@ public class ListInstallerController {
             description = "Возвращает список всех установщиков в системе")
     @ApiResponse(responseCode = "200", description = "Список установщиков успешно получен")
     @GetMapping
-    public ResponseEntity<Map<String, Object>> listInstallers() {
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("installers",installerService.getAllInstallers());
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<InstallerResponseDto>> listInstallers() {
+        return ResponseEntity.ok(installerService.getAllInstallers());
     }
 
     @Operation(summary = "Удалить установщика по ID",
@@ -46,7 +45,7 @@ public class ListInstallerController {
     @ApiResponse(responseCode = "404", description = "Установщик с таким ID не найден", content = @Content)
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteInstaller(@PathVariable Long id) {
+    public ResponseEntity<String> deleteInstaller(@PathVariable UUID id) {
         try {
             installerService.deleteInstallerById(id);
             return ResponseEntity.ok().build();
@@ -77,7 +76,7 @@ public class ListInstallerController {
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = InstallerInfo.class))))
     @GetMapping("/workload")
-    public ResponseEntity<List<InstallerInfo>> getWorkload(@RequestParam Date date) {
+    public ResponseEntity<List<InstallerInfo>> getWorkload(@RequestParam LocalDate date) {
         return installerService.getWorkloadDate(date);
     }
 }

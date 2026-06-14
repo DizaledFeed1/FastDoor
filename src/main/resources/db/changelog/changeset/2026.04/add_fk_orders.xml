@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="create-order-annotation-join-table" author="Dizaled">
+        <preConditions>
+            <not>
+                <columnExists tableName="orders" columnName="annotation_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="orders">
+            <column name="annotation_id" type="uuid">
+                <constraints nullable="true"
+                             foreignKeyName="fk_join_annotation"
+                             referencedTableName="order_installer_annotation"
+                             referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

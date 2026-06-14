@@ -12,9 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 
-public interface DoorLimitsRepository extends JpaRepository<DoorLimits, Long> {
+public interface DoorLimitsRepository extends JpaRepository<DoorLimits, UUID> {
     DoorLimits findByLimitDate(Date limitDate);
 
     @Query("SELECT d FROM DoorLimits d WHERE d.limitDate > CURRENT_TIMESTAMP ORDER BY d.limitDate ASC")

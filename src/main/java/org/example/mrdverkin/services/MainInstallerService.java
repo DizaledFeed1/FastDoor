@@ -4,46 +4,71 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.mrdverkin.controllers.api.exception.BadRequestException;
-import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
+import org.example.mrdverkin.dataBase.Entitys.Role;
+import org.example.mrdverkin.dataBase.Entitys.User;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
+import org.example.mrdverkin.dataBase.Repository.UserRepository;
 import org.example.mrdverkin.dto.InstallerDto;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.dto.InstallerUpdateDto;
-import org.example.mrdverkin.mapper.InstallerMapper;
+import org.example.mrdverkin.dto.mainInstaller.InstallerResponseDto;
+import org.example.mrdverkin.mapper.MainInstallerMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class InstallerService {
+public class MainInstallerService {
     private final InstallerRepository installerRepository;
+    private final UserRepository userRepository;
 
-    public List<Installer> getAllInstallers() {return installerRepository.findAll();}
-    public Installer findInstallerById(Long id) {return installerRepository.findInstallersById(id);}
+    @Transactional(readOnly = true)
+    public List<InstallerResponseDto> getAllInstallers() {
+        return installerRepository.findAll().stream()
+                .map(MainInstallerMapper::toInstallerResponseDto)
+                .toList();
+    }
 
-    public void deleteInstallerById(Long id) {
+    public Installer findInstallerById(UUID id) {
+        return installerRepository.findInstallersById(id);
+    }
+
+    public void deleteInstallerById(UUID id) {
         if (!installerRepository.existsById(id)) {
             throw new IllegalArgumentException("Установщик не найден");
         }
         installerRepository.deleteById(id);}
 
+    @Transactional
     public void createInstaller(String fullName, String phone) {
-            Installer installer = new Installer();
-            installer.setFullName(fullName);
-            installer.setPhone(phone);
-            installerRepository.save(installer);
+        User installerUser = User.builder()
+                .nickname(fullName)
+                .roles(Set.of(Role.ROLE_INSTALLER))
+                .inviteCode(HashService.hashSha256(fullName + phone + Role.ROLE_INSTALLER))
+                .build();
+
+        Installer installer = new Installer();
+        installer.setFullName(fullName);
+        installer.setPhone(phone);
+        installer.setUser(installerUser);
+
+        userRepository.save(installerUser);
+        installerRepository.save(installer);
     }
 
-    public ResponseEntity<Void> updateInstaller(Long id, String fullName, String phone) {
+    public ResponseEntity<Void> updateInstaller(UUID id, String fullName, String phone) {
         Installer installer = findInstallerById(id);
         if (installer == null) {
             return ResponseEntity.notFound().build();
@@ -69,17 +94,20 @@ public class InstallerService {
         installerRepository.save(installer);
     }
 
-    public ResponseEntity<List<InstallerInfo>> getWorkloadDate(Date date) {
-        return  ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
+    public ResponseEntity<List<InstallerInfo>> getWorkloadDate(LocalDate date) {
+        return ResponseEntity.ok().body(installerRepository.searchDoorbyDate(date, Condition.DELETED));
     }
 
+    @Transactional
     public void selectInstaller(InstallerInfo installerInfo, OrderRepository orderRepository, BotService botService) {
         try {
             Order oldOrder = orderRepository.findByOrderId(installerInfo.getOrderId());
-            orderRepository.updateComment(installerInfo.getOrderId(), installerInfo.getInstallerComment());
             //todo Нужно сделать поиск по id а не по fullName
             Installer installer = installerRepository.findByName(installerInfo.getInstallerFullName());
-            orderRepository.updateInstaller(installer, installerInfo.getOrderId());
+
+            oldOrder.setInstaller(installer);
+            oldOrder.setMessageMainInstaller(installerInfo.getInstallerComment());
+            oldOrder.setCondition(Condition.ASSIGNED);
 
             Order newOrder = new Order();
             newOrder.setFullName(oldOrder.getFullName());
@@ -109,6 +137,6 @@ public class InstallerService {
 
     public Optional<InstallerDto> getInstallerByPhone(String phone) {
         return installerRepository.findByPhone(phone)
-                .map(InstallerMapper::toInstallerDtoWithoutOrders);
+                .map(MainInstallerMapper::toInstallerDtoWithoutOrders);
     }
 }

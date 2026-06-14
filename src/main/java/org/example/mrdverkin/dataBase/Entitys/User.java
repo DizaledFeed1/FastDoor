@@ -10,27 +10,38 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
 @Data
-@Table(name = "\"User\"")
+@Table(name = "users")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access= AccessLevel.PROTECTED, force=true)
 @RequiredArgsConstructor
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @JsonIgnore
-    private Long id;
+    private UUID id;
+
+    /**
+     * Логин
+     */
     @JsonIgnore
-    private final String username; //логин
+    private String username;
     @JsonIgnore
-    private final String password;
-    private final String nickname;// либо название магазина либо ФИО владельца магазина
+    private String password;
+
+    /**
+     * Либо название магазина, либо ФИО владельца магазина
+     */
+    private String nickname;
 
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<Report> reports;
 
     @ElementCollection(fetch = FetchType.EAGER) // Связь с таблицей ролей
@@ -41,6 +52,12 @@ public class User implements UserDetails {
     private final Set<Role> roles;
 
     private boolean hints = true;
+
+    /**
+     * Код приглашение
+     */
+    @Column(name = "invite_code")
+    private String inviteCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

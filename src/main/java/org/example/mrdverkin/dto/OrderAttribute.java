@@ -7,12 +7,13 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 @Data
 public class OrderAttribute {
-    private Long id;
+    private UUID id;
     private String fullName;
     private String address;
     private String phone;

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import java.sql.Date;
+import java.util.UUID;
+
 import lombok.NoArgsConstructor;
 
 @Data
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoorLimitResponseDto {
-    private Long id;
+    private UUID id;
     private Date limitDate;
     private int frontDoorQuantity;
     private int inDoorQuantity;

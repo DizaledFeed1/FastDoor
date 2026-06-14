@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/2026.04/user_init.xml
+  - include:
+      file: db/changelog/changeset/2026.04/door_limit_init.xml
+  - include:
+      file: db/changelog/changeset/2026.04/installer_init.xml
+  - include:
+      file: db/changelog/changeset/2026.04/order_init.xml
+  - include:
+      file: db/changelog/changeset/2026.04/report_init.xml
+  - include:
+      file: db/changelog/changeset/2026.04/create_order_installer_annotation.xml
+  - include:
+      file: db/changelog/changeset/2026.04/add_fk_orders.xml
+  - include:
+      file: db/changelog/changeset/2026.04/add_hash_user.xml
+

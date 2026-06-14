@@ -1,6 +1,7 @@
 package org.example.mrdverkin.service;
 
 import org.example.mrdverkin.MrDverkinApplication;
+import org.example.mrdverkin.dataBase.Entitys.Condition;
 import org.example.mrdverkin.dataBase.Entitys.DoorLimits;
 import org.example.mrdverkin.dataBase.Entitys.Installer;
 import org.example.mrdverkin.dataBase.Entitys.Order;
@@ -9,7 +10,7 @@ import org.example.mrdverkin.dataBase.Repository.InstallerRepository;
 import org.example.mrdverkin.dataBase.Repository.OrderRepository;
 import org.example.mrdverkin.dto.InstallerInfo;
 import org.example.mrdverkin.services.BotService;
-import org.example.mrdverkin.services.InstallerService;
+import org.example.mrdverkin.services.MainInstallerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest(classes = MrDverkinApplication.class)
 @ActiveProfiles("dev")
 class InstallerServiceTest {
 
     @Autowired
-    private InstallerService service;
+    private MainInstallerService service;
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -73,5 +76,11 @@ class InstallerServiceTest {
         installerInfo.setInstallerComment("Test");
 
         service.selectInstaller(installerInfo, orderRepository, botService);
+
+        Order newOrder = orderRepository.findByOrderId(order.getId());
+
+        assertEquals(Condition.ASSIGNED, newOrder.getCondition());
+        assertEquals(installer.getFullName(), newOrder.getInstaller().getFullName());
+        assertEquals("Test", newOrder.getMessageMainInstaller());
     }
 }

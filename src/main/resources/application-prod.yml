@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # TODO:поменять на validate когда добавиться ликвидбейс
+      ddl-auto: validate
     show-sql: false
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -38,6 +38,10 @@ logging:
     root: INFO
     org.apache.coyote.http11.Http11Processor: ERROR
     org.springframework.security: WARN
+
+springdoc:
+  swagger-ui:
+    enabled: false
 
 sms:
   enabled: ${SMS_ENABLED}

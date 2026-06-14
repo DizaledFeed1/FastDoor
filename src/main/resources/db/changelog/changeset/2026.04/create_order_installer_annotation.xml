@@ -1,0 +1,43 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="create_order_installer_annotation_table" author="Dizaled">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="order_installer_annotation"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="order_installer_annotation">
+            <column name="id" type="UUID">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="order_id" type="UUID" remarks="Id заказа">
+                <constraints nullable="false"
+                             foreignKeyName="fk_annotation_orders_order"
+                             referencedTableName="orders"
+                             referencedColumnNames="id"
+                             deleteCascade="true"/>
+            </column>
+            <column name="installer_id" type="UUID" remarks="Id установщика">
+                <constraints nullable="false"
+                             foreignKeyName="fk_annotation_users_installer"
+                             referencedTableName="users"
+                             referencedColumnNames="id"
+                             deleteCascade="true"/>
+            </column>
+            <column name="annotation" type="VARCHAR(2000)" remarks="Пояснение отмены заказа, со стороны установщика">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <comment>
+
+        </comment>
+    </changeSet>
+
+</databaseChangeLog>

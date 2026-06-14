@@ -19,10 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Сервис для управления заказами.
@@ -43,7 +40,7 @@ public class OrderService {
      * @param id ID заказа
      * @return заказ
      */
-    public Order findOrderById(Long id) {
+    public Order findOrderById(UUID id) {
         return orderRepository.findByOrderId(id);
     }
 
@@ -135,7 +132,7 @@ public class OrderService {
      * @param orderAttribute новые параметры заказа
      * @return HTTP-ответ: OK — успешное обновление, BadRequest — превышение лимитов, NotFound — заказ не найден
      */
-    public ResponseEntity<Map<String, Object>> updateOrder(Long id, OrderAttribute orderAttribute, UserDetails userDetails) {
+    public ResponseEntity<Map<String, Object>> updateOrder(UUID id, OrderAttribute orderAttribute, UserDetails userDetails) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
@@ -181,7 +178,7 @@ public class OrderService {
      * @param id   ID заказа
      * @return HTTP-ответ с сообщением об успехе или ошибке
      */
-    public ResponseEntity<Map<String, Object>> deleteOrderById(Long id, UserDetails user, UserService userService) {
+    public ResponseEntity<Map<String, Object>> deleteOrderById(UUID id, UserDetails user, UserService userService) {
         Optional<Order> orderOpt = orderRepository.findById(id);
 
         if (orderOpt.isEmpty()) {
@@ -230,6 +227,7 @@ public class OrderService {
      * Значения по умолчанию: 2 входных двери и 50 межкомнатных дверей на день.
      */
     //todo @Scheduled(cron = "0 0 0 1 * *") раз в месяц
+    //todo добавить проперти чтобы можно было настраивать щедулер и кол-во входных и межкомнатных дверей
     @Scheduled(cron = "0 0 0 1 * *")
     public void generateMonthlyLimits(){
 
