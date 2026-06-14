@@ -27,6 +27,7 @@ public class RegistrationController {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @PostMapping
     public ResponseEntity<Map<String, String>> processRegistration(@RequestBody RegistrationForm form) {
         if (!form.isPasswordMatching()){
