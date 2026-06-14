@@ -25,7 +25,6 @@ public class RegistrationController {
         return registrationService.inviteRegistration(inviteCode);
     }
 
-
     @PostMapping
     public ResponseEntity<Map<String, String>> processRegistration(@RequestBody @Valid RegistrationForm form) {
         if (!form.isPasswordMatching()){
